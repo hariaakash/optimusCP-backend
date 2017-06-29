@@ -1,0 +1,8 @@
+
+		//		var socket = io.connect($rootScope.apiUrl);
+		//		socket.on('connect', function (data) {
+		//			socket.emit('authentication', {
+		//				authKey: $rootScope.authKey,
+		//				serverId: $scope.serverId
+		//			});
+		//		});
