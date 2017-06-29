@@ -1,0 +1,26 @@
+{
+  "name": "optimus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.2",
+    "cors": "^2.8.3",
+    "express": "^4.15.3",
+    "hat": "0.0.3",
+    "mongoose": "^4.9.8",
+    "morgan": "^1.8.2",
+    "node-cron": "^1.2.0",
+    "node-ssh": "^4.2.2",
+    "raven": "^2.1.0",
+    "rotating-file-stream": "^1.2.2",
+    "sendgrid": "^5.1.1"
+  }
+}
