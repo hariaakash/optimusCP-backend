@@ -23,7 +23,10 @@ angular.module("optimusApp", ['ui.router', 'oc.lazyLoad'])
 				controller: "manageCtrl",
 				resolve: {
 					loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-						return $ocLazyLoad.load('./ctrls/manage.js');
+						return $ocLazyLoad.load({
+							name: 'Manage',
+							files: ['./ctrls/manage.js', './plugins/highcharts/highstock.js']
+						})
     				}]
 				}
 			})
@@ -113,8 +116,8 @@ angular.module("optimusApp", ['ui.router', 'oc.lazyLoad'])
 // Global Controller
 angular.module('optimusApp')
 	.controller('globalCtrl', function ($scope, $rootScope, $location, $http, $state) {
-		$rootScope.apiUrl = 'https://optimus-hariaakash.rhcloud.com/';
-//		$rootScope.apiUrl = 'http://localhost:3000/';
+		//		$rootScope.apiUrl = 'https://optimus-hariaakash.rhcloud.com/';
+		$rootScope.apiUrl = 'http://localhost:3000/';
 		$rootScope.checkAuth = function () {
 			if (Cookies.get('authKey')) {
 				$rootScope.authKey = Cookies.get('authKey');

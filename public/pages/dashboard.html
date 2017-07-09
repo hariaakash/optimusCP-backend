@@ -4,7 +4,7 @@
 		<div class="navbar-header">
 			<a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
 			<div class="top-left-part">
-<!--
+				<!--
 				<a class="logo" href="index.html">
 					<b><img src="./images/eliteadmin-logo.png" alt="home" class="dark-logo" /></b>
 					<span class="hidden-xs"><img src="./images/eliteadmin-text.png" alt="home" class="dark-logo" /></span>
@@ -31,7 +31,8 @@
 		<div class="sidebar-nav navbar-collapse">
 			<ul class="nav" id="side-menu">
 				<li>
-					<a ui-sref="dashboard.home" ui-sref-active="active" class="waves-effect"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Home</span></a>
+					<a ui-sref="dashboard.home" ng-class="{active: ('dashboard.home' | 
+includedByState) || ('dashboard.manage' | includedByState) || ('dashboard.terminal' | includedByState)}" class="waves-effect"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Home</span></a>
 				</li>
 				<li>
 					<a ui-sref="dashboard.servers" ui-sref-active="active" class="waves-effect"><i class="fa fa-server fa-fw"></i> <span class="hide-menu">Servers</span></a>

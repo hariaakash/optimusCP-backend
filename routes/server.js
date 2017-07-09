@@ -2,7 +2,9 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var node_ssh = require('node-ssh');
-ssh = new node_ssh()
+ssh = new node_ssh();
+var moment = require('moment');
+var formatBytes = require('./formatBytes');
 var User = require('../models/user');
 
 
@@ -31,6 +33,37 @@ app.get('/m-det', function (req, res) {
 					var server = user.managed.filter(function (server) {
 						return server._id == req.query.serverId;
 					});
+					var metrics = server[0].metrics;
+					var latest = [],
+						d = [],
+						m = [],
+						seriesOptions = [];
+					for (i = 0; i < metrics.length; i++) {
+						latest.push({
+							date: metrics[i].date,
+							d_u: formatBytes(metrics[i].d_u),
+							d_t: formatBytes(metrics[i].d_t),
+							m_u: formatBytes(metrics[i].m_u),
+							m_t: formatBytes(metrics[i].m_t),
+							m: (metrics[i].m_u * 100 / metrics[i].m_t).toFixed(2),
+							d: (metrics[i].d_u * 100 / metrics[i].d_t).toFixed(2)
+						});
+						d.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].d_u * 100 / metrics[i].d_t).toFixed(2))]);
+						m.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].m_u * 100 / metrics[i].m_t).toFixed(2))]);
+					}
+					seriesOptions.push({
+						name: 'Memory',
+						compare: 'percent',
+						data: m,
+						gapSize: 5,
+						type: 'area'
+					}, {
+						name: 'Disk',
+						compare: 'percent',
+						gapSize: 5,
+						data: d,
+						type: 'area'
+					});
 					res.json({
 						status: true,
 						data: {
@@ -39,7 +72,9 @@ app.get('/m-det', function (req, res) {
 							port: server[0].port,
 							name: server[0].name,
 							uname: server[0].uname,
-							info: server[0].info
+							info: server[0].info,
+							metrics: latest,
+							seriesOptions: seriesOptions
 						}
 					});
 				} else {
@@ -47,6 +82,7 @@ app.get('/m-det', function (req, res) {
 				}
 			})
 			.catch(function (err) {
+				console.log(err);
 				uniR(res, false, 'Error when querying');
 			});
 	} else {
@@ -88,7 +124,7 @@ app.post('/m-add', function (req, res) {
 													.then(function (updatedUser) {
 														console.log(updatedUser._id);
 														console.log(updatedUser.managed[updatedUser.managed.length - 1]._id);
-														ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://www.dropbox.com/s/abvs179kertlunv/metrics.sh?dl=1" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "* * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.managed[updatedUser.managed.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+														ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://www.dropbox.com/s/abvs179kertlunv/metrics.sh?dl=1" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.managed[updatedUser.managed.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
 															.then(function (result) {
 																console.log(result);
 															});

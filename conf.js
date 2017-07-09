@@ -30,10 +30,10 @@ module.exports = {
 		app.use(morgan('dev'));
 		app.use(cors());
 		app.use(function (req, res, next) {
-			if ((req.get('origin') == 'http://localhost' || req.get('origin') == 'https://optimus-hariaakash.rhcloud.com' || req.get('origin') == 'http://optimus-hariaakash.rhcloud.com') || req.url.match('metrics'))
+//			if ((req.get('origin') == 'http://localhost' || req.get('origin') == 'https://optimus-hariaakash.rhcloud.com' || req.get('origin') == 'http://optimus-hariaakash.rhcloud.com') || req.url.match('metrics'))
 				next();
-			else
-				res.json(403);
+//			else
+//				res.json(403);
 		});
 	},
 	ROUTES: function (app) {
