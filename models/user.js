@@ -14,9 +14,15 @@ var userSchema = new Schema({
 	},
 	password: String,
 	info: {
-		fname: String,
-		lname: String,
-		country: String
+		name: String,
+		address: String,
+		city: String,
+		state: String,
+		country: String,
+		set: {
+			type: Boolean,
+			default: false
+		}
 	},
 	conf: {
 		verified: String,
@@ -24,14 +30,18 @@ var userSchema = new Schema({
 			type: Number,
 			default: 1
 		},
-		pVerify: String
+		pVerify: String,
+		block: {
+			type: Boolean,
+			default: false
+		}
 	},
 	stats: {
 		bought: {
 			type: Number,
 			default: 0
 		},
-		managed: {
+		added: {
 			type: Number,
 			default: 0
 		},
@@ -42,6 +52,16 @@ var userSchema = new Schema({
 		usage: {
 			type: Number,
 			default: 0
+		},
+		tickets: {
+			open: {
+				type: Number,
+				default: 0
+			},
+			closed: {
+				type: Number,
+				default: 0
+			}
 		}
 	},
 	authKey: String,
@@ -49,6 +69,7 @@ var userSchema = new Schema({
 		name: String,
 		key: String,
 		logs: [{
+			ip: String,
 			cmd: String,
 			error: String,
 			result: String,
@@ -66,7 +87,40 @@ var userSchema = new Schema({
 			default: true
 		}
 	}],
-	managed: [Server]
+	tickets: [{
+		status: {
+			type: String,
+			default: "open"
+		},
+		sub: String,
+		conv: [{
+			msg: String,
+			person: {
+				type: Boolean,
+				default: 0
+			},
+			date: {
+				type: Date,
+				default: Date.now
+			}
+		}]
+	}],
+	added: [Server],
+	logs: [{
+		ip: String,
+		msg: String,
+		date: {
+			type: Date,
+			default: Date.now
+		}
+	}],
+	teams: [{
+		name: String,
+		admin: {
+			type: Boolean,
+			default: 1
+		}
+	}]
 });
 
 

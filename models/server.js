@@ -17,7 +17,6 @@ var serverSchema = new Schema({
 		hname: String
 	},
 	uname: String,
-	password: String,
 	metrics: [{
 		m_t: Number,
 		m_u: Number,

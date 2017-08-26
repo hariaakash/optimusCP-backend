@@ -1,4 +1,5 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var server = require('http').Server(app);
 //var io = require('socket.io')(server);
 var fs = require('fs');
@@ -16,12 +17,12 @@ var conf = require('./conf');
 conf.MONGOOSE(mongoose);
 
 
-conf.MW(app, morgan, path, fs, rfs, cors);
+conf.MW(app, express, morgan, path, fs, rfs, cors);
 
 
 conf.ROUTES(app);
 //require('./routes/socket')(io);
 
 
-server.listen(conf.PORT, conf.IP);
+server.listen(conf.PORT);
 console.log('Server running on ' + conf.IP + ':' + conf.PORT);
