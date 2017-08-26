@@ -9,7 +9,7 @@ var cron = require('node-cron');
 var requestIp = require('request-ip');
 var User = require('../models/user');
 var Admin = require('../models/admin');
-var adminUrl = 'http://localhost/admin/';
+var adminUrl = 'http://optimuscp.io/admin/';
 
 
 app.use(bodyParser.json());
@@ -175,27 +175,27 @@ app.get('/view', function (req, res) {
 		uniR(res, false, 'Empty Fields !!');
 	}
 });
-
-app.post('/create', function (req, res) {
-	if (req.body.email && req.body.password) {
-		bcrypt.hash(req.body.password, 10, function (err, hash) {
-			var admin = new Admin();
-			admin.email = req.body.email;
-			admin.password = hash;
-			admin.adminKey = hat();
-			admin.save()
-				.then(function (user) {
-					uniR(res, true, 'Successfully created !!');
-				})
-				.catch(function (err) {
-					console.log(err);
-					uniR(res, false, 'Chosen email is already registered !!');
-				});
-		});
-	} else {
-		uniR(res, false, 'Empty Fields !!');
-	}
-});
+//
+//app.post('/create', function (req, res) {
+//	if (req.body.email && req.body.password) {
+//		bcrypt.hash(req.body.password, 10, function (err, hash) {
+//			var admin = new Admin();
+//			admin.email = req.body.email;
+//			admin.password = hash;
+//			admin.adminKey = hat();
+//			admin.save()
+//				.then(function (user) {
+//					uniR(res, true, 'Successfully created !!');
+//				})
+//				.catch(function (err) {
+//					console.log(err);
+//					uniR(res, false, 'Chosen email is already registered !!');
+//				});
+//		});
+//	} else {
+//		uniR(res, false, 'Empty Fields !!');
+//	}
+//});
 
 app.post('/login', function (req, res) {
 	if (req.body.email && req.body.password) {
@@ -378,7 +378,7 @@ app.post('/addUser', function (req, res) {
 											});
 									});
 								} else {
-									uniR(res, false, 'User already registered!!')
+									uniR(res, false, 'Staff already registered!!')
 								}
 							})
 							.catch(function (err) {
