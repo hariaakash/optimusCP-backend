@@ -1,0 +1,101 @@
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Cron Manager</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a ui-sref="dashboard.servers" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Buy Server</a>
+			<ol class="breadcrumb">
+				<li><a ui-sref="dashboard.home" class="active">Home</a></li>
+				<li><a ui-sref="dashboard.manage({serverId: serverId})" class="active">Manage</a></li>
+				<li class="active">Metrics</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+			<div class="panel panel-info">
+				<div class="panel-heading text-center">RAM
+					<div class="pull-right"><a href="javascript:void(0)"><i class="fa fa-code" style="font-size:20px" ng-click="copyEmbedModal(2)"></i></a></div>
+				</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div id="container1" ng-show="serverData.seriesOptions[0].data.length"></div>
+						<h2 class="text-center" ng-show="!serverData.seriesOptions[0].data.length">No Data to Display</h2>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading text-center">STORAGE
+					<div class="pull-right"><a href="javascript:void(0)"><i class="fa fa-code" style="font-size:20px" ng-click="copyEmbedModal(3)"></i></a></div>
+				</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div id="container2" ng-show="serverData.seriesOptions[1].data.length"></div>
+						<h2 class="text-center" ng-show="!serverData.seriesOptions[1].data.length">No Data to Display</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="panel panel-info">
+				<div class="panel-heading text-center">Server Info</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<table class="table table-borderless server-info">
+							<tbody>
+								<tr>
+									<td>Name: </td>
+									<td ng-bind="serverData.name"></td>
+								</tr>
+								<tr>
+									<td>IP: </td>
+									<td><a href="http://{{serverData.ip}}" target="_blank">{{serverData.ip}}<i class="fa fa-external-link m-l-5"></i></a></td>
+								</tr>
+								<tr>
+									<td>PORT: </td>
+									<td ng-bind="serverData.port"></td>
+								</tr>
+								<tr>
+									<td>Login name: </td>
+									<td ng-bind="serverData.uname"></td>
+								</tr>
+								<tr>
+									<td>OS: </td>
+									<td ng-bind="serverData.info.os"></td>
+								</tr>
+								<tr>
+									<td>Hostname: </td>
+									<td><a href="http://{{serverData.info.hname}}" target="_blank">{{serverData.info.hname}}<i class="fa fa-external-link m-l-5"></i></a></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="copyEmbed" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header text-center">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<i class="fa fa-code modal-icon"></i>
+				<h2 class="modal-title">Copy Chart Embed Code</h2>
+			</div>
+			<div class="modal-body text-white">
+				<div class="row">
+					<div class="col-md-10">
+						<pre class="prettyprint">{{embedCode}}</pre>
+					</div>
+					<div class="col-md-2">
+						<button type="button" class="btn btn-danger btn-circle" ng-click="copySuccess()" clipboard supported="supported" text="embedCode"><i class="fa fa-clone"></i></button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>

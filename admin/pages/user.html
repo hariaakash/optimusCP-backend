@@ -1,0 +1,181 @@
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">User </h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a ui-sref="dashboard.home" class="active">Home</a></li>
+				<li class="active">User</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+			<div class="panel panel-info">
+				<div class="panel-heading text-center">Servers</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div class="table-responsive" ng-show="userData.added.length">
+							<table class="table color-table">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Name</th>
+										<th>IP:Port</th>
+										<th>OS</th>
+										<th>Crons</th>
+										<th>SS</th>
+										<!--										<th>Delete</th>-->
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="x in userData.added">
+										<td>{{$index + 1}}</td>
+										<td ng-bind="x.name"></td>
+										<td>{{x.ip}}:{{x.port}}</td>
+										<td ng-bind="x.os"></td>
+										<td ng-bind="x.crons"></td>
+										<td ng-bind="x.ss"></td>
+										<!--										<td><button type="button" class="btn btn-circle btn-danger" ng-click="delApiKey(x._id)"><i class="fa fa-trash-o"></i></button></td>-->
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<h2 class="text-center" ng-show="!userData.added.length">No Server's created</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="panel panel-info">
+				<div class="panel-heading text-center">User Info</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<table class="table table-borderless server-info" style="font-size: 1em;">
+							<tbody>
+								<tr>
+									<td>UID: </td>
+									<td ng-bind="userData.id"></td>
+								</tr>
+								<tr>
+									<td>Email: </td>
+									<td ng-bind="userData.email"></td>
+								</tr>
+								<tr>
+									<td>Plan: </td>
+									<td ng-bind="userData.plan"></td>
+								</tr>
+								<tr ng-show="userData.info.name">
+									<td>Name: </td>
+									<td ng-bind="userData.info.name"></td>
+								</tr>
+								<tr>
+									<td>Servers: </td>
+									<td ng-bind="userData.stats.added"></td>
+								</tr>
+								<tr>
+									<td>APIs: </td>
+									<td ng-bind="userData.apis"></td>
+								</tr>
+								<tr>
+									<td>Tickets: </td>
+									<td>{{userData.stats.tickets.open}}/{{userData.stats.tickets.open+userData.stats.tickets.closed}}</td>
+								</tr>
+								<tr ng-show="userData.info.country">
+									<td>Country: </td>
+									<td ng-bind="userData.info.country"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="white-box">
+				<div class="sttabs tabs-style-bar" ng-init="supportTab=1">
+					<nav>
+						<ul>
+							<li ng-class="{'tab-current': supportTab==1}"><a ng-click="supportTab=1"><i class="fa fa-folder-open-o"></i> Open</a></li>
+							<li ng-class="{'tab-current': supportTab==2}"><a ng-click="supportTab=2"><i class="fa fa-folder-closed-o"></i> Closed</a></li>
+							<li ng-class="{'tab-current': supportTab==3}"><a ng-click="supportTab=3"><i class="fa fa-add"></i> Create</a></li>
+						</ul>
+					</nav>
+					<div class="content-wrap">
+						<section ng-class="{'content-current': supportTab==1}">
+							<h2 class="text-center" ng-show="!userData.tickets.open.length">No ticket's open</h2>
+							<div class="table-responsive" ng-show="userData.tickets.open.length">
+								<table class="table color-table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Subject</th>
+											<th>Last Reply</th>
+											<th>View</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in userData.tickets.open">
+											<td>{{$index + 1}}</td>
+											<td>{{ x.sub | limitTo: 20 }}{{x.sub.length > 20 ? '...' : ''}}</td>
+											<td>{{ x.conv[x.conv.length-1].person===true ? 'Staff' : 'User' }}</td>
+											<td><a ui-sref="dashboard.ticket({uId: userData.id, tId: x._id})"><button type="button" class="btn btn-circle btn-danger"><i class="fa fa-envelope"></i></button></a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</section>
+						<section ng-class="{'content-current': supportTab==2}">
+							<h2 class="text-center" ng-show="!userData.tickets.closed.length">No ticket's closed</h2>
+							<div class="table-responsive" ng-show="userData.tickets.closed.length">
+								<table class="table color-table">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Subject</th>
+											<th>Last Reply</th>
+											<th>View</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="x in userData.tickets.closed">
+											<td>{{$index + 1}}</td>
+											<td>{{ x.sub | limitTo: 20 }}{{x.sub.length > 20 ? '...' : ''}}</td>
+											<td>{{ x.conv[x.conv.length-1].person===true ? 'Staff' : 'User' }}</td>
+											<td><a ui-sref="dashboard.ticket({uId: userData.id, tId: x._id})"><button type="button" class="btn btn-circle btn-danger"><i class="fa fa-envelope"></i></button></a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</section>
+						<section ng-class="{'content-current': supportTab==3}">
+							<h2 class="text-center">New Support Ticket</h2>
+							<form name="ticketCreateForm" class="form-horizontal">
+								<div class="form-group">
+									<label>Subject:</label>
+									<div class="col-xs-12">
+										<input class="form-control" type="name" ng-model="newTicket.sub" placeholder="Subject" ng-minlength="1" required>
+									</div>
+								</div>
+								<div class="form-group">
+									<label>Message:</label>
+									<div class="col-xs-12">
+										<textarea class="form-control" ng-model="newTicket.msg" placeholder="Describe the problem you're having in great detail" ng-minlength="1" required></textarea>
+									</div>
+								</div>
+								<div class="form-group text-center">
+									<div class="col-xs-12">
+										<button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" id="btnLoad" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Submitting" type="submit" ng-disabled="ticketCreateForm.$invalid" ng-click="createTicket()">Create Ticket</button>
+									</div>
+								</div>
+							</form>
+						</section>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,28 @@
+<section id="wrapper" class="login-register">
+	<div class="row">
+		<div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-12 col-xs-12">
+			<div class="login-box">
+				<div class="white-box">
+					<form class="form-horizontal form-material" ng-submit="verifyEmail()">
+						<h3 class="box-title m-b-20">Verify Email</h3>
+						<div class="form-group ">
+							<div class="col-xs-12">
+								<input class="form-control" type="text" required="" ng-model="data.email" disabled>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-xs-12">
+								<input class="form-control" type="text" required="" ng-model="data.key" disabled>
+							</div>
+						</div>
+						<div class="form-group text-center m-t-20">
+							<div class="col-xs-12">
+								<button class="btn btn-primary btn-lg btn-block text-uppercase waves-effect waves-light" type="submit">Confirm</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

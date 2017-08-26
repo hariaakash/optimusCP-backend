@@ -1,0 +1,80 @@
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Home Page</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <button class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Role: {{homeData.role}}</button>
+			<ol class="breadcrumb">
+				<li class="active">Home</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Users Registered</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-user text-danger"></i></li>
+					<li class="text-right"><span ng-bind="homeData.users.length"></span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Users Verified</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-user-plus text-danger"></i></li>
+					<li class="text-right"><span ng-bind="homeData.verified"></span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Servers</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-server text-danger"></i></li>
+					<li class="text-right"><span ng-bind="homeData.servers"></span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Tickets Open</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-folder-open text-danger"></i></li>
+					<li class="text-right"><span ng-bind="homeData.tickets"></span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<h2 ng-show="!homeData.users.length">Not enough data</h2>
+		<table class="table table-hover margin bottom" ng-show="homeData.users.length">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Email</th>
+					<th>Verified</th>
+					<th>Blocked</th>
+					<th>Servers</th>
+					<th>Tickets Open</th>
+					<th>View</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr dir-paginate="x in homeData.users | itemsPerPage: pageSize" current-page="currentPage">
+					<td>{{ x.no }}</td>
+					<td>{{ x.email }}</td>
+					<td><button type="button" class="btn btn-circle" ng-class="{'btn-success': x.verified == 'true', 'btn-warning': x.verified != 'true'}"><i class="fa"  ng-class="{'fa-check': x.verified == 'true', 'fa-close': x.verified != 'true'}"></i></button></td>
+					<td ng-class="{'text-danger': x.block == true, 'text-info': x.block == false }">{{ x.block }}</td>
+					<td>{{ x.added }}</td>
+					<td>{{ x.tickets }}</td>
+					<td><a ui-sref="dashboard.user({uId:x.id})"><button type="button" class="btn btn-circle btn-info"><i class="fa fa-eye"></i></button></a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="pull-right">
+			<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+		</div>
+	</div>
+</div>
