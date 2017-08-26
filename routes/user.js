@@ -9,7 +9,7 @@ var request = require('request');
 var requestIp = require('request-ip');
 var User = require('../models/user');
 var Team = require('../models/team');
-var userUrl = 'http://localhost/a/#!/';
+var userUrl = 'https://optimuscp.io/a/#!/';
 
 
 app.use(bodyParser.json());
