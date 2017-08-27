@@ -23,7 +23,7 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.serverData = res.data.data;
-							$scope.embedCode = '<iframe src="http://localhost/a/#!/embed/' + $rootScope.serverData.id + '/1" width="400" height="300"></iframe>';
+							$scope.embedCode = '<iframe src="https://optimuscp.io/#!/embed/' + $rootScope.serverData.id + '/1" width="400" height="300"></iframe>';
 							Highcharts.stockChart('container', {
 								title: {
 									text: 'Name: ' + $rootScope.serverData.name + ', IP: ' + $rootScope.serverData.ip
@@ -376,17 +376,6 @@ angular.module('optimusApp')
 					protocol: 'FTP-SSH'
 				}
 			);
-			//			$scope.data = {
-			//				t: 'sftp',
-			//				c: {
-			//					p: $rootScope.serverData.password,
-			//					o: $rootScope.serverData.port,
-			//					m: 'Password'
-			//				}
-			//			};
-			//			$scope.data = btoa(JSON.stringify($scope.data));
-			//			$scope.url = "http://localhost/mftp/#/c/" + $rootScope.serverData.ip + '/' + $rootScope.serverData.uname + '/' + $scope.data;
-			//			$window.open($scope.url, '_blank');
 		};
 		$scope.copySuccess = function () {
 			swal("Success", "Code copied to clipboard.", "success");

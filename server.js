@@ -2,9 +2,6 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 //var io = require('socket.io')(server);
-var fs = require('fs');
-var path = require('path');
-var rfs = require('rotating-file-stream');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -17,7 +14,7 @@ var conf = require('./conf');
 conf.MONGOOSE(mongoose);
 
 
-conf.MW(app, express, morgan, path, fs, rfs, cors);
+conf.MW(app, express, morgan, cors);
 
 
 conf.ROUTES(app);
@@ -25,4 +22,4 @@ conf.ROUTES(app);
 
 
 server.listen(conf.PORT);
-console.log('Server running on ' + conf.IP + ':' + conf.PORT);
+console.log('Server running !!');

@@ -249,7 +249,7 @@ angular.module('optimusApp')
 		$scope.copyEmbedModal = function (x) {
 			$('#copyEmbed').modal('show');
 			$scope.chart = x;
-			$scope.embedCode = '<iframe src="http://localhost/a/#!/embed/' + $rootScope.serverData.id + '/' + $scope.chart + '" width="400" height="300"></iframe>';
+			$scope.embedCode = '<iframe src="https://optimuscp.io/#!/embed/' + $rootScope.serverData.id + '/' + $scope.chart + '" width="400" height="300"></iframe>';
 		};
 		$scope.copySuccess = function () {
 			swal("Success", "Code copied to clipboard.", "success");

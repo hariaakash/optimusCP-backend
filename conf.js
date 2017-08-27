@@ -10,16 +10,7 @@ module.exports = {
 				console.log(err.message);
 			});
 	},
-	MW: function (app, express, morgan, path, fs, rfs, cors) {
-		var logDirectory = path.join(__dirname, 'log');
-		fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-		var accessLogStream = rfs('access.log', {
-			interval: '1d',
-			path: logDirectory
-		});
-		app.use(morgan('common', {
-			stream: accessLogStream
-		}));
+	MW: function (app, express, morgan, cors) {
 		app.use(express.static('public'));
 		app.use(morgan('dev'));
 		app.use(cors());
