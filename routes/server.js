@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var node_ssh = require('node-ssh');
 ssh = new node_ssh();
-var request = require('request');
+var requestIp = require('request-ip');
 var moment = require('moment');
 var User = require('../models/user');
 
