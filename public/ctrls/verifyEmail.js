@@ -2,7 +2,7 @@ angular.module('optimusApp')
 	.controller('verifyEmailCtrl', function ($scope, $rootScope, $location, $http, $stateParams) {
 		$rootScope.checkAuth();
 		$scope.data = {
-			email: $stateParams.email,
+			email: decodeURIComponent($stateParams.email),
 			key: $stateParams.key
 		};
 		$scope.verifyEmail = function () {

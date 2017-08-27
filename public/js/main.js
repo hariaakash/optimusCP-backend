@@ -7,6 +7,7 @@ load("./plugins/ui-router/angular-ui-router.min.js");
 load("./plugins/ocLazyLoad/ocLazyLoad.min.js");
 load("./plugins/js-cookie/js-cookie.min.js");
 load("./js/app.js");
+load("./plugins/angular-loading-bar/loading-bar.js");
 $(document).ready(function () {
 	// Theme settings
 	//Open-Close-right sidebar

@@ -1,4 +1,7 @@
-angular.module("optimusApp", ['ui.router', 'oc.lazyLoad'])
+angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad'])
+	.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+		cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/optimuscp-logo.png" style="width: 64px; height: 64px;"></div>';
+  	}])
 	.filter('range', function () {
 		return function (input, total) {
 			total = parseInt(total);
@@ -264,7 +267,7 @@ angular.module('optimusApp')
 	.controller('globalCtrl', function ($scope, $rootScope, $location, $http, $state, $ocLazyLoad) {
 		//		$rootScope.apiUrl = 'http://localhost:3000/';
 		$rootScope.apiUrl = 'https://optimuscp.io/webapi/';
-		$ocLazyLoad.load(['./plugins/sweetalert2/sweetalert2.min.js', './plugins/sweetalert2/sweetalert2.min.css', './plugins/toast/toast.min.js', './plugins/toast/toast.min.css'])
+		$ocLazyLoad.load(['./plugins/sweetalert2/sweetalert2.min.js', './plugins/sweetalert2/sweetalert2.min.css', './plugins/toast/toast.min.js', './plugins/toast/toast.min.css']);
 		$rootScope.checkAuth = function () {
 			if (Cookies.get('authKey')) {
 				$rootScope.authKey = Cookies.get('authKey');
@@ -278,7 +281,6 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.homeData = res.data.data;
-							console.log($rootScope.homeData)
 							if (!$rootScope.homeData.info.set)
 								$state.go('dashboard.account.editProfile')
 						} else {

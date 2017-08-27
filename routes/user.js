@@ -101,7 +101,7 @@ app.post('/register', function (req, res) {
 					var body = new helper.Content('text/html', 'Welcome to OptimusCP');
 					var mail = new helper.Mail(from, subject, to, body);
 					mail.personalizations[0].addSubstitution(new helper.Substitution('-email-', user.email));
-					mail.personalizations[0].addSubstitution(new helper.Substitution('-url-', userUrl + 'verifyEmail?email=' + req.body.email + '&key=' + user.conf.verified));
+					mail.personalizations[0].addSubstitution(new helper.Substitution('-url-', userUrl + 'verifyEmail?email=' + encodeURIComponent(req.body.email) + '&key=' + user.conf.verified));
 					mail.personalizations[0].addSubstitution(new helper.Substitution('-body-', 'Welcome to OptimusCP'));
 					mail.setTemplateId('c9bd7737-04cd-4a52-ae61-5ce1fbf35208');
 					var request = sg.emptyRequest({
@@ -220,7 +220,7 @@ app.post('/sendEmailVerification', function (req, res) {
 						var body = new helper.Content('text/html', 'Welcome to OptimusCP');
 						var mail = new helper.Mail(from, subject, to, body);
 						mail.personalizations[0].addSubstitution(new helper.Substitution('-email-', user.email));
-						mail.personalizations[0].addSubstitution(new helper.Substitution('-url-', userUrl + 'verifyEmail?email=' + req.body.email + '&key=' + user.conf.verified));
+						mail.personalizations[0].addSubstitution(new helper.Substitution('-url-', userUrl + 'verifyEmail?email=' + encodeURIComponent(req.body.email) + '&key=' + user.conf.verified));
 						mail.personalizations[0].addSubstitution(new helper.Substitution('-body-', 'Welcome to OptimusCP'));
 						mail.setTemplateId('c9bd7737-04cd-4a52-ae61-5ce1fbf35208');
 						var request = sg.emptyRequest({
@@ -261,7 +261,7 @@ app.post('/forgotPassword', function (req, res) {
 					var body = new helper.Content('text/html', user.conf.pVerify);
 					var mail = new helper.Mail(from, subject, to, body);
 					mail.personalizations[0].addSubstitution(new helper.Substitution('-email-', req.body.email));
-					mail.personalizations[0].addSubstitution(new helper.Substitution('-url-', userUrl + 'changePassword?email=' + req.body.email + '&key=' + user.conf.pVerify));
+					mail.personalizations[0].addSubstitution(new helper.Substitution('-url-', userUrl + 'changePassword?email=' + encodeURIComponent(req.body.email) + '&key=' + user.conf.pVerify));
 					mail.personalizations[0].addSubstitution(new helper.Substitution('-body-', 'Reset account password'));
 					mail.setTemplateId('7721a5f3-8c96-43df-8bba-eec7c4d90144');
 					var request = sg.emptyRequest({
