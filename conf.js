@@ -20,14 +20,14 @@ module.exports = {
 		app.use(morgan('common', {
 			stream: accessLogStream
 		}));
+		app.use(express.static('public'));
 		app.use(morgan('dev'));
 		app.use(cors());
-		app.use(express.static('public'));
 		app.use(function (req, res, next) {
-			//			if ((req.get('origin') == 'http://localhost' || req.get('origin') == 'https://optimus-hariaakash.rhcloud.com' || req.get('origin') == 'http://optimus-hariaakash.rhcloud.com') || req.url.match('api'))
-			next();
-			//			else
-			//				res.json(403);
+			if ((req.get('origin') == 'http://localhost' || req.get('origin') == 'https://optimuscp.io') || req.url.match('api') || req.url.match('server/metrics'))
+				next();
+			else
+				res.json(403);
 		});
 	},
 	ROUTES: function (app) {
