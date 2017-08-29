@@ -1,5 +1,5 @@
 angular.module('optimusApp')
-	.controller('terminalCtrl', function ($rootScope, $scope, $http, $stateParams, $state, $window) {
+	.controller('terminalCtrl', function ($rootScope, $scope, $http, $stateParams, $state, $window, $sce) {
 		$rootScope.checkAuth();
 		$scope.serverId = $stateParams.serverId;
 		$scope.getServerInfo = function () {
@@ -15,6 +15,7 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.serverData = res.data.data;
+							$scope.url = $sce.trustAsResourceUrl('https://web.optimuscp.io/ssh/host/' + $rootScope.serverData.ip + '?port=' + $rootScope.serverData.port + '&uname=optimusCP&pass=' + $rootScope.serverData.id);
 						} else {
 							swal({
 								title: 'Failed',
@@ -34,52 +35,4 @@ angular.module('optimusApp')
 			}
 		};
 		$scope.getServerInfo();
-		$scope.items = [];
-		$scope.commands = ['clear', 'ls', 'rm', 'cd', 'cmp', 'cp', 'df', 'mv', 'mkdir', 'rmdir', 'wget', 'hostname', 'reboot'];
-		$scope.id = 0;
-		$scope.send = function () {
-			if ($scope.command == 'clear') {
-				$scope.items.length = 0;
-				$scope.command = '';
-			} else {
-				$('#btnLoad').button('loading');
-				$http({
-						method: 'POST',
-						url: $rootScope.apiUrl + 'server/exec',
-						data: {
-							authKey: $rootScope.authKey,
-							serverId: $scope.serverId,
-							cmd: 5,
-							command: $scope.command
-						}
-					})
-					.then(function (res) {
-						$('#btnLoad').button('reset');
-						if (res.data.status == true) {
-							$scope.id++;
-							$scope.items.push({
-								id: $scope.id,
-								command: $scope.command,
-								resp: res.data.result
-							});
-							$scope.command = '';
-						} else {
-							swal({
-								title: 'Failed',
-								text: res.data.msg,
-								type: 'error',
-								timer: 2000,
-								showConfirmButton: true
-							});
-						}
-					}, function (res) {
-						$('#btnLoad').button('reset');
-						swal("Fail", "Some error occurred, try again.", "error");
-					});
-			}
-		};
-		$scope.autofill = function (x) {
-			$scope.command = x;
-			$('#command').focus();
-		};
 	});

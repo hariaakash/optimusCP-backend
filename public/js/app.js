@@ -47,7 +47,10 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
 				controller: "terminalCtrl",
 				resolve: {
 					loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-						return $ocLazyLoad.load('./ctrls/terminal.js');
+						return $ocLazyLoad.load({
+							name: 'Cron',
+							files: ['./ctrls/terminal.js']
+						})
     				}]
 				}
 			})
