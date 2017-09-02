@@ -171,6 +171,7 @@ app.post('/m-add', function (req, res) {
 										if (!result.stderr) {
 											ssh.execCommand('cd / && mkdir -p optimusCP && cd optimusCP && wget https://optimuscp.io/bash/os.sh -O os.sh && chmod +x os.sh && ./os.sh')
 												.then(function (result) {
+													console.log(result)
 													user.added.push({
 														ip: req.body.ip,
 														port: req.body.port,
@@ -189,6 +190,7 @@ app.post('/m-add', function (req, res) {
 															var cmd = 'sudo -i /bin/bash -c "cd /optimusCP && sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo \\"*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '\\") 2>&1 | grep -v \\"no crontab\\" | sort | uniq | crontab - && adduser --disabled-password --gecos \\"\\" optimusCP --force-badname && echo -e \\"' + updatedUser.added[updatedUser.added.length - 1]._id + '\\n' + updatedUser.added[updatedUser.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"';
 															ssh.execCommand(cmd)
 																.then(function (result) {
+																	console.log(result)
 																	fs.unlink(file, function (err) {});
 																});
 														});
