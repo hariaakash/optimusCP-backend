@@ -5,6 +5,9 @@ var node_ssh = require('node-ssh');
 ssh = new node_ssh();
 var requestIp = require('request-ip');
 var moment = require('moment');
+var multer = require('multer');
+var fs = require('fs');
+var hat = require('hat');
 var User = require('../models/user');
 
 
@@ -104,54 +107,120 @@ app.get('/m-det', function (req, res) {
 });
 
 app.post('/m-add', function (req, res) {
-	if (req.body.authKey && req.body.ip && req.body.uname && req.body.password && req.body.name && req.body.port) {
+	if (req.body.authKey && req.body.ip && req.body.uname && (req.body.password || req.body.file) && req.body.name && req.body.port && req.body.authType) {
 		User.findOne({
 				authKey: req.body.authKey
 			})
 			.then(function (user) {
 				if (user) {
 					user.stats.added++;
-					ssh.connect({
-							host: req.body.ip,
-							port: req.body.port,
-							username: req.body.uname,
-							password: req.body.password
-						})
-						.then(function () {
-							ssh.execCommand('sudo -n true')
-								.then(function (result) {
-									if (!result.stderr) {
-										ssh.execCommand('cd / && mkdir -p optimusCP && cd optimusCP && wget https://www.dropbox.com/s/35cwxe0xzas60x8/os.sh?dl=1 -O os.sh && chmod +x os.sh && ./os.sh')
-											.then(function (result) {
-												user.added.push({
-													ip: req.body.ip,
-													port: req.body.port,
-													uname: req.body.uname,
-													name: req.body.name,
-													'info.os': result.stdout.split('\n')[0],
-													'info.hname': result.stdout.split('\n')[1]
-												});
-												user.logs.push({
-													ip: requestIp.getClientIp(req),
-													msg: 'Added Server with IP: ' + req.body.ip
-												});
-												user.save()
-													.then(function (updatedUser) {
-														ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://www.dropbox.com/s/abvs179kertlunv/metrics.sh?dl=1" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab - && adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + updatedUser.added[updatedUser.added.length - 1]._id + '\n' + updatedUser.added[updatedUser.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
-															.then(function (result) {
-																console.log(result);
-															});
+					if (req.body.authType == 1) {
+						ssh.connect({
+								host: req.body.ip,
+								port: req.body.port,
+								username: req.body.uname,
+								password: req.body.password
+							})
+							.then(function () {
+								ssh.execCommand('sudo -n true')
+									.then(function (result) {
+										if (!result.stderr) {
+											ssh.execCommand('cd / && mkdir -p optimusCP && cd optimusCP && wget "https://optimuscp.io/bash/os.sh" -O os.sh && chmod +x os.sh && ./os.sh')
+												.then(function (result) {
+													user.added.push({
+														ip: req.body.ip,
+														port: req.body.port,
+														authType: req.body.authType,
+														uname: req.body.uname,
+														name: req.body.name,
+														'info.os': result.stdout.split('\n')[0],
+														'info.hname': result.stdout.split('\n')[1]
 													});
-												uniR(res, true, 'Server added successfully !!');
-											});
-									} else {
-										uniR(res, false, 'Only root user allowed !!');
-									}
-								});
-						})
-						.catch(function (err) {
-							uniR(res, false, 'Either server is down / Authentication failed');
-						});
+													user.logs.push({
+														ip: requestIp.getClientIp(req),
+														msg: 'Added Server with IP: ' + req.body.ip
+													});
+													user.save()
+														.then(function (updatedUser) {
+															ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://optimuscp.io/bash/metrics.sh" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab - && adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + updatedUser.added[updatedUser.added.length - 1]._id + '\n' + updatedUser.added[updatedUser.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
+																.then(function (result) {
+																	console.log(result);
+																});
+														});
+													uniR(res, true, 'Server added successfully !!');
+												});
+										} else {
+											uniR(res, false, 'Only root user allowed !!');
+										}
+									});
+							})
+							.catch(function (err) {
+								uniR(res, false, 'Either server is down / Authentication failed');
+							});
+					} else {
+						var file = './uploads/' + req.body.file + '.pem';
+						ssh.connect({
+								host: req.body.ip,
+								port: req.body.port,
+								username: req.body.uname,
+								privateKey: fs.readFileSync(file, "utf8")
+							})
+							.then(function () {
+								ssh.execCommand('sudo -n true')
+									.then(function (result) {
+										if (!result.stderr) {
+											ssh.execCommand('cd / && mkdir -p optimusCP && cd optimusCP && wget https://www.dropbox.com/s/35cwxe0xzas60x8/os.sh?dl=1 -O os.sh && chmod +x os.sh && ./os.sh')
+												.then(function (result) {
+													user.added.push({
+														ip: req.body.ip,
+														port: req.body.port,
+														authType: req.body.authType,
+														uname: req.body.uname,
+														name: req.body.name,
+														'info.os': result.stdout.split('\n')[0],
+														'info.hname': result.stdout.split('\n')[1]
+													});
+													user.logs.push({
+														ip: requestIp.getClientIp(req),
+														msg: 'Added Server with IP: ' + req.body.ip
+													});
+													user.save()
+														.then(function (updatedUser) {
+															ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://www.dropbox.com/s/abvs179kertlunv/metrics.sh?dl=1" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab - && adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + updatedUser.added[updatedUser.added.length - 1]._id + '\n' + updatedUser.added[updatedUser.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
+																.then(function (result) {
+																	fs.unlink(file, function (err) {
+																		if (err && err.code == 'ENOENT') {
+																			// file doens't exist
+																			console.info("File doesn't exist, won't remove it.");
+																		} else if (err) {
+																			// other errors, e.g. maybe we don't have enough permission
+																			console.error("Error occurred while trying to remove file");
+																		} else {
+																			console.info(`removed`);
+																		}
+																	});
+																});
+														});
+													uniR(res, true, 'Server added successfully !!');
+												})
+												.catch(function (err) {
+													console.log(err);
+													uniR(res, false, 'Server is down / auth failed')
+												})
+										} else {
+											uniR(res, false, 'Only root user allowed !!');
+										}
+									})
+									.catch(function (err) {
+										console.log(err)
+									});
+							})
+							.catch(function (err) {
+								console.log(err)
+								uniR(res, false, 'Either server is down / Authentication failed');
+							});
+
+					}
 				} else {
 					uniR(res, false, 'Account not found !!');
 				}
@@ -214,6 +283,8 @@ app.post('/exec', function (req, res) {
 									password: String(user.added[index]._id)
 								})
 								.then(function () {
+									if (req.body.cmd == 3)
+										uniR(res, true, msg)
 									ssh.execCommand('sudo sh -c "' + cmd + '"')
 										.then(function (result) {
 											if (req.body.cmd == 4) {
@@ -226,7 +297,9 @@ app.post('/exec', function (req, res) {
 													msg: msg,
 													result: result
 												});
-											} else
+											} else if (req.body.cmd == 3)
+												req.body.cmd = 1;
+											else
 												uniR(res, true, msg);
 											console.log(result);
 										});
@@ -255,7 +328,7 @@ app.post('/exec', function (req, res) {
 								break;
 							case 3:
 								cmd = 'sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get -y dist-upgrade'
-								msg = 'System updated successfully !!';
+								msg = 'System will be updated !!';
 								exec();
 								break;
 							case 4:
@@ -269,7 +342,7 @@ app.post('/exec', function (req, res) {
 								exec();
 								break;
 							case 6:
-								cmd = 'cd /optimusCP && wget https://www.dropbox.com/s/ddcqxk8120sclyt/lamp.sh?dl=1 -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + user.added[index].password
+								cmd = 'cd /optimusCP && wget "https://optimuscp.io/bash/lamp.sh" -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + user.added[index].password
 								msg = 'LAMP is getting installed...'
 								exec();
 								break;
@@ -513,18 +586,24 @@ app.post('/metrics/:userId/:serverId', function (req, res) {
 		User.findById(req.params.userId)
 			.then(function (user) {
 				if (user) {
-					var index = 1;
+					var index = -1;
 					for (i = 0; i < user.added.length; i++)
 						if (user.added[i]._id == req.params.serverId)
 							index = i;
-					user.added[index].metrics.push({
-						m_t: req.body.m_t,
-						m_u: req.body.m_u,
-						d_t: req.body.d_t,
-						d_u: req.body.d_u,
-					});
-					user.save();
-					uniR(res, true, 'Metrics received !!');
+					if (index != -1) {
+						user.added[index].metrics.push({
+							m_t: req.body.m_t,
+							m_u: req.body.m_u,
+							d_t: req.body.d_t,
+							d_u: req.body.d_u,
+							m: parseFloat((req.body.m_u * 100 / req.body.m_t).toFixed(2)),
+							d: parseFloat((req.body.d_u * 100 / req.body.d_t).toFixed(2))
+						});
+						user.save();
+						uniR(res, true, 'Metrics received !!');
+					} else {
+						uniR(res, false, 'Error receiving');
+					}
 				} else {
 					uniR(res, false, 'Account not found !!');
 				}
@@ -586,6 +665,31 @@ app.get('/embed', function (req, res) {
 		uniR(res, false, 'Empty Fields !!');
 	}
 });
+
+app.post('/uploadPrivateKey', function (req, res) {
+	var filename = Date.now() + hat();
+	var storage = multer.diskStorage({
+		destination: function (req, file, cb) {
+			cb(null, './uploads/')
+		},
+		filename: function (req, file, cb) {
+			cb(null, filename + '.' + file.originalname.split('.')[file.originalname.split('.').length - 1])
+		}
+	});
+	var upload = multer({
+		storage: storage
+	}).single('file');
+	upload(req, res, function (err) {
+		if (err) {
+			uniR(res, false, 'Error uploading file')
+		} else {
+			res.json({
+				status: true,
+				file: filename
+			})
+		}
+	});
+})
 
 
 module.exports = app;

@@ -11,6 +11,7 @@ var serverSchema = new Schema({
 		sparse: true
 	},
 	port: Number,
+	authType: Number,
 	name: String,
 	info: {
 		os: String,
@@ -22,6 +23,8 @@ var serverSchema = new Schema({
 		m_u: Number,
 		d_t: Number,
 		d_u: Number,
+		d: Number,
+		m: Number,
 		date: {
 			type: Date,
 			default: Date.now

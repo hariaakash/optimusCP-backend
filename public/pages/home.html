@@ -98,10 +98,22 @@
 						<input type="text" class="form-control" ng-init="addServerForm.uname='root'" ng-model="addServerForm.uname" required>
 						<span class="help-block">Enter login name or leave it as root</span>
 					</div>
-					<div class="form-group">
+					<div class="form-group" ng-init="addServerForm.authType='1'">
+						<label>Authentication Type: *</label>
+						<select class="form-control" ng-model="addServerForm.authType" required>
+							<option value="1">Password</option>
+							<option value="2">Public Key File</option>
+						</select>
+					</div>
+					<div class="form-group" ng-show="addServerForm.authType==1">
 						<label>Login password: *</label>
 						<input type="password" class="form-control" ng-model="addServerForm.password" required>
 						<span class="help-block">Enter login password (We will keep it secret)</span>
+					</div>
+					<div class="form-group" ng-show="addServerForm.authType==2">
+						<label>Private Key : *</label>
+						<input type="file" ngf-select ng-model="addServerForm.password" name="file" ngf-pattern="'.pem'" accept=".pem" ngf-max-size="1MB">
+						<span class="help-block">Upload your private key (.pem) file</span>
 					</div>
 				</form>
 			</div>

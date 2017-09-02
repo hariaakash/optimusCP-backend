@@ -171,8 +171,3 @@ $('.visited li a').click(function (e) {
 	}
 	e.preventDefault();
 });
-// Login and recover password
-$('#to-recover').click(function () {
-	$("#loginform").slideUp();
-	$("#recoverform").fadeIn();
-});

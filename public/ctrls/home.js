@@ -1,5 +1,5 @@
 angular.module('optimusApp')
-	.controller('homeCtrl', function ($rootScope, $scope, $location, $http, $window, $timeout) {
+	.controller('homeCtrl', function ($rootScope, $scope, $location, $http, $window, $timeout, Upload) {
 		$rootScope.checkAuth();
 		$scope.addServer = function () {
 			$('#btnLoad').button('loading');
@@ -9,35 +9,91 @@ angular.module('optimusApp')
 				port: $scope.addServerForm.port,
 				uname: $scope.addServerForm.uname,
 				name: $scope.addServerForm.name,
-				password: $scope.addServerForm.password
+				authType: $scope.addServerForm.authType
 			};
-			$http({
-				method: 'POST',
-				url: $rootScope.apiUrl + 'server/m-add',
-				data: $scope.data
-			}).then(function (res) {
-				if (res.data.status == true) {
-					swal({
-						title: 'Success',
-						text: res.data.msg,
-						type: 'success',
-						showConfirmButton: false
+			if ($scope.addServerForm.authType == 1) {
+				$scope.data.password = $scope.addServerForm.password;
+				$http({
+						method: 'POST',
+						url: $rootScope.apiUrl + 'server/m-add',
+						data: $scope.data
+					})
+					.then(function (res) {
+						if (res.data.status == true) {
+							swal({
+									title: 'Success',
+									text: res.data.msg,
+									type: 'success',
+									showConfirmButton: true
+								})
+								.then(function () {
+									$window.location.reload();
+								});
+						} else {
+							$('#btnLoad').button('reset');
+							swal({
+								title: 'Failed',
+								text: res.data.msg,
+								type: 'error',
+								showConfirmButton: true
+							});
+						}
+					}, function (res) {
+						$('#btnLoad').button('reset');
+						swal("Fail", "Some error occurred, try again.", "error");
 					});
-					$timeout(function () {
-						$window.location.reload();
-					}, 2000);
-				} else {
+			} else
+				Upload.upload({
+					method: 'POST',
+					url: $rootScope.apiUrl + 'server/uploadPrivateKey',
+					data: {
+						file: $scope.addServerForm.password
+					}
+				})
+				.then(function (res) {
+					if (res.data.status == true) {
+						$scope.data.file = res.data.file;
+						$http({
+								method: 'POST',
+								url: $rootScope.apiUrl + 'server/m-add',
+								data: $scope.data
+							})
+							.then(function (res) {
+								if (res.data.status == true) {
+									swal({
+											title: 'Success',
+											text: res.data.msg,
+											type: 'success',
+											showConfirmButton: true
+										})
+										.then(function () {
+											$window.location.reload();
+										});
+								} else {
+									$('#btnLoad').button('reset');
+									swal({
+										title: 'Failed',
+										text: res.data.msg,
+										type: 'error',
+										showConfirmButton: true
+									});
+								}
+							}, function (res) {
+								$('#btnLoad').button('reset');
+								swal("Fail", "Some error occurred, try again.", "error");
+							});
+					} else {
+						$('#btnLoad').button('reset');
+						swal({
+							title: 'Failed',
+							text: res.data.msg,
+							type: 'error',
+							showConfirmButton: true
+						});
+					}
+				}, function (res) {
 					$('#btnLoad').button('reset');
-					swal({
-						title: 'Failed',
-						text: res.data.msg,
-						type: 'error',
-						showConfirmButton: true
-					});
-				}
-			}, function (res) {
-				$('#btnLoad').button('reset');
-				swal("Fail", "Some error occurred, try again.", "error");
-			});
+					swal("Fail", "Some error occurred, try again.", "error");
+				});
 		};
 	});
