@@ -186,19 +186,10 @@ app.post('/m-add', function (req, res) {
 													});
 													user.save()
 														.then(function (updatedUser) {
-															ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://www.dropbox.com/s/abvs179kertlunv/metrics.sh?dl=1" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab - && adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + updatedUser.added[updatedUser.added.length - 1]._id + '\n' + updatedUser.added[updatedUser.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
+															var cmd = 'sudo -i /bin/bash -c "cd /optimusCP && sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo \\"*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '\\") 2>&1 | grep -v \\"no crontab\\" | sort | uniq | crontab - && adduser --disabled-password --gecos \\"\\" optimusCP --force-badname && echo -e \\"' + updatedUser.added[updatedUser.added.length - 1]._id + '\\n' + updatedUser.added[updatedUser.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"';
+															ssh.execCommand(cmd)
 																.then(function (result) {
-																	fs.unlink(file, function (err) {
-																		if (err && err.code == 'ENOENT') {
-																			// file doens't exist
-																			console.info("File doesn't exist, won't remove it.");
-																		} else if (err) {
-																			// other errors, e.g. maybe we don't have enough permission
-																			console.error("Error occurred while trying to remove file");
-																		} else {
-																			console.info(`removed`);
-																		}
-																	});
+																	fs.unlink(file, function (err) {});
 																});
 														});
 													uniR(res, true, 'Server added successfully !!');
