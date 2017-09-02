@@ -125,7 +125,7 @@ app.post('/m-add', function (req, res) {
 								ssh.execCommand('sudo -n true')
 									.then(function (result) {
 										if (!result.stderr) {
-											ssh.execCommand('cd / && mkdir -p optimusCP && cd optimusCP && wget "https://optimuscp.io/bash/os.sh" -O os.sh && chmod +x os.sh && ./os.sh')
+											ssh.execCommand('sudo -i /bin/bash -c "cd / && mkdir -p optimusCP && cd optimusCP && wget "https://optimuscp.io/bash/os.sh" -O os.sh && chmod +x os.sh && ./os.sh"')
 												.then(function (result) {
 													user.added.push({
 														ip: req.body.ip,
