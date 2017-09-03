@@ -98,7 +98,7 @@
 						</thead>
 						<tbody>
 							<tr dir-paginate="x in logsData | itemsPerPage: pageSize" current-page="currentPage">
-								<td>{{ x.date }}</td>
+								<td>{{ x.date | date: 'MMM d, y H:mm:ss' }}</td>
 								<td>{{ x.ip }}</td>
 								<td>{{ x.cmd }}</td>
 								<td>{{ x.result }}</td>

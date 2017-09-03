@@ -258,27 +258,6 @@ angular.module('optimusApp')
 						allowOutsideClick: false
 					});
 					break;
-				case 4:
-					swal({
-						title: 'Enter new password',
-						input: 'password',
-						showCancelButton: true,
-						confirmButtonText: 'Confirm',
-						showLoaderOnConfirm: true,
-						preConfirm: function (req) {
-							return new Promise(function (resolve, reject) {
-								if (req.length >= 8) {
-									$scope.data.password = req;
-									$scope.data.cmd = $scope.cmd;
-									$scope.submit();
-								} else {
-									reject('Password should be atleast of length 8');
-								}
-							});
-						},
-						allowOutsideClick: false
-					});
-					break;
 				case 6:
 					swal({
 						title: 'Proceed to install LAMP Stack ?',

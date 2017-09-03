@@ -15,7 +15,13 @@ module.exports = {
 		app.use(morgan('dev'));
 		app.use(cors());
 		app.use(function (req, res, next) {
-			if ((req.get('origin') == 'http://localhost' || req.get('origin') == 'https://optimuscp.io') || req.url.match('api') || req.url.match('server/metrics'))
+			function checkUrl() {
+				if (req.url.match('/api') || req.url.match('server/metrics'))
+					return true
+				else
+					return false
+			}
+			if (req.get('host') == 'localhost:3000' || req.get('host') == 'optimuscp.io' || checkUrl())
 				next();
 			else
 				res.json(403);

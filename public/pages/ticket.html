@@ -3,7 +3,7 @@
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 			<h4 class="page-title">Support Center</h4>
 		</div>
-		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a href="https://themeforest.net/item/elite-admin-responsive-dashboard-web-app-kit-/16750820" target="_blank" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Buy Now</a>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <a ui-sref="dashboard.servers" class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Buy Server</a>
 			<ol class="breadcrumb">
 				<li><a ui-sref="dashboard.home" class="active">Home</a></li>
 				<li><a ui-sref="dashboard.support" class="active">Support</a></li>
@@ -19,7 +19,7 @@
 			<div class="panel panel-danger" ng-repeat="x in ticketData.conv">
 				<div class="panel-heading" style="padding: 5px 5px 0px 10px;">
 					<h4>{{ x.person===true ? 'Staff' : 'Me' }}
-						<div class="pull-right">{{ x.date }}</div>
+						<div class="pull-right">{{ x.date | date: 'MMM d, y H:mm:ss' }}</div>
 					</h4>
 				</div>
 				<div class="panel-body">

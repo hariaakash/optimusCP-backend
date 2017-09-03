@@ -11,7 +11,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
 		};
 	})
 	.config(function ($stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('/home');
+		$urlRouterProvider.otherwise('/login');
 		$stateProvider
 			.state("dashboard", {
 				url: "",
@@ -143,6 +143,19 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
 						return $ocLazyLoad.load({
 							name: 'changePasswordAccount',
 							files: ['./ctrls/changePasswordAccount.js']
+						})
+    				}]
+				}
+			})
+			.state("dashboard.account.activity", {
+				url: "/activity",
+				templateUrl: "pages/activity.html",
+				controller: "activityCtrl",
+				resolve: {
+					loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'Activity',
+							files: ['./ctrls/activity.js', './plugins/pagination/dirPagination.js']
 						})
     				}]
 				}

@@ -26,16 +26,18 @@ function uniR(res, status, msg) {
 }
 
 // Bytes to Readable
-function formatBytes(a, b) {
-	//	if (0 == a) return "0 Bytes";
-	//	var c = 1e3,
-	//		d = b || 2,
-	//		e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
-	//		f = Math.floor(Math.log(a) / Math.log(c));
-	//	return parseFloat((a / Math.pow(c, f)).toFixed(d)) + " " + e[f]
+function formatBytes(a) {
 	return (a / 1048576).toFixed(2)
 }
 
+function formatBytesStr(a, b) {
+	if (0 == a) return "0 Bytes";
+	var c = 1e3,
+		d = b || 2,
+		e = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"],
+		f = Math.floor(Math.log(a) / Math.log(c));
+	return parseFloat((a / Math.pow(c, f)).toFixed(d)) + " " + e[f]
+}
 
 app.get('/m-det', function (req, res) {
 	if (req.query.authKey && req.query.serverId) {
@@ -78,6 +80,14 @@ app.get('/m-det', function (req, res) {
 						data: d,
 						type: 'area'
 					});
+					var logs = [];
+					server[0].logs = server[0].logs.reverse()
+					for (i = 0; i < user.server[0].length; i++)
+						logs.push({
+							no: i,
+							msg: user.logs[i].msg,
+							date: user.logs[i].date
+						})
 					res.json({
 						status: true,
 						data: {
@@ -90,7 +100,8 @@ app.get('/m-det', function (req, res) {
 							metrics: latest[latest.length - 1],
 							seriesOptions: seriesOptions,
 							crons: server[0].crons.length,
-							startupScripts: server[0].startupScripts.length
+							startupScripts: server[0].startupScripts.length,
+							logs: logs
 						}
 					});
 				} else {
@@ -133,6 +144,9 @@ app.post('/m-add', function (req, res) {
 														authType: req.body.authType,
 														uname: req.body.uname,
 														name: req.body.name,
+														logs: [{
+															msg: 'Server created'
+														}],
 														'info.os': result.stdout.split('\n')[0],
 														'info.hname': result.stdout.split('\n')[1]
 													});
@@ -178,6 +192,9 @@ app.post('/m-add', function (req, res) {
 														authType: req.body.authType,
 														uname: req.body.uname,
 														name: req.body.name,
+														logs: [{
+															msg: 'Server created'
+														}],
 														'info.os': result.stdout.split('\n')[0],
 														'info.hname': result.stdout.split('\n')[1]
 													});
@@ -254,7 +271,7 @@ app.post('/m-remove', function (req, res) {
 });
 
 app.post('/exec', function (req, res) {
-	if (req.body.authKey && req.body.serverId && ((req.body.cmd == 1 || req.body.cmd == 3 || req.body.cmd == 6) || (req.body.cmd == 2 && req.body.hname) || (req.body.cmd == 4 && req.body.password) || (req.body.cmd == 5 && req.body.command))) {
+	if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 6)) {
 		User.findOne({
 				authKey: req.body.authKey
 			})
@@ -265,8 +282,8 @@ app.post('/exec', function (req, res) {
 						if (user.added[i]._id == req.body.serverId)
 							index = i;
 					if (user.added[index]) {
-						var cmd = '';
-						var msg = '';
+						var cmd = '',
+							msg = '';
 
 						function exec() {
 							ssh.connect({
@@ -278,23 +295,10 @@ app.post('/exec', function (req, res) {
 								.then(function () {
 									if (req.body.cmd == 3)
 										uniR(res, true, msg)
-									ssh.execCommand('sudo sh -c "' + cmd + '"')
+									ssh.execCommand(cmd)
 										.then(function (result) {
-											if (req.body.cmd == 4) {
-												user.added[index].password = req.body.password;
-												user.save();
-											}
-											if (req.body.cmd == 5) {
-												res.json({
-													status: true,
-													msg: msg,
-													result: result
-												});
-											} else if (req.body.cmd == 3)
-												req.body.cmd = 1;
-											else
+											if (req.body.cmd != 3)
 												uniR(res, true, msg);
-											console.log(result);
 										});
 								})
 								.catch(function (err) {
@@ -310,11 +314,18 @@ app.post('/exec', function (req, res) {
 							case 1:
 								cmd = 'reboot';
 								msg = 'Restarted successfully !!';
+								user.added[index].logs.push({
+									msg: 'Restarted server'
+								});
+								user.save();
 								exec();
 								break;
 							case 2:
 								cmd = 'hostnamectl set-hostname ' + req.body.hname
 								user.added[index].info.hname = req.body.hname;
+								user.added[index].logs.push({
+									msg: 'Changed hostname to ' + req.body.hname
+								});
 								user.save();
 								msg = 'Hostname changed successfully !!';
 								exec();
@@ -322,21 +333,19 @@ app.post('/exec', function (req, res) {
 							case 3:
 								cmd = 'sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get -y dist-upgrade'
 								msg = 'System will be updated !!';
-								exec();
-								break;
-							case 4:
-								cmd = 'echo -e "' + req.body.password + '\n' + req.body.password + '" | passwd ' + user.added[index].uname
-								msg = 'New password successfully set !!';
-								exec();
-								break;
-							case 5:
-								cmd = req.body.command;
-								msg = 'Your command executed successfully !!'
+								user.added[index].logs.push({
+									msg: 'Updated server'
+								});
+								user.save();
 								exec();
 								break;
 							case 6:
 								cmd = 'cd /optimusCP && wget "https://optimuscp.io/bash/lamp.sh" -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + user.added[index].password
 								msg = 'LAMP is getting installed...'
+								user.added[index].logs.push({
+									msg: 'Installed LAMP'
+								});
+								user.save();
 								exec();
 								break;
 							default:
@@ -368,6 +377,9 @@ app.post('/m-name', function (req, res) {
 					for (i = 0; i < user.added.length; i++)
 						if (user.added[i]._id == req.body.serverId) {
 							user.added[i].name = req.body.name;
+							user.added[i].logs.push({
+								msg: 'Changed server name to ' + req.body.name
+							});
 							user.save();
 						}
 					uniR(res, true, 'Server name changed successfully !!');
@@ -405,6 +417,9 @@ app.post('/addCron', function (req, res) {
 								.then(function () {
 									ssh.execCommand('(crontab -l ; echo "' + req.body.exp + ' ' + req.body.cmd + '") 2>&1 |  crontab -')
 										.then(function (result) {
+											user.added[i].logs.push({
+												msg: 'Added cron with command: ' + req.body.cmd
+											});
 											user.save();
 											uniR(res, true, 'Cron Added Successfully');
 										});
@@ -442,6 +457,9 @@ app.post('/delCron', function (req, res) {
 							for (j = 0; j < user.added[i].crons.length; j++)
 								if (user.added[i].crons[j]._id == req.body.cronId) {
 									var cmd = 'crontab -l | grep -v \'' + user.added[i].crons[j].cmd + '\' | crontab -';
+									user.added[i].logs.push({
+										msg: 'Removed cron with command: ' + user.added[i].crons[j].cmd
+									});
 									user.added[i].crons = user.added[i].crons.filter(function (cron) {
 										return cron._id != req.body.cronId;
 									});
@@ -500,6 +518,9 @@ app.post('/addStartupScript', function (req, res) {
 								.then(function () {
 									ssh.execCommand('(crontab -l ; echo "@reboot ' + req.body.cmd + '") 2>&1 |  crontab -')
 										.then(function (result) {
+											user.added[i].logs.push({
+												msg: 'Added startup script with command: ' + req.body.cmd
+											});
 											user.save();
 											uniR(res, true, 'Startup Script Added Successfully');
 										});
@@ -537,6 +558,9 @@ app.post('/delStartupScript', function (req, res) {
 							for (j = 0; j < user.added[i].startupScripts.length; j++)
 								if (user.added[i].startupScripts[j]._id == req.body.startupScriptId) {
 									var cmd = 'crontab -l | grep -v \'' + user.added[i].startupScripts[j].cmd + '\' | crontab -';
+									user.added[i].logs.push({
+										msg: 'Removed startup script with command: ' + user.added[i].startupScripts[j].cmd
+									});
 									user.added[i].startupScripts = user.added[i].startupScripts.filter(function (startupScript) {
 										return startupScript._id != req.body.startupScriptId;
 									});
@@ -575,7 +599,7 @@ app.post('/delStartupScript', function (req, res) {
 });
 
 app.post('/metrics/:userId/:serverId', function (req, res) {
-	if (req.params.serverId && req.params.userId) {
+	if (req.params.serverId && req.params.userId && req.body.m_t) {
 		User.findById(req.params.userId)
 			.then(function (user) {
 				if (user) {

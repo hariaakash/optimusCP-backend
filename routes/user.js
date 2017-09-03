@@ -384,6 +384,37 @@ app.post('/editProfile', function (req, res) {
 	}
 });
 
+app.get('/activity', function (req, res) {
+	if (req.query.authKey) {
+		User.findOne({
+				authKey: req.query.authKey
+			})
+			.then(function (user) {
+				if (user) {
+					var logs = [];
+					user.logs = user.logs.reverse()
+					for (i = 0; i < user.logs.length; i++)
+						logs.push({
+							no: i,
+							msg: user.logs[i].msg,
+							date: user.logs[i].date
+						})
+					res.json({
+						status: true,
+						data: logs
+					});
+				} else {
+					uniR(res, false, 'Account not found !!');
+				}
+			})
+			.catch(function (err) {
+				uniR(res, false, 'Error when querying');
+			});
+	} else {
+		uniR(res, false, 'Empty Fields !!');
+	}
+});
+
 app.get('/tickets', function (req, res) {
 	if (req.query.authKey) {
 		User.findOne({

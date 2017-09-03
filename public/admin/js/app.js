@@ -11,7 +11,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
 		};
 	})
 	.config(function ($stateProvider, $urlRouterProvider) {
-		$urlRouterProvider.otherwise('/home');
+		$urlRouterProvider.otherwise('/login');
 		$stateProvider
 			.state("dashboard", {
 				url: "",

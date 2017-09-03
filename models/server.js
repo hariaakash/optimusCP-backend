@@ -46,8 +46,7 @@ var serverSchema = new Schema({
 		}
 	}],
 	logs: [{
-		type: String,
-		log: String,
+		msg: String,
 		date: {
 			type: Date,
 			default: Date.now
