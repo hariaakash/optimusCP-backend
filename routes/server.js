@@ -82,7 +82,7 @@ app.get('/m-det', function (req, res) {
 					});
 					var logs = [];
 					server[0].logs = server[0].logs.reverse()
-					for (i = 0; i < user.server[0].length; i++)
+					for (i = 0; i < server[0].length; i++)
 						logs.push({
 							no: i,
 							msg: user.logs[i].msg,
