@@ -1,6 +1,6 @@
 angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad'])
 	.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-		cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/optimuscp-logo.png" style="width: 64px; height: 64px;"></div>';
+		cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/logo.png" style="width: 64px; height: 64px;"></div>';
   	}])
 	.filter('range', function () {
 		return function (input, total) {

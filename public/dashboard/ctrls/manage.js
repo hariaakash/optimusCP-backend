@@ -2,6 +2,8 @@ angular.module('optimusApp')
 	.controller('manageCtrl', function ($rootScope, $scope, $http, $stateParams, $state, $window) {
 		$rootScope.checkAuth();
 		$scope.serverId = $stateParams.serverId;
+		$scope.currentPage = 1;
+		$scope.pageSize = 10;
 		$('#stackBox').block({
 			message: '<p style="margin:0;padding:8px;font-size:24px;">Sneak Peek...</p>',
 			css: {
@@ -23,7 +25,7 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.serverData = res.data.data;
-							$scope.embedCode = '<iframe src="https://optimuscp.io/#!/embed/' + $rootScope.serverData.id + '/1" width="400" height="300"></iframe>';
+							$scope.embedCode = '<iframe src="https://optimuscp.io/dashboard/#!/embed/' + $rootScope.serverData.id + '/1" width="400" height="300"></iframe>';
 							Highcharts.stockChart('container', {
 								title: {
 									text: 'Name: ' + $rootScope.serverData.name + ', IP: ' + $rootScope.serverData.ip

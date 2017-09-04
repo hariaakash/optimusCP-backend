@@ -1,6 +1,6 @@
 angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad'])
 	.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
-		cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/optimuscp-logo.png" style="width: 64px; height: 64px;"></div>';
+		cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/logo.png" style="width: 64px; height: 64px;"></div>';
   	}])
 	.filter('range', function () {
 		return function (input, total) {
@@ -39,7 +39,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
 					loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
 						return $ocLazyLoad.load({
 							name: 'Manage',
-							files: ['./ctrls/manage.js', './plugins/highcharts/highstock.js', './plugins/blockUI/jquery.blockUI.min.js', './plugins/cron-gen/cron-gen.min.js', './plugins/angular-clipboard/angular-clipboard.min.js']
+							files: ['./ctrls/manage.js', './plugins/highcharts/highstock.js', './plugins/blockUI/jquery.blockUI.min.js', './plugins/cron-gen/cron-gen.min.js', './plugins/angular-clipboard/angular-clipboard.min.js', './plugins/pagination/dirPagination.js']
 						})
     				}]
 				}

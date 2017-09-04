@@ -82,11 +82,11 @@ app.get('/m-det', function (req, res) {
 					});
 					var logs = [];
 					server[0].logs = server[0].logs.reverse()
-					for (i = 0; i < server[0].length; i++)
+					for (i = 0; i < server[0].logs.length; i++)
 						logs.push({
 							no: i,
-							msg: user.logs[i].msg,
-							date: user.logs[i].date
+							msg: server[0].logs[i].msg,
+							date: server[0].logs[i].date
 						})
 					res.json({
 						status: true,

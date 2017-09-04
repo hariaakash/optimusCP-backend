@@ -129,14 +129,12 @@
 						<thead>
 							<tr>
 								<th>Date</th>
-								<th>IP</th>
 								<th>Log</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr dir-paginate="x in logsData.logs | itemsPerPage: pageSize" current-page="currentPage">
-								<td>{{ x.date }}</td>
-								<td>{{ x.ip }}</td>
+								<td>{{ x.date | date: 'MMM d, y H:mm:ss' }}</td>
 								<td>{{ x.msg }}</td>
 							</tr>
 						</tbody>

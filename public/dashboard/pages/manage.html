@@ -269,7 +269,7 @@
 			<div class="modal-header text-center">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<i class="fa fa-list modal-icon"></i>
-				<h2 class="modal-title">Logs of API Hits</h2>
+				<h2 class="modal-title">Server Activity</h2>
 			</div>
 			<div class="modal-body text-white">
 				<div class="row">
@@ -286,7 +286,7 @@
 							<tr dir-paginate="x in serverData.logs | itemsPerPage: pageSize" current-page="currentPage">
 								<td>{{ x.no+1 }}</td>
 								<td>{{ x.date | date: 'MMM d, y H:mm:ss' }}</td>
-								<td>{{ x.log }}</td>
+								<td>{{ x.msg }}</td>
 							</tr>
 						</tbody>
 					</table>
