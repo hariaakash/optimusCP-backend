@@ -295,7 +295,7 @@ app.post('/exec', function (req, res) {
 								.then(function () {
 									if (req.body.cmd == 3)
 										uniR(res, true, msg)
-									ssh.execCommand(cmd)
+									ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
 										.then(function (result) {
 											if (req.body.cmd != 3)
 												uniR(res, true, msg);
@@ -340,7 +340,7 @@ app.post('/exec', function (req, res) {
 								exec();
 								break;
 							case 6:
-								cmd = 'cd /optimusCP && wget "https://optimuscp.io/bash/lamp.sh" -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + user.added[index].password
+								cmd = 'wget https://optimuscp.io/bash/lamp.sh -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + user.added[index]._id
 								msg = 'LAMP is getting installed...'
 								user.added[index].logs.push({
 									msg: 'Installed LAMP'
@@ -415,7 +415,7 @@ app.post('/addCron', function (req, res) {
 									password: String(user.added[i]._id)
 								})
 								.then(function () {
-									ssh.execCommand('(crontab -l ; echo "' + req.body.exp + ' ' + req.body.cmd + '") 2>&1 |  crontab -')
+									ssh.execCommand('sudo -i /bin/bash -c "(crontab -l ; echo \"' + req.body.exp + ' ' + req.body.cmd + '\") 2>&1 |  crontab -"')
 										.then(function (result) {
 											user.added[i].logs.push({
 												msg: 'Added cron with command: ' + req.body.cmd
@@ -470,7 +470,7 @@ app.post('/delCron', function (req, res) {
 											password: String(user.added[i]._id)
 										})
 										.then(function () {
-											ssh.execCommand(cmd)
+											ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
 												.then(function (result) {
 													user.save();
 													uniR(res, true, 'Cron Removed Successfully');
@@ -516,7 +516,7 @@ app.post('/addStartupScript', function (req, res) {
 									password: String(user.added[i]._id)
 								})
 								.then(function () {
-									ssh.execCommand('(crontab -l ; echo "@reboot ' + req.body.cmd + '") 2>&1 |  crontab -')
+									ssh.execCommand('sudo -i /bin/bash -c "(crontab -l ; echo \"@reboot ' + req.body.cmd + '\") 2>&1 |  crontab -"')
 										.then(function (result) {
 											user.added[i].logs.push({
 												msg: 'Added startup script with command: ' + req.body.cmd
@@ -571,7 +571,7 @@ app.post('/delStartupScript', function (req, res) {
 											password: String(user.added[i]._id)
 										})
 										.then(function () {
-											ssh.execCommand(cmd)
+											ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
 												.then(function (result) {
 													user.save();
 													uniR(res, true, 'Startup Script Removed Successfully');
