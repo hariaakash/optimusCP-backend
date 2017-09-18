@@ -20,6 +20,7 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.serverData = res.data.data;
+							console.log($rootScope.serverData)
 						} else {
 							swal({
 								title: 'Failed',

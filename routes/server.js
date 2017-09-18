@@ -99,8 +99,8 @@ app.get('/m-det', function (req, res) {
 							info: server[0].info,
 							metrics: latest[latest.length - 1],
 							seriesOptions: seriesOptions,
-							crons: server[0].crons.length,
-							startupScripts: server[0].startupScripts.length,
+							crons: server[0].crons,
+							startupScripts: server[0].startupScripts,
 							logs: logs
 						}
 					});
@@ -136,7 +136,7 @@ app.post('/m-add', function (req, res) {
 								ssh.execCommand('sudo -n true')
 									.then(function (result) {
 										if (!result.stderr) {
-											ssh.execCommand('sudo -i /bin/bash -c "cd / && mkdir -p optimusCP && cd optimusCP && wget "https://optimuscp.io/bash/os.sh" -O os.sh && chmod +x os.sh && ./os.sh"')
+											ssh.execCommand('wget https://optimuscp.io/bash/os.sh -O os.sh && chmod +x os.sh && ./os.sh && rm os.sh')
 												.then(function (result) {
 													user.added.push({
 														ip: req.body.ip,
@@ -154,14 +154,31 @@ app.post('/m-add', function (req, res) {
 														ip: requestIp.getClientIp(req),
 														msg: 'Added Server with IP: ' + req.body.ip
 													});
-													user.save()
-														.then(function (updatedUser) {
-															ssh.execCommand('cd /optimusCP && sudo apt-get -y install dos2unix && wget "https://optimuscp.io/bash/metrics.sh" -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab - && adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + updatedUser.added[updatedUser.added.length - 1]._id + '\n' + updatedUser.added[updatedUser.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
-																.then(function (result) {
-																	console.log(result);
+													ssh.execCommand('adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
+														.then(function (result) {
+															console.log(result);
+															ssh.connect({
+																	host: req.body.ip,
+																	port: req.body.port,
+																	username: 'optimusCP',
+																	password: String(user.added[user.added.length - 1]._id)
+																})
+																.then(function () {
+																	ssh.execCommand('mkdir optimusCP && cd ./optimusCP && sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+																		.then(function (result) {
+																			console.log(result);
+																			user.save();
+																			uniR(res, true, 'Server added successfully !!');
+																		});
+																})
+																.catch(function (err) {
+																	console.log(err)
+																	uniR(res, false, 'Server is already being managed by OptimusCP');
 																});
+														})
+														.catch(function (err) {
+															uniR(res, false, 'Some error occurred when adding server, try again !!')
 														});
-													uniR(res, true, 'Server added successfully !!');
 												});
 										} else {
 											uniR(res, false, 'Only root user allowed !!');
@@ -297,6 +314,7 @@ app.post('/exec', function (req, res) {
 										uniR(res, true, msg)
 									ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
 										.then(function (result) {
+											console.log(result)
 											if (req.body.cmd != 3)
 												uniR(res, true, msg);
 										});
@@ -408,6 +426,9 @@ app.post('/addCron', function (req, res) {
 								cmd: req.body.cmd,
 								exp: req.body.exp
 							});
+							user.added[i].logs.push({
+								msg: 'Added cron with command: ' + req.body.cmd
+							});
 							ssh.connect({
 									host: user.added[i].ip,
 									port: user.added[i].port,
@@ -415,13 +436,17 @@ app.post('/addCron', function (req, res) {
 									password: String(user.added[i]._id)
 								})
 								.then(function () {
-									ssh.execCommand('sudo -i /bin/bash -c "(crontab -l ; echo \"' + req.body.exp + ' ' + req.body.cmd + '\") 2>&1 |  crontab -"')
+									ssh.execCommand('(crontab -l ; echo "' + req.body.exp + ' ' + req.body.cmd + '") 2>&1 |  crontab -')
 										.then(function (result) {
-											user.added[i].logs.push({
-												msg: 'Added cron with command: ' + req.body.cmd
-											});
-											user.save();
-											uniR(res, true, 'Cron Added Successfully');
+											console.log(result)
+											user.save()
+												.then(function (user) {
+													uniR(res, true, 'Cron Added Successfully');
+												})
+												.catch(function (err) {
+													console.log(err)
+													uniR(res, false, 'Error adding cron !!')
+												});
 										});
 								})
 								.catch(function (err) {
@@ -456,7 +481,7 @@ app.post('/delCron', function (req, res) {
 						if (user.added[i]._id == req.body.serverId)
 							for (j = 0; j < user.added[i].crons.length; j++)
 								if (user.added[i].crons[j]._id == req.body.cronId) {
-									var cmd = 'crontab -l | grep -v \'' + user.added[i].crons[j].cmd + '\' | crontab -';
+									var cmd = 'crontab -l | grep -v "' + user.added[i].crons[j].cmd + '" | crontab -';
 									user.added[i].logs.push({
 										msg: 'Removed cron with command: ' + user.added[i].crons[j].cmd
 									});
@@ -470,7 +495,7 @@ app.post('/delCron', function (req, res) {
 											password: String(user.added[i]._id)
 										})
 										.then(function () {
-											ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
+											ssh.execCommand(cmd)
 												.then(function (result) {
 													user.save();
 													uniR(res, true, 'Cron Removed Successfully');
@@ -509,6 +534,9 @@ app.post('/addStartupScript', function (req, res) {
 							user.added[i].startupScripts.push({
 								cmd: req.body.cmd
 							});
+							user.added[i].logs.push({
+								msg: 'Added startup script with command: ' + req.body.cmd
+							});
 							ssh.connect({
 									host: user.added[i].ip,
 									port: user.added[i].port,
@@ -516,11 +544,8 @@ app.post('/addStartupScript', function (req, res) {
 									password: String(user.added[i]._id)
 								})
 								.then(function () {
-									ssh.execCommand('sudo -i /bin/bash -c "(crontab -l ; echo \"@reboot ' + req.body.cmd + '\") 2>&1 |  crontab -"')
+									ssh.execCommand('(crontab -l ; echo "@reboot ' + req.body.cmd + '") 2>&1 |  crontab -')
 										.then(function (result) {
-											user.added[i].logs.push({
-												msg: 'Added startup script with command: ' + req.body.cmd
-											});
 											user.save();
 											uniR(res, true, 'Startup Script Added Successfully');
 										});
@@ -557,7 +582,7 @@ app.post('/delStartupScript', function (req, res) {
 						if (user.added[i]._id == req.body.serverId)
 							for (j = 0; j < user.added[i].startupScripts.length; j++)
 								if (user.added[i].startupScripts[j]._id == req.body.startupScriptId) {
-									var cmd = 'crontab -l | grep -v \'' + user.added[i].startupScripts[j].cmd + '\' | crontab -';
+									var cmd = 'crontab -l | grep -v "' + user.added[i].startupScripts[j].cmd + '" | crontab -';
 									user.added[i].logs.push({
 										msg: 'Removed startup script with command: ' + user.added[i].startupScripts[j].cmd
 									});
@@ -571,7 +596,7 @@ app.post('/delStartupScript', function (req, res) {
 											password: String(user.added[i]._id)
 										})
 										.then(function () {
-											ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
+											ssh.execCommand(cmd)
 												.then(function (result) {
 													user.save();
 													uniR(res, true, 'Startup Script Removed Successfully');

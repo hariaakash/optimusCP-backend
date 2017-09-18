@@ -204,10 +204,6 @@
 									<td ng-bind="serverData.port"></td>
 								</tr>
 								<tr>
-									<td>Login name: </td>
-									<td ng-bind="serverData.uname"></td>
-								</tr>
-								<tr>
 									<td>OS: </td>
 									<td ng-bind="serverData.info.os"></td>
 								</tr>
@@ -217,20 +213,20 @@
 								</tr>
 								<tr>
 									<td>Crons: </td>
-									<td ng-bind="serverData.crons"></td>
+									<td ng-bind="serverData.crons.length"></td>
 								</tr>
 								<tr>
 									<td>Startup Scripts: </td>
-									<td ng-bind="serverData.startupScripts"></td>
+									<td ng-bind="serverData.startupScripts.length"></td>
 								</tr>
 							</tbody>
 						</table>
-						<h5>Disk<span class="pull-right">{{serverData.metrics.d}}%</span></h5>
-						<div class="progress">
+						<h5 ng-show="serverData.metrics.d">Disk<span class="pull-right">{{serverData.metrics.d}}%</span></h5>
+						<div class="progress" ng-show="serverData.metrics.d">
 							<div class="progress-bar progress-bar-info" aria-valuenow="{{serverData.metrics.d}}" aria-valuemin="0" aria-valuemax="100" style="width: {{serverData.metrics.d}}%" role="progressbar"></div>
 						</div>
-						<h5>RAM<span class="pull-right">{{serverData.metrics.m}}%</span></h5>
-						<div class="progress">
+						<h5 ng-show="serverData.metrics.m">RAM<span class="pull-right">{{serverData.metrics.m}}%</span></h5>
+						<div class="progress" ng-show="serverData.metrics.m">
 							<div class="progress-bar progress-bar-success" aria-valuenow="{{serverData.metrics.m}}" aria-valuemin="0" aria-valuemax="100" style="width: {{serverData.metrics.m}}%" role="progressbar"></div>
 						</div>
 					</div>
