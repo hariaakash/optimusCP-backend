@@ -154,7 +154,7 @@ app.post('/m-add', function (req, res) {
 														ip: requestIp.getClientIp(req),
 														msg: 'Added Server with IP: ' + req.body.ip
 													});
-													ssh.execCommand('adduser --disabled-password --gecos \"\" optimusCP --force-badname && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
+													ssh.execCommand('sudo useradd -ou 0 -g 0 optimusCP && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
 														.then(function (result) {
 															console.log(result);
 															ssh.connect({
@@ -164,7 +164,7 @@ app.post('/m-add', function (req, res) {
 																	password: String(user.added[user.added.length - 1]._id)
 																})
 																.then(function () {
-																	ssh.execCommand('mkdir optimusCP && cd ./optimusCP && sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+																	ssh.execCommand('sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
 																		.then(function (result) {
 																			console.log(result);
 																			user.save();
@@ -173,11 +173,11 @@ app.post('/m-add', function (req, res) {
 																})
 																.catch(function (err) {
 																	console.log(err)
-																	uniR(res, false, 'Server is already being managed by OptimusCP');
+																	uniR(res, false, 'Some error occurred when adding server, try again !!')
 																});
 														})
 														.catch(function (err) {
-															uniR(res, false, 'Some error occurred when adding server, try again !!')
+															uniR(res, false, 'Server is already being managed by OptimusCP')
 														});
 												});
 										} else {
@@ -200,7 +200,7 @@ app.post('/m-add', function (req, res) {
 								ssh.execCommand('sudo -n true')
 									.then(function (result) {
 										if (!result.stderr) {
-											ssh.execCommand('sudo -i /bin/bash -c "cd / && mkdir -p optimusCP && cd optimusCP && wget https://optimuscp.io/bash/os.sh -O os.sh && chmod +x os.sh && ./os.sh"')
+											ssh.execCommand('wget https://optimuscp.io/bash/os.sh -O os.sh && chmod +x os.sh && ./os.sh && rm os.sh')
 												.then(function (result) {
 													console.log(result)
 													user.added.push({
@@ -219,16 +219,33 @@ app.post('/m-add', function (req, res) {
 														ip: requestIp.getClientIp(req),
 														msg: 'Added Server with IP: ' + req.body.ip
 													});
-													user.save()
-														.then(function (updatedUser) {
-															var cmd = 'sudo -i /bin/bash -c "cd /optimusCP && sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo \\"*/5 * * * * /optimusCP/metrics.sh ' + updatedUser._id + ' ' + updatedUser.added[updatedUser.added.length - 1]._id + '\\") 2>&1 | grep -v \\"no crontab\\" | sort | uniq | crontab - && adduser --disabled-password --gecos \\"\\" optimusCP --force-badname && echo -e \\"' + updatedUser.added[updatedUser.added.length - 1]._id + '\\n' + updatedUser.added[updatedUser.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"';
-															ssh.execCommand(cmd)
-																.then(function (result) {
-																	console.log(result)
-																	fs.unlink(file, function (err) {});
+													var cmd = 'sudo -i /bin/bash -c "sudo useradd -ou 0 -g 0 optimusCP --force-badname && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"';
+													ssh.execCommand(cmd)
+														.then(function (result) {
+															console.log(result)
+															fs.unlink(file, function (err) {});
+															ssh.connect({
+																	host: req.body.ip,
+																	port: req.body.port,
+																	username: 'optimusCP',
+																	password: String(user.added[user.added.length - 1]._id)
+																})
+																.then(function () {
+																	ssh.execCommand('sudo apt-get -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+																		.then(function (result) {
+																			console.log(result);
+																			user.save();
+																			uniR(res, true, 'Server added successfully !!');
+																		});
+																})
+																.catch(function (err) {
+																	console.log(err)
+																	uniR(res, false, 'Some error occurred when adding server, try again !!')
 																});
+														})
+														.catch(function (err) {
+															uniR(res, false, 'Server is already being managed by OptimusCP')
 														});
-													uniR(res, true, 'Server added successfully !!');
 												})
 												.catch(function (err) {
 													console.log(err);
@@ -288,7 +305,7 @@ app.post('/m-remove', function (req, res) {
 });
 
 app.post('/exec', function (req, res) {
-	if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 6)) {
+	if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 5)) {
 		User.findOne({
 				authKey: req.body.authKey
 			})
@@ -310,12 +327,12 @@ app.post('/exec', function (req, res) {
 									password: String(user.added[index]._id)
 								})
 								.then(function () {
-									if (req.body.cmd == 3)
+									if (req.body.cmd == 3 || req.body.cmd == 5)
 										uniR(res, true, msg)
-									ssh.execCommand('sudo -i /bin/bash -c "' + cmd + '"')
+									ssh.exec(cmd)
 										.then(function (result) {
 											console.log(result)
-											if (req.body.cmd != 3)
+											if (req.body.cmd != 3 && req.body.cmd != 6)
 												uniR(res, true, msg);
 										});
 								})
@@ -330,7 +347,7 @@ app.post('/exec', function (req, res) {
 						}
 						switch (req.body.cmd) {
 							case 1:
-								cmd = 'reboot';
+								cmd = 'sudo reboot';
 								msg = 'Restarted successfully !!';
 								user.added[index].logs.push({
 									msg: 'Restarted server'
@@ -339,7 +356,7 @@ app.post('/exec', function (req, res) {
 								exec();
 								break;
 							case 2:
-								cmd = 'hostnamectl set-hostname ' + req.body.hname
+								cmd = 'sudo hostnamectl set-hostname ' + req.body.hname
 								user.added[index].info.hname = req.body.hname;
 								user.added[index].logs.push({
 									msg: 'Changed hostname to ' + req.body.hname
@@ -357,11 +374,11 @@ app.post('/exec', function (req, res) {
 								user.save();
 								exec();
 								break;
-							case 6:
+							case 5:
 								cmd = 'wget https://optimuscp.io/bash/lamp.sh -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + user.added[index]._id
-								msg = 'LAMP is getting installed...'
+								msg = 'LAMP is getting installed with mysql password: ' + user.added[index]._id
 								user.added[index].logs.push({
-									msg: 'Installed LAMP'
+									msg: 'Installed LAMP with password: ' + user.added[index]._id
 								});
 								user.save();
 								exec();
@@ -436,7 +453,9 @@ app.post('/addCron', function (req, res) {
 									password: String(user.added[i]._id)
 								})
 								.then(function () {
-									ssh.execCommand('(crontab -l ; echo "' + req.body.exp + ' ' + req.body.cmd + '") 2>&1 |  crontab -')
+									var cmd = '(crontab -l ; echo "' + req.body.exp + ' ' + req.body.cmd + '") 2>&1 |  crontab -';
+									console.log(cmd)
+									ssh.execCommand(cmd)
 										.then(function (result) {
 											console.log(result)
 											user.save()

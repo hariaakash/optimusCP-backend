@@ -4,14 +4,14 @@ angular.module('optimusApp')
 		$scope.serverId = $stateParams.serverId;
 		$scope.currentPage = 1;
 		$scope.pageSize = 10;
-		$('#stackBox').block({
-			message: '<p style="margin:0;padding:8px;font-size:24px;">Sneak Peek...</p>',
-			css: {
-				color: '#fff',
-				border: '1px solid #fb9678',
-				backgroundColor: '#fb9678'
-			}
-		});
+		//		$('#stackBox').block({
+		//			message: '<p style="margin:0;padding:8px;font-size:24px;">Sneak Peek...</p>',
+		//			css: {
+		//				color: '#fff',
+		//				border: '1px solid #fb9678',
+		//				backgroundColor: '#fb9678'
+		//			}
+		//		});
 		$scope.getServerInfo = function () {
 			if ($scope.serverId) {
 				$http({
@@ -25,6 +25,7 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.serverData = res.data.data;
+							console.log(res.data.data.seriesOptions)
 							$scope.embedCode = '<iframe src="https://optimuscp.io/dashboard/#!/embed/' + $rootScope.serverData.id + '/1" width="400" height="300"></iframe>';
 							Highcharts.stockChart('container', {
 								title: {
@@ -260,7 +261,7 @@ angular.module('optimusApp')
 						allowOutsideClick: false
 					});
 					break;
-				case 6:
+				case 5:
 					swal({
 						title: 'Proceed to install LAMP Stack ?',
 						showCancelButton: true,
@@ -328,35 +329,46 @@ angular.module('optimusApp')
 			});
 		};
 		$scope.sftp = function () {
-			function submit_post_via_hidden_form(url, params) {
-				var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
-					action: url
-				}).appendTo(document.body);
-
-				for (var i in params) {
-					if (params.hasOwnProperty(i)) {
-						$('<input type="hidden" />').attr({
-							name: i,
-							value: params[i]
-						}).appendTo(f);
-					}
+			//			function submit_post_via_hidden_form(url, params) {
+			//				var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+			//					action: url
+			//				}).appendTo(document.body);
+			//
+			//				for (var i in params) {
+			//					if (params.hasOwnProperty(i)) {
+			//						$('<input type="hidden" />').attr({
+			//							name: i,
+			//							value: params[i]
+			//						}).appendTo(f);
+			//					}
+			//				}
+			//
+			//				f.submit();
+			//
+			//				f.remove();
+			//			}
+			//			submit_post_via_hidden_form(
+			//				'https://net2ftp.com/', {
+			//					ftpserver: $rootScope.serverData.ip,
+			//					ftpserverport: $rootScope.serverData.port,
+			//					username: 'optimusCP',
+			//					password: String($rootScope.serverData.id),
+			//					state: 'browse',
+			//					state2: 'main',
+			//					protocol: 'FTP-SSH'
+			//				}
+			//			);
+			$scope.data = {
+				t: "sftp",
+				c: {
+					p: String($rootScope.serverData.id),
+					o: $rootScope.serverData.port,
+					m: "Password"
 				}
-
-				f.submit();
-
-				f.remove();
-			}
-			submit_post_via_hidden_form(
-				'https://net2ftp.com/', {
-					ftpserver: $rootScope.serverData.ip,
-					ftpserverport: $rootScope.serverData.port,
-					username: 'optimusCP',
-					password: String($rootScope.serverData.id),
-					state: 'browse',
-					state2: 'main',
-					protocol: 'FTP-SSH'
-				}
-			);
+			};
+			$scope.data = btoa(JSON.stringify($scope.data));
+			$scope.url = encodeURI("https://www.monstaftp.com/demo/#/c/" + $rootScope.serverData.ip + '/optimusCP/' + $scope.data);
+			$window.open($scope.url, '_blank');
 		};
 		$scope.copySuccess = function () {
 			swal("Success", "Code copied to clipboard.", "success");
