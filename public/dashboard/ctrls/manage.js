@@ -276,6 +276,51 @@ angular.module('optimusApp')
 						allowOutsideClick: false
 					});
 					break;
+				case 6:
+					swal({
+						title: 'Proceed to install MEAN Stack ?',
+						showCancelButton: true,
+						confirmButtonText: 'Confirm',
+						showLoaderOnConfirm: true,
+						preConfirm: function () {
+							return new Promise(function (resolve, reject) {
+								$scope.data.cmd = $scope.cmd;
+								$scope.submit();
+							});
+						},
+						allowOutsideClick: false
+					});
+					break;
+				case 7:
+					swal({
+						title: 'Proceed to install Django Stack ?',
+						showCancelButton: true,
+						confirmButtonText: 'Confirm',
+						showLoaderOnConfirm: true,
+						preConfirm: function () {
+							return new Promise(function (resolve, reject) {
+								$scope.data.cmd = $scope.cmd;
+								$scope.submit();
+							});
+						},
+						allowOutsideClick: false
+					});
+					break;
+				case 8:
+					swal({
+						title: 'Proceed to install Ruby on Rails ?',
+						showCancelButton: true,
+						confirmButtonText: 'Confirm',
+						showLoaderOnConfirm: true,
+						preConfirm: function () {
+							return new Promise(function (resolve, reject) {
+								$scope.data.cmd = $scope.cmd;
+								$scope.submit();
+							});
+						},
+						allowOutsideClick: false
+					});
+					break;
 				default:
 					break;
 			};
