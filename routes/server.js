@@ -154,7 +154,7 @@ app.post('/m-add', function (req, res) {
 														ip: requestIp.getClientIp(req),
 														msg: 'Added Server with IP: ' + req.body.ip
 													});
-													ssh.execCommand('sudo useradd -m -ou 0 -g 0 optimusCP && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
+													ssh.execCommand('sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && service ssh restart')
 														.then(function (result) {
 															console.log(result);
 															ssh.connect({
@@ -219,7 +219,7 @@ app.post('/m-add', function (req, res) {
 														ip: requestIp.getClientIp(req),
 														msg: 'Added Server with IP: ' + req.body.ip
 													});
-													var cmd = 'sudo -i /bin/bash -c "sudo useradd -m -ou 0 -g 0 optimusCP --force-badname && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"';
+													var cmd = 'sudo -i /bin/bash -c "sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"';
 													ssh.execCommand(cmd)
 														.then(function (result) {
 															console.log(result)
