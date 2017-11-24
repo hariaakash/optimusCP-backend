@@ -64,7 +64,8 @@ app.get('/', function (req, res) {
 							info: user.info,
 							stats: user.stats,
 							teams: user.teams.length,
-							added: added
+							added: added,
+							block: user.conf.block
 						}
 					});
 				} else {

@@ -6,14 +6,15 @@ angular.module('optimusApp')
 		$scope.getActivityInfo = function () {
 			$http({
 					method: 'GET',
-					url: $rootScope.apiUrl + 'user/activity',
+					url: $rootScope.apiUrl + 'admin/activity',
 					params: {
-						authKey: $rootScope.authKey
+						adminKey: $rootScope.adminKey
 					}
 				})
 				.then(function (res) {
 					if (res.data.status == true) {
 						$rootScope.activityData = res.data.data;
+						console.log($rootScope.activityData)
 					} else {
 						swal({
 							title: 'Failed',

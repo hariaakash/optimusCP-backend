@@ -305,7 +305,7 @@ app.post('/m-remove', function (req, res) {
 });
 
 app.post('/exec', function (req, res) {
-	if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 5)) {
+	if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 5 || req.body.cmd == 6 || req.body.cmd == 7 || req.body.cmd == 8)) {
 		User.findOne({
 				authKey: req.body.authKey
 			})
@@ -327,12 +327,12 @@ app.post('/exec', function (req, res) {
 									password: String(user.added[index]._id)
 								})
 								.then(function () {
-									if (req.body.cmd == 3 || req.body.cmd == 5)
+									if (req.body.cmd == 3 || req.body.cmd == 5 || req.body.cmd == 6)
 										uniR(res, true, msg)
 									ssh.exec(cmd)
 										.then(function (result) {
 											console.log(result)
-											if (req.body.cmd != 3 && req.body.cmd != 6)
+											if (req.body.cmd != 3 && req.body.cmd != 5 || req.body.cmd != 6)
 												uniR(res, true, msg);
 										});
 								})
@@ -379,6 +379,33 @@ app.post('/exec', function (req, res) {
 								msg = 'LAMP is getting installed with mysql password: ' + user.added[index]._id
 								user.added[index].logs.push({
 									msg: 'Installed LAMP with password: ' + user.added[index]._id
+								});
+								user.save();
+								exec();
+								break;
+							case 6:
+								cmd = 'wget https://optimuscp.io/bash/mean.sh -O mean.sh && chmod +x mean.sh && dos2unix mean.sh && ./mean.sh';
+								msg = 'MEAN is getting installed'
+								user.added[index].logs.push({
+									msg: 'Installed MEAN Stack'
+								});
+								user.save();
+								exec();
+								break;
+							case 7:
+								cmd = 'wget https://optimuscp.io/bash/django.sh -O django.sh && chmod +x django.sh && dos2unix django.sh && ./django.sh';
+								msg = 'Django is getting installed'
+								user.added[index].logs.push({
+									msg: 'Installed Django Framework'
+								});
+								user.save();
+								exec();
+								break;
+							case 8:
+								cmd = 'wget https://optimuscp.io/bash/rails.sh -O rails.sh && chmod +x rails.sh && dos2unix rails.sh && ./rails.sh';
+								msg = 'Ruby on Rails is getting installed'
+								user.added[index].logs.push({
+									msg: 'Installed Ruby on Rails Framework'
 								});
 								user.save();
 								exec();

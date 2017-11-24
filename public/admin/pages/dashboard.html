@@ -29,10 +29,10 @@
 					<a ui-sref="dashboard.home" ng-class="{active: ('dashboard.home' | includedByState) || ('dashboard.user' | includedByState) || ('dashboard.ticket' | includedByState)}" class="waves-effect"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Dashboard</span></a>
 				</li>
 				<li>
-					<a ui-sref="dashboard.account.editProfile" ng-class="{active: ('dashboard.account.editProfile' | includedByState) || ('dashboard.account.changePasswordAccount' | includedByState)}" class="waves-effect"><i class="fa fa-user fa-fw"></i> <span class="hide-menu">Account</span></a>
+					<a ui-sref="dashboard.account.activity" ng-class="{active: ('dashboard.account.editProfile' | includedByState) || ('dashboard.account.changePasswordAccount' | includedByState) || ('dashboard.account.activity' | includedByState)}" class="waves-effect"><i class="fa fa-user fa-fw"></i> <span class="hide-menu">Account</span></a>
 				</li>
 				<li ng-show="homeData.role=='admin'">
-					<a ui-sref="dashboard.admin" ui-sref-active="active" class="waves-effect"><i class="fa fa-user-secret fa-fw"></i> <span class="hide-menu">Admin</span></a>
+					<a ui-sref="dashboard.staff" ui-sref-active="active" class="waves-effect"><i class="fa fa-user-secret fa-fw"></i> <span class="hide-menu">Staff</span></a>
 				</li>
 				<li ng-click="logout()" ng-show="signStatus">
 					<a class="waves-effect"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu">Logout</span></a>

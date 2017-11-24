@@ -1,0 +1,22 @@
+<div class="row">
+	<h2 ng-show="!activityData.length">Not enough data</h2>
+	<table class="table table-hover margin bottom" ng-show="activityData.length">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Date</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr dir-paginate="x in activityData | itemsPerPage: pageSize" current-page="currentPage">
+				<td>{{ x.no+1 }}</td>
+				<td>{{ x.date | date: 'MMM d, y H:mm:ss' }}</td>
+				<td>{{ x.msg }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="pull-right">
+		<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+	</div>
+</div>

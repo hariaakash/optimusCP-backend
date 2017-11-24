@@ -38,7 +38,8 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<h1 ng-show="homeData.block">Your account is blocked, contact support to know more information !!</h1>
+	<div class="row" ng-hide="homeData.block">
 		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
 			<a href="javascript:void(0)" ng-click="openModal('addServer')">
 				<div class="white-box text-center bg-info server">

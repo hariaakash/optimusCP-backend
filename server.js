@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
-//var io = require('socket.io')(server);
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');

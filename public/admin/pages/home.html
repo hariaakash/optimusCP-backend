@@ -56,6 +56,7 @@
 					<th>Email</th>
 					<th>Verified</th>
 					<th>Blocked</th>
+					<th>Block / Unblock</th>
 					<th>Servers</th>
 					<th>Tickets Open</th>
 					<th>View</th>
@@ -66,7 +67,8 @@
 					<td>{{ x.no }}</td>
 					<td>{{ x.email }}</td>
 					<td><button type="button" class="btn btn-circle" ng-class="{'btn-success': x.verified == 'true', 'btn-warning': x.verified != 'true'}"><i class="fa"  ng-class="{'fa-check': x.verified == 'true', 'fa-close': x.verified != 'true'}"></i></button></td>
-					<td ng-class="{'text-danger': x.block == true, 'text-info': x.block == false }">{{ x.block }}</td>
+					<td>{{ x.block }}</td>
+					<td><button type="button" class="btn btn-circle btn-info" ng-click="blockUser(x.id)" ng-show="!x.block"><i class="fa fa-user-times"></i></button><button type="button" class="btn btn-circle btn-danger" ng-click="unBlockUser(x.id)" ng-show="x.block"><i class="fa fa-user-plus"></i></button></td>
 					<td>{{ x.added }}</td>
 					<td>{{ x.tickets }}</td>
 					<td><a ui-sref="dashboard.user({uId:x.id})"><button type="button" class="btn btn-circle btn-info"><i class="fa fa-eye"></i></button></a></td>

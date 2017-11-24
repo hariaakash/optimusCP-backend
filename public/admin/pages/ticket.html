@@ -19,7 +19,7 @@
 			<div class="panel panel-danger" ng-repeat="x in ticketData.conv">
 				<div class="panel-heading" style="padding: 5px 5px 0px 10px;">
 					<h4>{{ x.person===true ? 'Staff' : 'User' }}
-						<div class="pull-right">{{ x.date }}</div>
+						<div class="pull-right">{{ x.date | date: 'MMM d, y H:mm:ss' }}</div>
 					</h4>
 				</div>
 				<div class="panel-body">
