@@ -13,7 +13,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">RAM
 					<div class="pull-right"><a href="javascript:void(0)"><i class="fa fa-code" style="font-size:20px" ng-click="copyEmbedModal(2)"></i></a></div>
 				</div>
@@ -24,7 +24,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">STORAGE
 					<div class="pull-right"><a href="javascript:void(0)"><i class="fa fa-code" style="font-size:20px" ng-click="copyEmbedModal(3)"></i></a></div>
 				</div>
@@ -35,9 +35,42 @@
 					</div>
 				</div>
 			</div>
+			<div class="panel panel-inverse">
+				<div class="panel-heading text-center">Monitoring</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div class="row">
+							<h2 class="text-center" ng-show="!monitorData.length">Not enough data</h2>
+							<table class="table table-hover margin bottom" ng-show="monitorData.length">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Event</th>
+										<th>Start</th>
+										<th>End</th>
+										<th>Duration</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr dir-paginate="x in monitorData | itemsPerPage: pageSize" current-page="currentPage">
+										<td>{{ x.no+1 }}</td>
+										<td><i class="fa fa-dot-circle-o fa-blink" ng-class="{'text-success': x.isReachable == true, 'text-red': x.isReachable == false}"></i> {{x.isReachable==true?'UP':'DOWN'}}</td>
+										<td>{{ x.start | date: 'MMM d, y H:mm:ss' }}</td>
+										<td>{{ x.current | date: 'MMM d, y H:mm:ss' }}</td>
+										<td>{{ x.duration }}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="pull-right">
+								<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">Server Info</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
@@ -54,6 +87,10 @@
 								<tr>
 									<td>PORT: </td>
 									<td ng-bind="serverData.port"></td>
+								</tr>
+								<tr>
+									<td>Status: </td>
+									<td><i class="fa fa-dot-circle-o fa-blink" ng-class="{'text-success': serverData.monitorLogs.isReachable == true, 'text-red': serverData.monitorLogs.isReachable == false}"></i> {{serverData.monitorLogs.isReachable==true?'UP':'DOWN'}}</td>
 								</tr>
 								<tr>
 									<td>OS: </td>

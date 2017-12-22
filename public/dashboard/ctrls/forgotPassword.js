@@ -1,30 +1,21 @@
 angular.module('optimusApp')
-	.controller('forgotPasswordCtrl', function ($scope, $location, $http, $rootScope) {
-		$rootScope.checkAuth();
-		$scope.sendEmailVerification = function () {
-			$http({
-					method: 'POST',
-					url: $rootScope.apiUrl + 'user/forgotPassword',
-					data: $scope.data
-				})
-				.then(function (res) {
-					if (res.data.status) {
-						swal({
-							title: 'Success',
-							text: res.data.msg,
-							type: 'success',
-							showConfirmButton: true
-						});
-					} else {
-						swal({
-							title: 'Failed',
-							text: res.data.msg,
-							type: 'error',
-							showConfirmButton: true
-						});
-					}
-				}, function () {
-					swal("Fail", "Some error occurred, try again.", "error");
-				});
-		};
-	});
+    .controller('forgotPasswordCtrl', function($scope, $state, $http, $rootScope) {
+        $rootScope.checkAuth();
+        $scope.sendEmailVerification = function() {
+            $http({
+                    method: 'POST',
+                    url: $rootScope.apiUrl + 'user/forgotPassword',
+                    data: $scope.data
+                })
+                .then(function(res) {
+                    if (res.data.status) {
+                        $state.go('login');
+                        $rootScope.toast('Success', res.data.msg, "success", 0);
+                    } else {
+                        $rootScope.toast('Failed', res.data.msg, "error");
+                    }
+                }, function() {
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                });
+        };
+    });

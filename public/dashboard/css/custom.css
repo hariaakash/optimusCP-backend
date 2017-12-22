@@ -1,0 +1,148 @@
+/*Preloader*/
+
+@import url("../plugins/angular-loading-bar/loading-bar.css");
+.preloader-body {
+    opacity: 0;
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+}
+
+.preloader {
+    height: 128px;
+    width: 128px;
+    background-color: #353c48;
+    border-radius: 50%;
+    position: fixed;
+    top: calc(50% - 64px);
+    left: calc(50% - 64px);
+}
+
+.preloader:before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    -webkit-animation: rotation 1s linear infinite;
+    animation: rotation 1s linear infinite;
+    border: 1px solid #fb9678;
+    border-top: 1px solid transparent;
+    border-radius: 100%;
+}
+
+.preloader>.icon {
+    position: absolute;
+    top: calc(50% - 32px);
+    left: calc(50% - 32px);
+    -webkit-animation: wink 1s ease-in-out infinite alternate;
+    animation: wink 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+    }
+}
+
+@-webkit-keyframes wink {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes wink {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Extras */
+
+.server {
+    box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+
+.server:hover {
+    box-shadow: 0 10px 16px 10px rgba(0, 0, 0, 0.4), 0 12px 20px 0 rgba(0, 0, 0, 0.38) !important;
+}
+
+.ip {
+    font-size: 26px;
+}
+
+.modal-icon {
+    font-size: 60px;
+    color: #fb9678;
+}
+
+.add-server {
+    padding-top: 5px;
+}
+
+.table-borderless>tbody>tr>td, .table-borderless>tbody>tr>th, .table-borderless>tfoot>tr>td, .table-borderless>tfoot>tr>th, .table-borderless>thead>tr>td, .table-borderless>thead>tr>th {
+    border: none;
+}
+
+.server-info {
+    font-size: 20px;
+}
+
+.stack {
+    width: 50px;
+    height: 50px;
+}
+
+/*Dropdown*/
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; // remove the gap so it doesn't close
+}
+
+@keyframes fa-blink {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    75% {
+        opacity: 0.75;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fa-blink {
+    -webkit-animation: fa-blink 1s linear infinite;
+    -moz-animation: fa-blink 1s linear infinite;
+    -ms-animation: fa-blink 1s linear infinite;
+    -o-animation: fa-blink 1s linear infinite;
+    animation: fa-blink 1s linear infinite;
+}

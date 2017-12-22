@@ -32,7 +32,7 @@ angular.module('optimusApp')
 							});
 						}
 					}, function () {
-						swal("Fail", "Some error occurred, try again.", "error");
+						$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 					});
 			} else {
 				$location.search({});

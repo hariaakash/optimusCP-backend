@@ -1,16 +1,16 @@
 angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad'])
-    .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+    .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
         cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/logo.png" style="width: 64px; height: 64px;"></div>';
     }])
-    .filter('range', function () {
-        return function (input, total) {
+    .filter('range', function() {
+        return function(input, total) {
             total = parseInt(total);
             for (var i = 0; i < total; i++)
                 input.push(i);
             return input;
         };
     })
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('/login');
         $stateProvider
             .state("dashboard", {
@@ -23,7 +23,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                 templateUrl: "pages/home.html",
                 controller: "homeCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'Home',
                             files: ['./ctrls/home.js', './plugins/pagination/dirPagination.js']
@@ -36,7 +36,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                 templateUrl: "pages/user.html",
                 controller: "userCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'User',
                             files: ['./ctrls/user.js']
@@ -49,7 +49,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                 templateUrl: "pages/ticket.html",
                 controller: "ticketCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'Ticket',
                             files: ['./ctrls/ticket.js']
@@ -67,7 +67,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                 templateUrl: "pages/editProfile.html",
                 controller: "editProfileCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'EditProfile',
                             files: ['./ctrls/editProfile.js', './plugins/angular-country-state/angular-country-state.min.js']
@@ -80,7 +80,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                 templateUrl: "pages/changePasswordAccount.html",
                 controller: "changePasswordAccountCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'changePasswordAccount',
                             files: ['./ctrls/changePasswordAccount.js']
@@ -88,25 +88,25 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                     }]
                 }
             })
-            .state("dashboard.account.activity", {
-                url: "/activity",
-                templateUrl: "pages/activity.html",
-                controller: "activityCtrl",
-                resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-                        return $ocLazyLoad.load({
-                            name: 'Activity',
-                            files: ['./ctrls/activity.js', './plugins/pagination/dirPagination.js']
-                        })
+			.state("dashboard.account.activity", {
+				url: "/activity",
+				templateUrl: "pages/activity.html",
+				controller: "activityCtrl",
+				resolve: {
+					loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+						return $ocLazyLoad.load({
+							name: 'Activity',
+							files: ['./ctrls/activity.js', './plugins/pagination/dirPagination.js']
+						})
     				}]
-                }
-            })
+				}
+			})
             .state("dashboard.staff", {
                 url: "/staff",
                 templateUrl: "pages/staff.html",
                 controller: "staffCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'Staff',
                             files: ['./ctrls/staff.js', './plugins/pagination/dirPagination.js']
@@ -119,7 +119,7 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                 templateUrl: "pages/login.html",
                 controller: "loginCtrl",
                 resolve: {
-                    loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
                         return $ocLazyLoad.load({
                             name: 'Login',
                             files: ['./ctrls/login.js', './css/login-register.css']
@@ -132,12 +132,12 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
 
 // Global Controller
 angular.module('optimusApp')
-    .controller('globalCtrl', function ($scope, $rootScope, $location, $http, $state, $ocLazyLoad) {
-        //        $rootScope.apiUrl = 'http://localhost:3000/webapi/';
+    .controller('globalCtrl', function($scope, $rootScope, $location, $http, $state, $ocLazyLoad) {
+        // $rootScope.apiUrl = 'http://localhost:3000/webapi/';
         $rootScope.apiUrl = 'https://optimuscp.io/webapi/';
         $ocLazyLoad.load(['./plugins/sweetalert2/sweetalert2.min.js', './plugins/sweetalert2/sweetalert2.min.css', './plugins/toast/toast.min.js', './plugins/toast/toast.min.css'])
         $rootScope.homeData = {};
-        $rootScope.checkAuth = function () {
+        $rootScope.checkAuth = function() {
             if (Cookies.get('adminKey')) {
                 $rootScope.adminKey = Cookies.get('adminKey');
                 $http({
@@ -147,7 +147,7 @@ angular.module('optimusApp')
                             adminKey: $rootScope.adminKey
                         }
                     })
-                    .then(function (res) {
+                    .then(function(res) {
                         console.log(res.data)
                         if (res.data.status == true) {
                             $rootScope.homeData = res.data.data;
@@ -165,7 +165,7 @@ angular.module('optimusApp')
                                 showConfirmButton: true
                             });
                         }
-                    }, function (res) {
+                    }, function(res) {
                         $('#btnLoad').button('reset');
                         swal("Fail", "Some error occurred, try again.", "error");
                     });
@@ -181,7 +181,7 @@ angular.module('optimusApp')
                     $state.go('login');
             }
         };
-        $rootScope.logout = function () {
+        $rootScope.logout = function() {
             Cookies.remove('adminKey');
             $http({
                     method: 'GET',
@@ -190,18 +190,18 @@ angular.module('optimusApp')
                         adminKey: $rootScope.adminKey
                     }
                 })
-                .then(function (res) {
+                .then(function(res) {
                     $state.go('login');
                     $rootScope.adminKey = '';
-                }, function (res) {
+                }, function(res) {
                     $state.go('login');
                     swal("Fail", "Some error occurred, try again.", "error");
                 });
         };
-        $rootScope.openModal = function (x) {
+        $rootScope.openModal = function(x) {
             $('#' + x).modal('show');
         };
-        $rootScope.toast = function (heading, text, status) {
+        $rootScope.toast = function(heading, text, status) {
             $.toast({
                 heading: heading,
                 text: text,

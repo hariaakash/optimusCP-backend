@@ -50,17 +50,10 @@
 		</div>
 		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-repeat="x in homeData.added" ng-show="homeData.added">
 			<a ui-sref="dashboard.manage({ serverId: x._id })">
-				<div class="white-box text-center server" ng-class="'bg-danger'">
-					<h3 class="box-title text-left text-white" ng-bind="x.name"></h3>
-					<h1 class="text-white ip" ng-bind="x.ip"></h1>
-					<p class="text-right text-white" ng-bind="x.os"></p>
-				</div>
-			</a>
-		</div>
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-repeat="x in homeData.bought" ng-show="homeData.bought">
-			<a href="manage/{{x._id}}">
-				<div class="ribbon ribbon-corner"><i class="fa fa-server"></i></div>
-				<div class="white-box text-center server" ng-class="'bg-danger'">
+				<div class="white-box text-center server bg-danger">
+					<div class="ribbon ribbon-right">
+						<h5 class="text-white">Status: <i class="fa fa-dot-circle-o fa-blink" ng-class="{'text-success': x.monitorLogs.isReachable == true, 'text-red': x.monitorLogs.isReachable == false}"></i> {{x.monitorLogs.isReachable==true?'UP':'DOWN'}}</h5>
+					</div>
 					<h3 class="box-title text-left text-white" ng-bind="x.name"></h3>
 					<h1 class="text-white ip" ng-bind="x.ip"></h1>
 					<p class="text-right text-white" ng-bind="x.os"></p>

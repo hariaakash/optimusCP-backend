@@ -1,256 +1,200 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en-US">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="">
-	<meta name="author" content="">
-
-	<link rel="shortcut icon" href="images/favicon.ico">
-
-	<title>OptimusCP - Cloud Server Control Panel</title>
-
-	<!-- Fonts -->
-	<link href='https://fonts.googleapis.com/css?family=Josefin+Sans:400,600,700' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
-
-	<!-- CSS -->
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/font-awesome.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
-
+    <!-- Basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OptimusCP - Cloud Control Panel for Cloud Servers</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="OptimusCP - Cloud Control Panel for Cloud Servers">
+    <meta name="author" content="optimuscp.io">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,400i|Poppins:300,400,500,600" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lity/2.0.0/lity.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 </head>
-
 
 <body>
 
-	<nav class="navbar navbar-default navbar-custom sticky">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-				<a class="navbar-brand" href="https://optimuscp.io"><img src="images/text-logo.png" class="logo" alt="logo"></a>
-			</div>
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#home" class="scroll">Home</a></li>
-					<li><a href="#features" class="scroll">Features</a></li>
-					<li><a href="#faq" class="scroll">FAQ</a></li>
-					<li><a href="https://optimuscp.io/dashboard/#!/login">Login</a></li>
-					<li><a href="https://optimuscp.io/dashboard/#!/register">Register</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+    <!-- Scroll up -->
+    <div class="scrollup">
+        <i class="fa fa-chevron-up"></i>
+    </div>
 
+    <!-- Main Container -->
+    <div class="web-in">
 
-	<section class="section home" id="home">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="home-wrapper text-center">
-						<div class="text-tran-box">
-							<h1 class="text-transparent">Cloud Server Control Panel</h1>
-						</div>
-						<a href="#features" class="btn btn-dark scroll">Get Started</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+        <!-- Navigation -->
+        <nav id="light" class="transparent start-light regular">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="nav-ui n_">
+                            <div>
+                                <a target="_blank" href="./dashboard/#!/login" class="btn hidden-xs start-project"><span>Login</span></a>
+                                <div id="menu-icon"><span></span></div>
+                            </div>
+                        </div>
+                        <div class="logo-holder n_">
+                            <div>
+                                <a href="optimuscp.io">
+                                    <img class="logo" src="img/text-logo2.png" alt="">
+                                    <img class="logo alt" src="img/text-logo2.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="nav-content n_">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#features">Features</a></li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
 
+        <header id="sp1" class="dark1 center" style="background-image:url(img/header.jpg)">
+            <div class="header-in">
+                <div class="caption">
+                    <h5>Welcome to OptimusCP</h5>
+                    <h1>Manage, Collaborate, Automate & Monitor</h1>
+                    <h6>Control Panel for Cloud Servers</h6>
+                    <br />
+                    <a target="_blank" href="./dashboard/#!/register" class="btn"><span>Register</span></a>
+                    <a href="https://www.youtube.com/watch?v=kJQP7kiw5Fk" class="btn alt playvideo" data-lity><span><i class="fa fa-play"></i> Play the video</span></a>
+                </div>
+                <i class="fa fa-chevron-down arrow"></i>
+            </div>
+        </header>
 
-	<section>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="facts-box testimonial-cta">
-						<div class="row">
-							<div class="col-sm-12">
-								<img src="./images/user.png" alt="img" class="img-circle img-thumbnail">
-								<p>"OptimusCP is a savior, helps me access server through company proxy. Also the api features comes in handy for service automations" - <span class="text-colored">Daniel Daley</span></p>
-							</div>
-							<!--
-							<div class="col-sm-6 col-xs-6">
-								<h2>23</h2>
-								<p class="text-muted">Registered Users</p>
-							</div>
-							<div class="col-sm-6 col-xs-6">
-								<h2>193</h2>
-								<p class="text-muted">Servers Added</p>
-							</div>
--->
-							<!--
-							<div class="col-sm-3 col-xs-6">
-								<h2>742</h2>
-								<p class="text-muted">Total Download</p>
-							</div>
+        <section class="phone-pres-1 dark1" id="features">
+            <div class="container border">
+                <div class="row">
+                    <div class="col col-md-6 col-md-offset-3 title">
+                        <h2>Revolutionizing Server Management</h2>
+                        <h4>The way you want.</h4>
+                    </div>
+                </div>
+                <div class="row m-space">
+                    <div class="col-sm-3 col-xs-6 right mh" style="height: 563px;">
+                        <div class="aligner">
+                            <div class="holder">
+                                <i class="fa fa-gears"></i>
+                                <h3>Manage</h3>
+                                <p>Manage your server in the cloud without utlizing any of your server resources.</p>
+                                <hr>
+                                <i class="fa fa-group"></i>
+                                <h3>Collaborate</h3>
+                                <p>Work together, Work remotely as a team on our collaborative management environment.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 center phones mh hidden-xs" style="height: 563px;">
+                        <img class="behind" src="img/manage.png" alt="">
+                        <img src="img/manage.png" alt="">
+                    </div>
+                    <div class="col-sm-3 col-xs-6 mh" style="height: 563px;">
+                        <div class="aligner">
+                            <div class="holder">
+                                <i class="fa fa-code"></i>
+                                <h3>Automate</h3>
+                                <p>Integrate your server with other web services using the powerful REST API.</p>
+                                <hr>
+                                <i class="fa fa-area-chart"></i>
+                                <h3>Monitor</h3>
+                                <p>Hassle free real time server monitoring with memory and disk usage statistics.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-							<div class="col-sm-3 col-xs-6">
-								<h2>1548</h2>
-								<p class="text-muted">Cup Of Coffee</p>
-							</div>
--->
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+        <section class="iconblock center dark1">
+            <div class="container border">
+                <div class="row">
+                    <div class="col col-md-6 col-md-offset-3 title">
+                        <h4>Control Panel</h4>
+                        <h2>Beautiful & Featureful</h2>
+                    </div>
+                </div>
+                <div class="row m-space">
+                    <div class="col-sm-6 col-md-3">
+                        <i class="fa fa-cloud"></i>
+                        <h3>File Manager</h3>
+                        <p>Edit your code, upload and download files, copy/move/delete files and folders - all remotely.</p>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <i class="fa fa-terminal"></i>
+                        <h3>Web Terminal</h3>
+                        <p>With integrated web terminal, manage servers on the goworks under corporate proxy.</p>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <i class="fa fa-th"></i>
+                        <h3>Stack Installer</h3>
+                        <p>One-click latest stack installers to make your development easier.</p>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <i class="fa fa-upload"></i>
+                        <h3>Update</h3>
+                        <p>Update your servers and keep it secured with just one click.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-	<div class="clearfix"></div>
+        <div class="promo area dark1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 col-lg-4">
+                        <h4 class="no-pad-top no-pad-bot">Get Started</h4>
+                        <span class="promo-heading">OptimusCP is free in it's beta stage.</span>
+                        <a target="_blank" href="./dashboard/#!/register" class="btn"><span>Register</span></a>
+                    </div>
+                    <div class="col-sm-8 col-lg-8">
+                        <img class="promo-image" src="img/promo.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
 
-	<section class="section" id="features">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12 text-center">
-					<h2 class="title">Features</h2>
-					<p class="title-alt">Beautiful &amp; Featureful</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="features-box text-center">
-						<div class="feature-icon">
-							<i class="fa fa-cloud-upload"></i>
-						</div>
-						<h3>File Manager</h3>
-						<p class="text-muted">Edit your code, upload and download files, copy/move/delete files and folders - all without installing any desktop software.</p>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="features-box text-center">
-						<div class="feature-icon">
-							<i class="fa fa-terminal"></i>
-						</div>
-						<h3>Web Terminal</h3>
-						<p class="text-muted">With integrated web terminal, you can manage servers on the go and works under corporate proxy.</p>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="features-box text-center">
-						<div class="feature-icon">
-							<i class="fa fa-line-chart"></i>
-						</div>
-						<h3>Monitoring</h3>
-						<p class="text-muted">Hassle free real time server monitoring with memory and disk usage statistics. Easily embed the metrics on to other websites and showcase your usage statistics.</p>
-					</div>
-				</div>
-			</div><br>
-			<div class="row">
-				<div class="col-sm-4">
-					<div class="features-box text-center">
-						<div class="feature-icon">
-							<i class="fa fa-code"></i>
-						</div>
-						<h3>API</h3>
-						<p class="text-muted">Integrate your server with other web services by using the API.</p>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="features-box text-center">
-						<div class="feature-icon">
-							<i class="fa fa-upload"></i>
-						</div>
-						<h3>Update</h3>
-						<p class="text-muted">Update your servers and keep it secured with just one click.</p>
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="features-box text-center">
-						<div class="feature-icon">
-							<i class="fa fa-clock-o"></i>
-						</div>
-						<h3>Cron Job &amp; Startup Scripts</h3>
-						<p class="text-muted">Adding a cron job and startup script won't be any easier than this.</p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+        <footer id="minimal" class="dark1 center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <img src="img/text-logo2.png" width="256px" alt="logo">
+                        <div class="social">
+                            <a target="_blank" href="https://twitter.com/connect_omnia"><i class="fa fa-twitter"></i></a>
+                            <a target="_blank" href="https://www.facebook.com/connectwithomnia/"><i class="fa fa-facebook"></i></a>
+                            <a target="_blank" href="https://www.linkedin.com/company/connectwithomnia/"><i class="fa fa-linkedin"></i></a>
+                        </div>
+                        <hr>
+                        <p class="footer-text">Copyright © OptimusCP - Omni@<br /> Made with <i class="fa fa-heart fa-blink"></i> in India.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
-	<section class="section bg-register" id="register">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<div class="home-wrapper text-center">
-						<div class="text-tran-box">
-							<h1 class="text-transparent">Go ahead and register now !!</h1>
-						</div>
-						<a href="https://optimuscp.io/dashboard/#!/register" class="btn btn-dark">Register</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="section" id="faq">
-		<div class="container">
-			<div class="row text-center">
-				<div class="col-sm-12">
-					<h2 class="title">FAQ</h2>
-					<div class="row text-left">
-						<div class="col-sm-6">
-							<div class="question-box">
-								<h4><span class="text-colored">Q. </span>What is OptimusCP?</h4>
-								<p><span><b>A. </b></span>OptimusCP is a cloud server control panel which can be used to manage the currently supported linux distros like Ubuntu &amp; Debian. Unlike other control panels OptimusCP doesn't utilize any of your server resources as it doesn't install anything remotely.</p>
-							</div>
-							<div class="question-box">
-								<h4><span class="text-colored">Q. </span>How this work?</h4>
-								<p><span><b>A. </b></span>OptimusCP act as a middle man who automates your tasks which are tedious and connects to your server directly to perform these.</p>
-							</div>
-						</div>
-
-						<div class="col-sm-6">
-							<div class="question-box">
-								<h4><span class="text-colored">Q. </span>How secure is this?</h4>
-								<p><span><b>A. </b></span>The accessibility of your server is restricted to you and only OptimusCP, none of our agents have access to your servers. Moreover no sensitive information is stored on our end.</p>
-							</div>
-							<div class="question-box">
-								<h4><span class="text-colored">Q. </span>Did we miss something ?</h4>
-								<p><span><b>A. </b></span>Mail us at <a href="mailto:support@optimuscp.io">support@optimuscp.io</a> or else open a support ticket from the dashboard.</p>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<footer class="footer bg-theme">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-4">
-					<p class="m-b-0 font-13 copyright">Made with <i class="fa fa-heart fa-blink"></i> in India</p>
-				</div>
-				<div class="col-sm-4 text-center">
-					<img src="images/omnia.png" width="100px" height="100px" />
-				</div>
-				<div class="col-sm-4">
-					<ul class="list-inline footer-social-one m-b-0 pull-right">
-						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</footer>
-
-
-	<!-- JS -->
-	<script src="js/jquery-2.1.4.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.easing.1.3.min.js"></script>
-	<script src="js/jquery.app.js"></script>
-
+    </div>
+    <!-- end of web-in -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.0/pace.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.3/headroom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lity/2.0.0/lity.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>

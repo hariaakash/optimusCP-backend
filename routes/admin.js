@@ -50,12 +50,7 @@ cron.schedule('0 */2 * * *', function() {
 
 
 //Responder
-function uniR(res, status, msg) {
-    res.json({
-        status: status,
-        msg: msg
-    });
-}
+var uniR = require('../controllers/uniR');
 
 
 //Routes
@@ -368,7 +363,7 @@ app.post('/addUser', function(req, res) {
                                             .then(function(user) {
                                                 uniR(res, true, 'User Added successfully !!');
                                                 var helper = require('sendgrid').mail;
-                                                var from = new helper.Email('support@proapi.co');
+                                                var from = new helper.Email('support@optimuscp.io');
                                                 var to = new helper.Email(user.email);
                                                 var subject = 'Welcome to OptimusCP !! Account Details';
                                                 var body = new helper.Content('text/html', 'Welcome to OptimusCP');

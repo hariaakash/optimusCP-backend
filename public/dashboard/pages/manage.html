@@ -12,7 +12,9 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="panel panel-info">
+			<div class="alert alert-success text-center" ng-show="msgboardStatus">
+				<h1 class="text-white">{{serverData.msgboard.msg}}</h1><br /><b>Time Left: {{time}} seconds</b></div>
+			<div class="panel panel-inverse" ng-show="!msgboardStatus">
 				<div class="panel-heading text-center">Metrics
 					<div class="pull-right"><a href="javascript:void(0)"><i class="fa fa-code" style="font-size:20px" ng-click="openModal('copyEmbed')"></i></a></div>
 				</div>
@@ -25,9 +27,9 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row" ng-show="!msgboardStatus">
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 text-center">
-			<div class="panel panel-info">
+			<div class="panel panel-inverse blockUI">
 				<div class="panel-heading">Basic Control</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
@@ -66,7 +68,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-info" id="stackBox">
+			<div class="panel panel-inverse blockUI">
 				<div class="panel-heading">Stack Installer</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
@@ -105,12 +107,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-info">
+			<div class="panel panel-inverse blockUI">
 				<div class="panel-heading">Advanced</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-							<a href="javascript:void(0)" ng-click="sftp()">
+							<a ui-sref="dashboard.fileManager({serverId: serverId})">
 								<div class="white-box">
 									<h3 class="text-danger"><i class="fa fa-cloud-upload fa-2x"></i></h3>
 									<h3 class="text-danger">SFTP</h3>
@@ -144,7 +146,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading">Other</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
@@ -165,7 +167,7 @@
 							</a>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-							<a href="javascript:void(0)" ng-click="openModal('viewActivity')">
+							<a ui-sref="dashboard.serverActivity({serverId: serverId})">
 								<div class="white-box">
 									<h3 class="text-danger"><i class="fa fa-list fa-2x"></i></h3>
 									<h3 class="text-danger">Activity</h3>
@@ -173,10 +175,10 @@
 							</a>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-							<a href="javascript:void(0)" ng-click="openModal('addServer')">
+							<a ui-sref="dashboard.metrics({serverId: serverId})">
 								<div class="white-box">
-									<h3 class="text-danger"><i class="fa fa-file fa-2x"></i></h3>
-									<h3 class="text-danger">Docs</h3>
+									<h3 class="text-danger"><i class="fa fa-line-chart fa-2x"></i></h3>
+									<h3 class="text-danger">Metrics</h3>
 								</div>
 							</a>
 						</div>
@@ -185,7 +187,7 @@
 			</div>
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">Server Info</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
@@ -202,6 +204,10 @@
 								<tr>
 									<td>PORT: </td>
 									<td ng-bind="serverData.port"></td>
+								</tr>
+								<tr>
+									<td>Status: </td>
+									<td><i class="fa fa-dot-circle-o fa-blink" ng-class="{'text-success': serverData.monitorLogs.isReachable == true, 'text-red': serverData.monitorLogs.isReachable == false}"></i> {{serverData.monitorLogs.isReachable==true?'UP':'DOWN'}}</td>
 								</tr>
 								<tr>
 									<td>OS: </td>
@@ -250,44 +256,6 @@
 					</div>
 					<div class="col-md-2">
 						<button type="button" class="btn btn-danger btn-circle" ng-click="copySuccess()" clipboard supported="supported" text="embedCode"><i class="fa fa-clone"></i></button>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div id="viewActivity" class="modal fade" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header text-center">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<i class="fa fa-list modal-icon"></i>
-				<h2 class="modal-title">Server Activity</h2>
-			</div>
-			<div class="modal-body text-white">
-				<div class="row">
-					<h2 ng-show="!serverData.logs.length">Not enough data</h2>
-					<table class="table table-hover margin bottom" ng-show="serverData.logs.length">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Date</th>
-								<th>Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr dir-paginate="x in serverData.logs | itemsPerPage: pageSize" current-page="currentPage">
-								<td>{{ x.no+1 }}</td>
-								<td>{{ x.date | date: 'MMM d, y H:mm:ss' }}</td>
-								<td>{{ x.msg }}</td>
-							</tr>
-						</tbody>
-					</table>
-					<div class="pull-right">
-						<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
 					</div>
 				</div>
 			</div>
