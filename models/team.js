@@ -53,7 +53,31 @@ var teamSchema = new Schema({
             type: Boolean,
             default: true
         }
-    }]
+    }],
+    stats: {
+        bought: {
+            type: Number,
+            default: 0
+        },
+        added: {
+            type: Number,
+            default: 0
+        },
+        credits: {
+            type: Number,
+            default: 0
+        },
+        tickets: {
+            open: {
+                type: Number,
+                default: 0
+            },
+            closed: {
+                type: Number,
+                default: 0
+            }
+        }
+    }
 });
 
 

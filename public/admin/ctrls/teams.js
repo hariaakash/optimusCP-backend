@@ -1,15 +1,35 @@
 angular.module('optimusApp')
-    .controller('homeCtrl', function($rootScope, $scope, $http, $state) {
+    .controller('teamsCtrl', function($rootScope, $scope, $http, $state) {
         $rootScope.checkAuth();
         $scope.currentPage = 1;
         $scope.pageSize = 10;
-        $scope.blockUser = function(x) {
+        $scope.getTeamsInfo = function(x) {
+            $http({
+                    method: 'GET',
+                    url: $rootScope.apiUrl + 'admin/teams',
+                    params: {
+                        adminKey: $rootScope.adminKey
+                    }
+                })
+                .then(function(res) {
+                    if (res.data.status == true) {
+                        $rootScope.teamsData = res.data.data;
+                    } else {
+                        $('#btnLoad').button('reset');
+                        $rootScope.toast('Failed', res.data.msg, "error");
+                    }
+                }, function(res) {
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                });
+        };
+        $scope.getTeamsInfo();
+        $scope.blockTeam = function(x) {
             $http({
                     method: 'POST',
-                    url: $rootScope.apiUrl + 'admin/blockUser',
+                    url: $rootScope.apiUrl + 'admin/blockTeam',
                     data: {
                         adminKey: $rootScope.adminKey,
-                        uId: x
+                        tId: x
                     }
                 })
                 .then(function(res) {
@@ -25,13 +45,13 @@ angular.module('optimusApp')
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
         };
-        $scope.unBlockUser = function(x) {
+        $scope.unBlockTeam = function(x) {
             $http({
                     method: 'POST',
-                    url: $rootScope.apiUrl + 'admin/unBlockUser',
+                    url: $rootScope.apiUrl + 'admin/unBlockTeam',
                     data: {
                         adminKey: $rootScope.adminKey,
-                        uId: x
+                        tId: x
                     }
                 })
                 .then(function(res) {

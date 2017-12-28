@@ -1,4 +1,4 @@
-module.exports = function(req, res, uniR, multer) {
+module.exports = function(req, res, uniR, multer, hat) {
     var filename = Date.now() + hat();
     var storage = multer.diskStorage({
         destination: function(req, file, cb) {
@@ -13,6 +13,7 @@ module.exports = function(req, res, uniR, multer) {
     }).single('file');
     upload(req, res, function(err) {
         if (err) {
+            console.log(err)
             uniR(res, false, 'Error uploading file')
         } else {
             res.json({

@@ -40,7 +40,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="panel panel-info">
+		<div class="panel panel-inverse">
 			<div class="panel-heading text-center">Admin</div>
 			<div class="panel-wrapper">
 				<div class="panel-body">
@@ -52,10 +52,6 @@
 									<th>Email</th>
 									<th>Name</th>
 									<th>Logs</th>
-									<!--
-									<th>Block</th>
-									<th>Delete</th>
--->
 								</tr>
 							</thead>
 							<tbody>
@@ -64,10 +60,6 @@
 									<td ng-bind="x.email"></td>
 									<td> {{x.info.name ? x.info.name : 'Not Set'}}</td>
 									<td><button type="button" class="btn btn-circle btn-info" ng-click="openLog(x)"><i class="fa fa-list"></i></button></td>
-									<!--
-									<td><button type="button" class="btn btn-circle btn-warning" ng-click="delApiKey(x._id)"><i class="fa fa-user-times"></i></button></td>
-									<td><button type="button" class="btn btn-circle btn-danger" ng-click="delApiKey(x._id)"><i class="fa fa-close"></i></button></td>
--->
 								</tr>
 							</tbody>
 						</table>
@@ -78,7 +70,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="panel panel-info">
+		<div class="panel panel-inverse">
 			<div class="panel-heading text-center">Support</div>
 			<div class="panel-wrapper">
 				<div class="panel-body">

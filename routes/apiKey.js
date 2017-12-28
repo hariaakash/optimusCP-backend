@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var requestIp = require('request-ip');
 var hat = require('hat');
 var rack = hat.rack();
 var User = require('../models/user');
@@ -147,6 +148,11 @@ app.post('/create/:tId', function(req, res) {
                                     name: req.body.name,
                                     key: rack()
                                 });
+                                team.logs.push({
+                                    ip: requestIp.getClientIp(req),
+                                    user: user.email,
+                                    msg: 'API created with name: ' + req.body.name
+                                });
                                 team.save();
                                 uniR(res, true, 'API Key Created !!');
                             } else {
@@ -203,6 +209,11 @@ app.post('/delete/:tId', function(req, res) {
                             if (data.status) {
                                 var team = data.team;
                                 team.apis.id(req.body.apiId).remove();
+                                team.logs.push({
+                                    ip: requestIp.getClientIp(req),
+                                    user: user.email,
+                                    msg: 'API Key removed.'
+                                });
                                 team.save();
                                 uniR(res, true, 'API Key Deleted !!');
                             } else {

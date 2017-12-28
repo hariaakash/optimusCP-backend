@@ -50,10 +50,6 @@ var userSchema = new Schema({
             type: Number,
             default: 0
         },
-        usage: {
-            type: Number,
-            default: 0
-        },
         tickets: {
             open: {
                 type: Number,

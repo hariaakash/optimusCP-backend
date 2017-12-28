@@ -24,7 +24,7 @@ var uniR = require('../controllers/uniR');
 var formatBytes = require('../controllers/formatBytes');
 
 //Check uptime
-// require('../controllers/server/checkUptimeUserServer')();
+require('../controllers/server/checkUptimeUserServer')();
 
 app.get('/m-det', function(req, res) {
     if (req.query.authKey && req.query.serverId) {
@@ -134,13 +134,34 @@ app.post('/m-remove', function(req, res) {
 });
 
 app.post('/exec', function(req, res) {
-    if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 5 || req.body.cmd == 6 || req.body.cmd == 7 || req.body.cmd == 8)) {
+    if (req.body.authKey && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3)) {
         User.findOne({
                 authKey: req.body.authKey
             })
             .then(function(user) {
                 if (user) {
                     require('../controllers/server/exec')(req, res, ssh, uniR, user);
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                console.log(err)
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+app.post('/stack', function(req, res) {
+    if (req.body.authKey && req.body.serverId && (req.body.stack == 1 || req.body.stack == 2 || req.body.stack == 3 || req.body.stack == 4)) {
+        User.findOne({
+                authKey: req.body.authKey
+            })
+            .then(function(user) {
+                if (user) {
+                    require('../controllers/server/stack')(req, res, ssh, uniR, user);
                 } else {
                     uniR(res, false, 'Account not found !!');
                 }
@@ -318,7 +339,7 @@ app.get('/embed', function(req, res) {
 });
 
 app.post('/uploadPrivateKey', function(req, res) {
-    require('../controllers/uploadPrivateKey')(req, res, uniR, multer);
+    require('../controllers/uploadPrivateKey')(req, res, uniR, multer, hat);
 });
 
 

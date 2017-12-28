@@ -31,8 +31,19 @@ angular.module('optimusApp')
         };
         $rootScope.getTeamInfo();
         $scope.openAddMemberModal = function() {
+            if ($rootScope.teamData.conf.block == false) {
+                if ($rootScope.teamData.role == 1) {
+                    $rootScope.openModal('addMember');
+                } else {
+                    $rootScope.toast('Info', "You don't have permissions !", "info")
+                }
+            } else {
+                $rootScope.toast('Failed', "Your team is blocked", "error")
+            }
+        };
+        $scope.openAddServerModal = function() {
             if ($rootScope.teamData.role == 1) {
-                $rootScope.openModal('addMember');
+                $rootScope.openModal('addServer');
             } else {
                 $rootScope.toast('Info', "You don't have permissions !", "info")
             }

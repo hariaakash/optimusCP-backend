@@ -44,6 +44,19 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                     }]
                 }
             })
+            .state("dashboard.userActivity", {
+                url: "/userActivity/:uId",
+                templateUrl: "pages/userActivity.html",
+                controller: "userActivityCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'User Activity',
+                            files: ['./ctrls/userActivity.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
             .state("dashboard.ticket", {
                 url: "/ticket/:uId/:tId/",
                 templateUrl: "pages/ticket.html",
@@ -88,19 +101,19 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                     }]
                 }
             })
-			.state("dashboard.account.activity", {
-				url: "/activity",
-				templateUrl: "pages/activity.html",
-				controller: "activityCtrl",
-				resolve: {
-					loadMyCtrl: ['$ocLazyLoad', function ($ocLazyLoad) {
-						return $ocLazyLoad.load({
-							name: 'Activity',
-							files: ['./ctrls/activity.js', './plugins/pagination/dirPagination.js']
-						})
-    				}]
-				}
-			})
+            .state("dashboard.account.activity", {
+                url: "/activity",
+                templateUrl: "pages/activity.html",
+                controller: "activityCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Activity',
+                            files: ['./ctrls/activity.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
             .state("dashboard.staff", {
                 url: "/staff",
                 templateUrl: "pages/staff.html",
@@ -110,6 +123,45 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                         return $ocLazyLoad.load({
                             name: 'Staff',
                             files: ['./ctrls/staff.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.teams", {
+                url: "/teams",
+                templateUrl: "pages/teams.html",
+                controller: "teamsCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Teams',
+                            files: ['./ctrls/teams.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.team", {
+                url: "/team/:tId",
+                templateUrl: "pages/team.html",
+                controller: "teamCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Team',
+                            files: ['./ctrls/team.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.teamActivity", {
+                url: "/teamActivity/:tId",
+                templateUrl: "pages/teamActivity.html",
+                controller: "teamActivityCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Team Activity',
+                            files: ['./ctrls/teamActivity.js', './plugins/pagination/dirPagination.js']
                         })
                     }]
                 }
@@ -137,38 +189,34 @@ angular.module('optimusApp')
         $rootScope.apiUrl = 'https://optimuscp.io/webapi/';
         $ocLazyLoad.load(['./plugins/sweetalert2/sweetalert2.min.js', './plugins/sweetalert2/sweetalert2.min.css', './plugins/toast/toast.min.js', './plugins/toast/toast.min.css'])
         $rootScope.homeData = {};
-        $rootScope.checkAuth = function() {
+        $rootScope.checkAuth = function(force) {
             if (Cookies.get('adminKey')) {
                 $rootScope.adminKey = Cookies.get('adminKey');
-                $http({
-                        method: 'GET',
-                        url: $rootScope.apiUrl + 'admin',
-                        params: {
-                            adminKey: $rootScope.adminKey
-                        }
-                    })
-                    .then(function(res) {
-                        console.log(res.data)
-                        if (res.data.status == true) {
-                            $rootScope.homeData = res.data.data;
-                            console.log($rootScope.homeData);
-                            $rootScope.user = $rootScope.homeData.info;
-                            if (!$rootScope.homeData.info.set)
-                                $state.go('dashboard.account.editProfile')
-                        } else {
-                            $rootScope.logout();
-                            swal({
-                                title: 'Failed',
-                                text: res.data.msg,
-                                type: 'error',
-                                timer: 2000,
-                                showConfirmButton: true
-                            });
-                        }
-                    }, function(res) {
-                        $('#btnLoad').button('reset');
-                        swal("Fail", "Some error occurred, try again.", "error");
-                    });
+                if (!$rootScope.signStatus || force) {
+                    $http({
+                            method: 'GET',
+                            url: $rootScope.apiUrl + 'admin',
+                            params: {
+                                adminKey: $rootScope.adminKey
+                            }
+                        })
+                        .then(function(res) {
+                            if (res.data.status == true) {
+                                $rootScope.homeData = res.data.data;
+                                $rootScope.user = $rootScope.homeData.info;
+                                if (!$rootScope.homeData.info.set)
+                                    $state.go('dashboard.account.editProfile')
+                            } else {
+                                $rootScope.logout();
+                                $rootScope.toast('Error', res.data.msg, 'error');
+                            }
+                        }, function(res) {
+                            $('#btnLoad').button('reset');
+                            $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                        });
+                } else if (!$rootScope.homeData.info.set) {
+                    $state.go('dashboard.account.editProfile')
+                }
                 var path = $location.path();
                 if (path == '/login')
                     $state.go('dashboard.home');
@@ -191,25 +239,32 @@ angular.module('optimusApp')
                     }
                 })
                 .then(function(res) {
+                    delete $rootScope.adminKey;
+                    $rootScope.toast('Success', 'Logged out !!', "info");
                     $state.go('login');
-                    $rootScope.adminKey = '';
                 }, function(res) {
                     $state.go('login');
-                    swal("Fail", "Some error occurred, try again.", "error");
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
         };
         $rootScope.openModal = function(x) {
             $('#' + x).modal('show');
         };
-        $rootScope.toast = function(heading, text, status) {
+        $rootScope.closeModal = function(x) {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open');
+        };
+        $rootScope.toast = function(heading, text, status, hideAfter = 10000) {
+            // info, warning, error, success
+            if (hideAfter == 0) hideAfter = false;
             $.toast({
                 heading: heading,
                 text: text,
-                position: 'top-right',
+                position: 'bottom-right',
                 loaderBg: '#ff6849',
                 icon: status,
-                hideAfter: 5000,
-                stack: 6
+                hideAfter: hideAfter,
+                stack: 1
             });
         };
     });

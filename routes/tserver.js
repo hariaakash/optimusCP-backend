@@ -25,7 +25,7 @@ var uniR = require('../controllers/uniR');
 var formatBytes = require('../controllers/formatBytes');
 
 //Check uptime
-// require('../controllers/tserver/checkUptimeTeamServer')();
+require('../controllers/tserver/checkUptimeTeamServer')();
 
 //Retrieve team info
 function checkUserInTeam(uId, teamId) {
@@ -230,7 +230,7 @@ app.post('/m-remove/:tId', function(req, res) {
 });
 
 app.post('/exec/:tId', function(req, res) {
-    if (req.body.authKey && req.params.tId && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3 || req.body.cmd == 5 || req.body.cmd == 6 || req.body.cmd == 7 || req.body.cmd == 8)) {
+    if (req.body.authKey && req.params.tId && req.body.serverId && (req.body.cmd == 1 || (req.body.cmd == 2 && req.body.hname) || req.body.cmd == 3)) {
         User.findOne({
                 authKey: req.body.authKey
             })
@@ -246,6 +246,38 @@ app.post('/exec/:tId', function(req, res) {
                             }
                         })
                         .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+app.post('/stack/:tId', function(req, res) {
+    if (req.body.authKey && req.params.tId && req.body.serverId && (req.body.stack == 1 || req.body.stack == 2 || req.body.stack == 3 || req.body.stack == 4)) {
+        User.findOne({
+                authKey: req.body.authKey
+            })
+            .then(function(user) {
+                if (user) {
+                    checkUserInTeam(user._id, req.params.tId)
+                        .then(function(data) {
+                            if (data.status) {
+                                var team = data.team;
+                                require('../controllers/tserver/stack')(req, res, ssh, requestIp, uniR, user, team);
+                            } else {
+                                uniR(res, false, 'Not authorized !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            console.log(err)
                             uniR(res, false, 'Error when querying');
                         });
                 } else {
@@ -480,7 +512,7 @@ app.get('/embed', function(req, res) {
 });
 
 app.post('/uploadPrivateKey', function(req, res) {
-    require('../controllers/uploadPrivateKey')(req, res, uniR, multer);
+    require('../controllers/uploadPrivateKey')(req, res, uniR, multer, hat);
 });
 
 

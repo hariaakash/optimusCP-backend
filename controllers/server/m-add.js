@@ -11,7 +11,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                 ssh.execCommand('sudo -n true')
                     .then(function(result) {
                         if (!result.stderr) {
-                            ssh.execCommand('wget https://optimuscp.io/bash/os.sh -O os.sh && chmod +x os.sh && ./os.sh && rm os.sh')
+                            ssh.execCommand('curl -O https://optimuscp.io/bash/os.sh && chmod +x os.sh && ./os.sh && rm -f os.sh')
                                 .then(function(result) {
                                     user.added.push({
                                         ip: req.body.ip,
@@ -47,13 +47,14 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                                             password: String(user.added[user.added.length - 1]._id)
                                                         })
                                                         .then(function() {
-                                                            ssh.execCommand('sudo ' + oscmd + ' -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+                                                            ssh.execCommand('sudo ' + oscmd + ' -y install dos2unix wget && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
                                                                 .then(function(result) {
                                                                     user.save();
                                                                     uniR(res, true, 'Server added successfully !!');
                                                                 });
                                                         })
                                                         .catch(function(err) {
+                                                            console.log(err)
                                                             uniR(res, false, 'Some error occurred when adding server, try again !!')
                                                         });
                                                 } else {
@@ -87,7 +88,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                 ssh.execCommand('sudo -n true')
                     .then(function(result) {
                         if (!result.stderr) {
-                            ssh.execCommand('wget https://optimuscp.io/bash/os.sh -O os.sh && chmod +x os.sh && ./os.sh && rm os.sh')
+                            ssh.execCommand('curl -O  https://optimuscp.io/bash/os.sh && chmod +x os.sh && ./os.sh && rm -f os.sh')
                                 .then(function(result) {
                                     user.added.push({
                                         ip: req.body.ip,
@@ -113,7 +114,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                     });
                                     if ((result.stdout.split('\n')[0].indexOf("CentOS") >= 0) || (result.stdout.split('\n')[0].indexOf("Ubuntu") >= 0)) {
                                         var oscmd = (result.stdout.split('\n')[0].indexOf("CentOS") >= 0) ? 'yum' : 'apt-get';
-                                        ssh.execCommand('sudo -i /bin/bash -c "sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && service sshd reload"')
+                                        ssh.execCommand('sudo -i /bin/bash -c "sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && sudo sed -i \\"s/^PermitRootLogin.*/PermitRootLogin yes/\\" /etc/ssh/sshd_config && service sshd reload"')
                                             .then(function(result) {
                                                 fs.unlink(file, function(err) {});
                                                 if (!result.stderr.includes('already exists')) {
@@ -124,7 +125,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                                             password: String(user.added[user.added.length - 1]._id)
                                                         })
                                                         .then(function() {
-                                                            ssh.execCommand('sudo ' + oscmd + ' -y install dos2unix && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+                                                            ssh.execCommand('sudo ' + oscmd + ' -y install dos2unix wget && wget https://optimuscp.io/bash/metrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
                                                                 .then(function(result) {
                                                                     user.save();
                                                                     uniR(res, true, 'Server added successfully !!');

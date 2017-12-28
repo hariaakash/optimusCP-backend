@@ -180,7 +180,7 @@ angular.module('optimusApp')
                                 $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                             });
                         }
-                    });
+                    }).catch(swal.noop);
             } else {
                 $rootScope.toast('Info', "You don't have permissions !", "info")
             }
@@ -223,7 +223,7 @@ angular.module('optimusApp')
                             });
                         },
                         allowOutsideClick: false
-                    });
+                    }).catch(swal.noop);
                     break;
                 case 2:
                     swal({
@@ -243,75 +243,56 @@ angular.module('optimusApp')
                             });
                         },
                         allowOutsideClick: false
-                    });
-                    break;
-                case 5:
-                    swal({
-                        title: 'Proceed to install LAMP Stack ?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirm',
-                        showLoaderOnConfirm: true,
-                        preConfirm: function() {
-                            return new Promise(function(resolve, reject) {
-                                $scope.data.cmd = $scope.cmd;
-                                resolve()
-                                $scope.submit();
-                            });
-                        },
-                        allowOutsideClick: false
-                    });
-                    break;
-                case 6:
-                    swal({
-                        title: 'Proceed to install MEAN Stack ?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirm',
-                        showLoaderOnConfirm: true,
-                        preConfirm: function() {
-                            return new Promise(function(resolve, reject) {
-                                $scope.data.cmd = $scope.cmd;
-                                resolve()
-                                $scope.submit();
-                            });
-                        },
-                        allowOutsideClick: false
-                    });
-                    break;
-                case 7:
-                    swal({
-                        title: 'Proceed to install Django Stack ?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirm',
-                        showLoaderOnConfirm: true,
-                        preConfirm: function() {
-                            return new Promise(function(resolve, reject) {
-                                $scope.data.cmd = $scope.cmd;
-                                resolve()
-                                $scope.submit();
-                            });
-                        },
-                        allowOutsideClick: false
-                    });
-                    break;
-                case 8:
-                    swal({
-                        title: 'Proceed to install Ruby on Rails ?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Confirm',
-                        showLoaderOnConfirm: true,
-                        preConfirm: function() {
-                            return new Promise(function(resolve, reject) {
-                                $scope.data.cmd = $scope.cmd;
-                                resolve()
-                                $scope.submit();
-                            });
-                        },
-                        allowOutsideClick: false
-                    });
+                    }).catch(swal.noop);
                     break;
                 default:
                     break;
             };
+        };
+        $scope.stack = function(stack) {
+            $scope.data = {};
+            $scope.submit = function() {
+                $scope.data.authKey = $rootScope.authKey;
+                $scope.data.serverId = $scope.serverId;
+                $http({
+                    method: 'POST',
+                    url: $rootScope.apiUrl + 'tserver/stack/' + $rootScope.teamId,
+                    data: $scope.data
+                })
+                .then(function(res) {
+                    if (res.data.status == true) {
+                        $state.reload();
+                        $rootScope.toast('Success', res.data.msg, "success");
+                    } else {
+                        $rootScope.toast('Failed', res.data.msg, "error");
+                    }
+                }, function(res) {
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                });
+            };
+            $scope.stack = stack;
+            if ($scope.stack == 1)
+                $scope.title = 'LAMP';
+            else if ($scope.stack == 2)
+                $scope.title = 'MEAN';
+            else if ($scope.stack == 3)
+                $scope.title = 'Django';
+            else
+                $scope.title = 'Ruby on Rails';
+            swal({
+                title: 'Proceed to install ' + $scope.title + ' Stack ?',
+                showCancelButton: true,
+                confirmButtonText: 'Confirm',
+                showLoaderOnConfirm: true,
+                preConfirm: function() {
+                    return new Promise(function(resolve, reject) {
+                        $scope.data.stack = $scope.stack;
+                        resolve()
+                        $scope.submit();
+                    });
+                },
+                allowOutsideClick: false
+            }).catch(swal.noop);
         };
         $scope.changeName = function() {
             swal({
@@ -347,20 +328,7 @@ angular.module('optimusApp')
                 }, function(res) {
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
-            });
-        };
-        $scope.sftp = function() {
-            $scope.data = {
-                t: "sftp",
-                c: {
-                    p: String($rootScope.serverData.id),
-                    o: $rootScope.serverData.port,
-                    m: "Password"
-                }
-            };
-            $scope.data = btoa(JSON.stringify($scope.data));
-            $scope.url = encodeURI("https://www.monstaftp.com/demo/#/c/" + $rootScope.serverData.ip + '/optimusCP/' + $scope.data);
-            $window.open($scope.url, '_blank');
+            }).catch(swal.noop);
         };
         $scope.copySuccess = function() {
             $rootScope.toast("Success", "Code copied to clipboard.", "info");

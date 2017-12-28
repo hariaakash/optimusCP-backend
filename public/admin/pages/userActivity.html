@@ -1,0 +1,88 @@
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">User Activity</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<ol class="breadcrumb">
+				<li><a ui-sref="dashboard.home" class="active">Home</a></li>
+				<li><a ui-sref="dashboard.user({uId:uId})" class="active">User</a></li>
+				<li class="active">User Activity</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+			<div class="panel panel-inverse">
+				<div class="panel-heading text-center">Activity</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div class="row">
+							<h2 ng-show="!userActivityData.logs.length">Not enough data</h2>
+							<table class="table table-hover margin bottom" ng-show="userActivityData.logs.length">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Date</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr dir-paginate="x in userActivityData.logs | itemsPerPage: pageSize" current-page="currentPage">
+										<td>{{ x.no+1 }}</td>
+										<td>{{ x.date | date: 'MMM d, y H:mm:ss' }}</td>
+										<td>{{ x.msg }}</td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="pull-right">
+								<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="panel panel-inverse">
+				<div class="panel-heading text-center">User Info</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<table class="table table-borderless server-info" style="font-size: 1em;">
+							<tbody>
+								<tr>
+									<td>UID: </td>
+									<td ng-bind="userActivityData.id"></td>
+								</tr>
+								<tr>
+									<td>Email: </td>
+									<td ng-bind="userActivityData.email"></td>
+								</tr>
+								<tr>
+									<td>Plan: </td>
+									<td ng-bind="userActivityData.plan"></td>
+								</tr>
+								<tr ng-show="userActivityData.info.name">
+									<td>Name: </td>
+									<td ng-bind="userActivityData.info.name"></td>
+								</tr>
+								<tr>
+									<td>Servers: </td>
+									<td ng-bind="userActivityData.stats.added"></td>
+								</tr>
+								<tr>
+									<td>APIs: </td>
+									<td ng-bind="userActivityData.apis"></td>
+								</tr>
+								<tr ng-show="userActivityData.info.country">
+									<td>Country: </td>
+									<td ng-bind="userActivityData.info.country"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

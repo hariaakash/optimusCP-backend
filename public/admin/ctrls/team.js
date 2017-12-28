@@ -1,15 +1,40 @@
 angular.module('optimusApp')
-    .controller('homeCtrl', function($rootScope, $scope, $http, $state) {
-        $rootScope.checkAuth();
-        $scope.currentPage = 1;
-        $scope.pageSize = 10;
-        $scope.blockUser = function(x) {
+	.controller('teamCtrl', function ($rootScope, $scope, $http, $stateParams, $state) {
+		$rootScope.checkAuth();
+		$rootScope.tId = $stateParams.tId;
+		$scope.getTeamInfo = function () {
+			if ($rootScope.tId) {
+				$http({
+						method: 'GET',
+						url: $rootScope.apiUrl + 'admin/team/' + $rootScope.tId,
+						params: {
+							adminKey: $rootScope.adminKey
+						}
+					})
+					.then(function (res) {
+						if (res.data.status == true) {
+							$rootScope.teamData = res.data.data;
+							console.log(res.data.data)
+						} else {
+							$rootScope.toast('Error', res.data.msg, "error");
+							$state.go('dashboard.home');
+						}
+					}, function (res) {
+						$('#btnLoad').button('reset');
+						$rootScope.toast('Failed', "Some error occurred, try again.", "error");
+					});
+			} else {
+				$state.go('dashboard.home');
+			}
+		};
+		$scope.getTeamInfo();
+        $scope.blockTeam = function() {
             $http({
                     method: 'POST',
-                    url: $rootScope.apiUrl + 'admin/blockUser',
+                    url: $rootScope.apiUrl + 'admin/blockTeam',
                     data: {
                         adminKey: $rootScope.adminKey,
-                        uId: x
+                        tId: $rootScope.tId
                     }
                 })
                 .then(function(res) {
@@ -25,13 +50,13 @@ angular.module('optimusApp')
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
         };
-        $scope.unBlockUser = function(x) {
+        $scope.unBlockTeam = function() {
             $http({
                     method: 'POST',
-                    url: $rootScope.apiUrl + 'admin/unBlockUser',
+                    url: $rootScope.apiUrl + 'admin/unBlockTeam',
                     data: {
                         adminKey: $rootScope.adminKey,
-                        uId: x
+                        tId: $rootScope.tId
                     }
                 })
                 .then(function(res) {
@@ -47,4 +72,4 @@ angular.module('optimusApp')
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
         };
-    });
+	});

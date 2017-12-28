@@ -50,8 +50,6 @@ includedByState) || ('dashboard.account.changePasswordAccount' | includedByState
 				<li>
 					<a ui-sref="dashboard.support" ng-if="profile" ng-class="{active: ('dashboard.support' |
 includedByState) || ('dashboard.ticket' | includedByState)}" class="waves-effect"><i class="fa fa-support fa-fw"></i> <span class="hide-menu">Support</span></a>
-					<a ui-sref="dashboard.tsupport({teamId: teamId})" ng-if="!profile" ng-class="{active: ('dashboard.tsupport' |
-includedByState) || ('dashboard.tticket' | includedByState)}" class="waves-effect"><i class="fa fa-support fa-fw"></i> <span class="hide-menu">Support</span></a>
 				</li>
 				<li>
 					<a ui-sref="dashboard.api" ng-if="profile" ui-sref-active="active" class="waves-effect"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>

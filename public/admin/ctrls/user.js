@@ -1,8 +1,8 @@
 angular.module('optimusApp')
-	.controller('userCtrl', function ($rootScope, $scope, $http, $stateParams, $state, $window) {
+	.controller('userCtrl', function ($rootScope, $scope, $http, $stateParams, $state) {
 		$rootScope.checkAuth();
 		$rootScope.uId = $stateParams.uId;
-		$scope.getServerInfo = function () {
+		$scope.getUserInfo = function () {
 			if ($rootScope.uId) {
 				$http({
 						method: 'POST',
@@ -14,26 +14,64 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.userData = res.data.data;
-							console.log($rootScope.userData)
+							console.log(res.data.data)
 						} else {
-							swal({
-								title: 'Failed',
-								text: res.data.msg,
-								type: 'error',
-								timer: 2000,
-								showConfirmButton: true
-							});
+							$rootScope.toast('Error', res.data.msg, "error");
 							$state.go('dashboard.home');
 						}
 					}, function (res) {
 						$('#btnLoad').button('reset');
-						swal("Fail", "Some error occurred, try again.", "error");
+						$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 					});
 			} else {
 				$state.go('dashboard.home');
 			}
 		};
-		$scope.getServerInfo();
+		$scope.getUserInfo();
+        $scope.blockUser = function() {
+            $http({
+                    method: 'POST',
+                    url: $rootScope.apiUrl + 'admin/blockUser',
+                    data: {
+                        adminKey: $rootScope.adminKey,
+                        uId: $rootScope.uId
+                    }
+                })
+                .then(function(res) {
+                    if (res.data.status == true) {
+                        $state.reload();
+                        $rootScope.checkAuth();
+                        $rootScope.toast('Success', res.data.msg, "success");
+                    } else {
+                        $('#btnLoad').button('reset');
+                        $rootScope.toast('Failed', res.data.msg, "error");
+                    }
+                }, function(res) {
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                });
+        };
+        $scope.unBlockUser = function() {
+            $http({
+                    method: 'POST',
+                    url: $rootScope.apiUrl + 'admin/unBlockUser',
+                    data: {
+                        adminKey: $rootScope.adminKey,
+                        uId: $rootScope.uId
+                    }
+                })
+                .then(function(res) {
+                    if (res.data.status == true) {
+                        $state.reload();
+                        $rootScope.checkAuth();
+                        $rootScope.toast('Success', res.data.msg, "success");
+                    } else {
+                        $('#btnLoad').button('reset');
+                        $rootScope.toast('Failed', res.data.msg, "error");
+                    }
+                }, function(res) {
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                });
+        };
 		$scope.createTicket = function () {
 			$('#btnLoad').button('loading');
 			$scope.newTicket.adminKey = $rootScope.adminKey;
@@ -45,26 +83,15 @@ angular.module('optimusApp')
 				})
 				.then(function (res) {
 					if (res.data.status == true) {
-						swal({
-							title: 'Success',
-							text: res.data.msg,
-							type: 'success',
-							showConfirmButton: true
-						}).then(function () {
-							$window.location.reload();
-						});
+                        $state.reload();
+                        $rootScope.checkAuth();
+                        $rootScope.toast('Success', res.data.msg, "success");
 					} else {
 						$('#btnLoad').button('reset');
-						swal({
-							title: 'Failed',
-							text: res.data.msg,
-							type: 'error',
-							timer: 2000,
-							showConfirmButton: true
-						});
+							$rootScope.toast('Error', res.data.msg, "error");
 					}
 				}, function (res) {
-					swal("Fail", "Some error occurred, try again.", "error");
+					$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 				});
 		};
 	});

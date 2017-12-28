@@ -1,4 +1,3 @@
-var lamp = 'https://bitnami.com/redirect/to/167501/bitnami-lampstack-7.1.12-0-linux-x64-installer.run';
 module.exports = function(req, res, ssh, requestIp, uniR, user, team) {
     function exec() {
         ssh.connect({
@@ -10,12 +9,7 @@ module.exports = function(req, res, ssh, requestIp, uniR, user, team) {
             .then(function() {
                 uniR(res, true, msg)
                 ssh.exec(cmd)
-                    .then(function(result) {
-                        console.log(result);
-                        if (req.body.cmd == 3 && req.body.cmd == 5 || req.body.cmd == 6) {
-
-                        }
-                    })
+                    .then(function(result) {})
                     .catch(function(err) {});
             })
             .catch(function(err) {
@@ -36,7 +30,7 @@ module.exports = function(req, res, ssh, requestIp, uniR, user, team) {
                 });
                 team.added[x].msgboard = {
                     msg: 'System is rebooting !!',
-                    time: 1 * 60 * 1000,
+                    time: 1 * 30 * 1000,
                     date: Date.now()
                 };
                 team.save();
@@ -65,53 +59,9 @@ module.exports = function(req, res, ssh, requestIp, uniR, user, team) {
                 });
                 team.added[x].msgboard = {
                     msg: 'System is being updated !!',
-                    time: 2 * 60 * 1000,
+                    time: 1 * 60 * 1000,
                     date: Date.now()
                 };
-                team.save();
-                exec();
-                break;
-            case 5:
-                cmd = 'wget https://optimuscp.io/bash/lamp.sh -O lamp.sh && chmod +x lamp.sh && dos2unix lamp.sh && ./lamp.sh ' + team.added[x]._id
-                msg = 'LAMP is getting installed with mysql password: ' + team.added[x]._id
-                team.added[x].logs.push({
-                    ip: requestIp.getClientIp(req),
-                    msg: 'Installed LAMP with password: ' + team.added[x]._id,
-                    user: user.email
-                });
-                team.save();
-                exec();
-                break;
-            case 6:
-                cmd = 'wget https://optimuscp.io/bash/mean.sh -O mean.sh && chmod +x mean.sh && dos2unix mean.sh && ./mean.sh';
-                msg = 'MEAN is getting installed'
-                team.added[x].logs.push({
-                    ip: requestIp.getClientIp(req),
-                    msg: 'Installed MEAN Stack',
-                    user: user.email
-                });
-                team.save();
-                exec();
-                break;
-            case 7:
-                cmd = 'wget https://optimuscp.io/bash/django.sh -O django.sh && chmod +x django.sh && dos2unix django.sh && ./django.sh';
-                msg = 'Django is getting installed'
-                team.added[x].logs.push({
-                    ip: requestIp.getClientIp(req),
-                    msg: 'Installed Django Framework',
-                    user: user.email
-                });
-                team.save();
-                exec();
-                break;
-            case 8:
-                cmd = 'wget https://optimuscp.io/bash/rails.sh -O rails.sh && chmod +x rails.sh && dos2unix rails.sh && ./rails.sh';
-                msg = 'Ruby on Rails is getting installed'
-                team.added[x].logs.push({
-                    ip: requestIp.getClientIp(req),
-                    msg: 'Installed Ruby on Rails Framework',
-                    user: user.email
-                });
                 team.save();
                 exec();
                 break;

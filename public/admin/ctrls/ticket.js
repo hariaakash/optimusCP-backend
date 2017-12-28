@@ -1,5 +1,5 @@
 angular.module('optimusApp')
-	.controller('ticketCtrl', function ($rootScope, $scope, $http, $stateParams, $state, $window) {
+	.controller('ticketCtrl', function ($rootScope, $scope, $http, $stateParams, $state) {
 		$rootScope.checkAuth();
 		$scope.tId = $stateParams.tId;
 		$rootScope.uId = $stateParams.uId;
@@ -17,17 +17,11 @@ angular.module('optimusApp')
 						if (res.data.status == true) {
 							$rootScope.ticketData = res.data.data;
 						} else {
-							swal({
-								title: 'Failed',
-								text: res.data.msg,
-								type: 'error',
-								timer: 2000,
-								showConfirmButton: true
-							});
+							$rootScope.toast('Error', res.data.msg, "error");
 							$state.go('dashboard.home');
 						}
 					}, function (res) {
-						swal("Fail", "Some error occurred, try again.", "error");
+						$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 					});
 			} else {
 				$state.go('dashboard.home');
@@ -47,26 +41,15 @@ angular.module('optimusApp')
 				}
 			}).then(function (res) {
 				if (res.data.status == true) {
-					swal({
-						title: 'Success',
-						text: res.data.msg,
-						type: 'success',
-						showConfirmButton: true
-					}).then(function () {
-						$window.location.reload();
-					});
+					$state.reload();
+					$rootScope.checkAuth();
+					$rootScope.toast('Success', res.data.msg, "success");
 				} else {
 					$('#btnLoad').button('reset');
-					swal({
-						title: 'Failed',
-						text: res.data.msg,
-						type: 'error',
-						timer: 2000,
-						showConfirmButton: true
-					});
+						$rootScope.toast('Error', res.data.msg, "error");
 				}
 			}, function (res) {
-				swal("Fail", "Some error occurred, try again.", "error");
+				$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 			});
 		};
 		$scope.closeTicket = function () {
@@ -81,26 +64,15 @@ angular.module('optimusApp')
 				}
 			}).then(function (res) {
 				if (res.data.status == true) {
-					swal({
-						title: 'Success',
-						text: res.data.msg,
-						type: 'success',
-						showConfirmButton: true
-					}).then(function () {
-						$window.location.reload();
-					});
+					$state.reload();
+					$rootScope.checkAuth();
+					$rootScope.toast('Success', res.data.msg, "success");
 				} else {
 					$('#btnLoad').button('reset');
-					swal({
-						title: 'Failed',
-						text: res.data.msg,
-						type: 'error',
-						timer: 2000,
-						showConfirmButton: true
-					});
+						$rootScope.toast('Error', res.data.msg, "error");
 				}
 			}, function (res) {
-				swal("Fail", "Some error occurred, try again.", "error");
+				$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 			});
 		};
 		$scope.reOpenTicket = function () {
@@ -115,26 +87,15 @@ angular.module('optimusApp')
 				}
 			}).then(function (res) {
 				if (res.data.status == true) {
-					swal({
-						title: 'Success',
-						text: res.data.msg,
-						type: 'success',
-						showConfirmButton: true
-					}).then(function () {
-						$window.location.reload();
-					});
+					$state.reload();
+					$rootScope.checkAuth();
+					$rootScope.toast('Success', res.data.msg, "success");
 				} else {
 					$('#btnLoad').button('reset');
-					swal({
-						title: 'Failed',
-						text: res.data.msg,
-						type: 'error',
-						timer: 2000,
-						showConfirmButton: true
-					});
+						$rootScope.toast('Error', res.data.msg, "error");
 				}
 			}, function (res) {
-				swal("Fail", "Some error occurred, try again.", "error");
+				$rootScope.toast('Failed', "Some error occurred, try again.", "error");
 			});
 		};
 	});

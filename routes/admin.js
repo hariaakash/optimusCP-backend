@@ -8,6 +8,7 @@ var request = require('request');
 var cron = require('node-cron');
 var requestIp = require('request-ip');
 var User = require('../models/user');
+var Team = require('../models/team');
 var Admin = require('../models/admin');
 var adminUrl = 'http://optimuscp.io/admin/';
 
@@ -142,7 +143,7 @@ app.get('/activity', function(req, res) {
     }
 });
 
-// Admin Area
+// Staff Area
 app.get('/view', function(req, res) {
     if (req.query.adminKey) {
         Admin.findOne({
@@ -574,11 +575,64 @@ app.post('/user/:uId', function(req, res) {
                                         id: user._id,
                                         email: user.email,
                                         info: user.info,
+                                        block: user.conf.block,
                                         plan: user.conf.plan,
                                         stats: user.stats,
                                         tickets: tickets,
                                         apis: user.apis.length,
-                                        added: added
+                                        added: added,
+                                        teams: user.teams
+                                    }
+                                });
+                            } else {
+                                uniR(res, false, 'User not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// View User Activity
+app.get('/userActivity/:uId', function(req, res) {
+    if (req.query.adminKey && req.params.uId) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    User.findById(req.params.uId)
+                        .then(function(user) {
+                            if (user) {
+                                var logs = [];
+                                user.logs = user.logs.reverse();
+                                for (i = 0; i < user.logs.length; i++)
+                                    logs.push({
+                                        no: i,
+                                        msg: user.logs[i].msg,
+                                        date: user.logs[i].date
+                                    });
+                                res.json({
+                                    status: true,
+                                    data: {
+                                        id: user._id,
+                                        email: user.email,
+                                        info: user.info,
+                                        plan: user.conf.plan,
+                                        stats: user.stats,
+                                        apis: user.apis.length,
+                                        teams: user.teams.length,
+                                        logs: logs
                                     }
                                 });
                             } else {
@@ -664,7 +718,7 @@ app.post('/unBlockUser', function(req, res) {
                                     admin.save();
                                     uniR(res, true, 'User unblocked !!')
                                 } else {
-                                    uniR(res, false, 'Staff already unblocked !!')
+                                    uniR(res, false, 'User already unblocked !!')
                                 }
                             } else {
                                 uniR(res, false, 'User not found !!')
@@ -863,6 +917,243 @@ app.post('/tickets/reopen', function(req, res) {
                                 uniR(res, true, 'Support ticket reopened !!');
                             } else {
                                 uniR(res, false, 'User not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// View all teams
+app.get('/teams', function(req, res) {
+    if (req.query.adminKey) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    Team.find()
+                        .then(function(teams) {
+                            var team = [],
+                                user = 0,
+                                server = 0;
+                            for (i = 0; i < teams.length; i++) {
+                                server += teams[i].added.length;
+                                user += teams[i].members.length;
+                                team.push({
+                                    no: i + 1,
+                                    id: teams[i]._id,
+                                    name: teams[i].name,
+                                    block: teams[i].conf.block,
+                                    added: teams[i].added.length,
+                                    members: teams[i].members.length
+                                });
+                            }
+                            res.json({
+                                status: true,
+                                data: {
+                                    servers: server,
+                                    users: user,
+                                    teams: team
+                                }
+                            });
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// View User Activity
+app.get('/teamActivity/:tId', function(req, res) {
+    if (req.query.adminKey && req.params.tId) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    Team.findById(req.params.tId)
+                        .then(function(team) {
+                            if (team) {
+                                var logs = [];
+                                team.logs = team.logs.reverse();
+                                for (i = 0; i < team.logs.length; i++)
+                                    logs.push({
+                                        no: i,
+                                        msg: team.logs[i].msg,
+                                        user: team.logs[i].user,
+                                        date: team.logs[i].date
+                                    });
+                                res.json({
+                                    status: true,
+                                    data: {
+                                        id: team._id,
+                                        name: team.name,
+                                        block: team.conf.block,
+                                        apis: team.apis.length,
+                                        added: team.added.length,
+                                        members: team.members.length,
+                                        logs: logs
+                                    }
+                                });
+                            } else {
+                                uniR(res, false, 'Team not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// View a particular team
+app.get('/team/:tId', function(req, res) {
+    if (req.query.adminKey && req.params.tId) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    Team.findById(req.params.tId)
+                        .then(function(team) {
+                            if (team) {
+                                var added = [];
+                                for (i = 0; i < team.added.length; i++) {
+                                    added.push({
+                                        id: team.added[i]._id,
+                                        ip: team.added[i].ip,
+                                        port: team.added[i].port,
+                                        name: team.added[i].name,
+                                        os: team.added[i].info.os,
+                                        crons: team.added[i].crons.length,
+                                        ss: team.added[i].startupScripts.length
+                                    });
+                                }
+                                res.json({
+                                    status: true,
+                                    data: {
+                                        id: team._id,
+                                        name: team.name,
+                                        block: team.conf.block,
+                                        apis: team.apis.length,
+                                        added: added,
+                                        members: team.members
+                                    }
+                                });
+                            } else {
+                                uniR(res, false, 'Team not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// Block Team
+app.post('/blockTeam', function(req, res) {
+    if (req.body.adminKey && req.body.tId) {
+        Admin.findOne({
+                adminKey: req.body.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    Team.findById(req.body.tId)
+                        .then(function(team) {
+                            if (team) {
+                                if (team.conf.block == false) {
+                                    team.conf.block = true;
+                                    team.save();
+                                    admin.logs.push({
+                                        ip: requestIp.getClientIp(req),
+                                        msg: 'Blocked team: ' + team.name + ': id: ' + team._id
+                                    });
+                                    admin.save();
+                                    uniR(res, true, 'Team blocked !!')
+                                } else {
+                                    uniR(res, false, 'Team already blocked !!')
+                                }
+                            } else {
+                                uniR(res, false, 'Team not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// Unblock user
+app.post('/unBlockTeam', function(req, res) {
+    if (req.body.adminKey && req.body.tId) {
+        Admin.findOne({
+                adminKey: req.body.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    Team.findById(req.body.tId)
+                        .then(function(team) {
+                            if (team) {
+                                if (team.conf.block == true) {
+                                    team.conf.block = false;
+                                    team.save();
+                                    admin.logs.push({
+                                        ip: requestIp.getClientIp(req),
+                                        msg: 'UnBlocked team: ' + team.name + ': id: ' + team._id
+                                    });
+                                    admin.save();
+                                    uniR(res, true, 'Team unblocked !!')
+                                } else {
+                                    uniR(res, false, 'Team already unblocked !!')
+                                }
+                            } else {
+                                uniR(res, false, 'Team not found !!')
                             }
                         })
                         .catch(function(err) {

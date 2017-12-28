@@ -1,0 +1,71 @@
+<div class="container-fluid">
+	<div class="row bg-title">
+		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title">Teams</h4>
+		</div>
+		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12"> <button class="btn btn-danger pull-right m-l-20 btn-rounded btn-outline hidden-xs hidden-sm waves-effect waves-light">Role: {{homeData.role}}</button>
+			<ol class="breadcrumb">
+				<li class="active">Teams</li>
+			</ol>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Teams</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-group text-danger"></i></li>
+					<li class="text-right"><span ng-bind="teamsData.teams.length"></span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Users</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-user text-danger"></i></li>
+					<li class="text-right"><span ng-bind="teamsData.users"></span></li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="white-box">
+				<h3 class="box-title">Servers</h3>
+				<ul class="list-inline two-part">
+					<li><i class="fa fa-server text-danger"></i></li>
+					<li class="text-right"><span ng-bind="teamsData.servers"></span></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<h2 ng-show="!teamsData.teams.length">Not enough data</h2>
+		<table class="table table-hover margin bottom" ng-show="teamsData.teams.length">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Blocked</th>
+					<th>Block / Unblock</th>
+					<th>Servers</th>
+					<th>Members</th>
+					<th>View</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr dir-paginate="x in teamsData.teams | itemsPerPage: pageSize" current-page="currentPage">
+					<td>{{ x.no }}</td>
+					<td>{{ x.name }}</td>
+					<td>{{ x.block }}</td>
+					<td><button type="button" class="btn btn-circle btn-info" ng-click="blockTeam(x.id)" ng-show="!x.block"><i class="fa fa-user-times"></i></button><button type="button" class="btn btn-circle btn-danger" ng-click="unBlockTeam(x.id)" ng-show="x.block"><i class="fa fa-user-plus"></i></button></td>
+					<td>{{ x.added }}</td>
+					<td>{{ x.members }}</td>
+					<td><a ui-sref="dashboard.team({tId:x.id})"><button type="button" class="btn btn-circle btn-info"><i class="fa fa-eye"></i></button></a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="pull-right">
+			<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+		</div>
+	</div>
+</div>

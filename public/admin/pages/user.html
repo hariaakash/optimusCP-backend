@@ -12,7 +12,7 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">Servers</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
@@ -26,7 +26,6 @@
 										<th>OS</th>
 										<th>Crons</th>
 										<th>SS</th>
-										<!--										<th>Delete</th>-->
 									</tr>
 								</thead>
 								<tbody>
@@ -37,7 +36,6 @@
 										<td ng-bind="x.os"></td>
 										<td ng-bind="x.crons"></td>
 										<td ng-bind="x.ss"></td>
-										<!--										<td><button type="button" class="btn btn-circle btn-danger" ng-click="delApiKey(x._id)"><i class="fa fa-trash-o"></i></button></td>-->
 									</tr>
 								</tbody>
 							</table>
@@ -46,9 +44,76 @@
 					</div>
 				</div>
 			</div>
+			<div class="panel panel-inverse">
+				<div class="panel-heading text-center">Teams</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div class="table-responsive" ng-show="userData.teams.length">
+							<table class="table color-table">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Name</th>
+										<th>Role</th>
+										<th>View</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="x in userData.teams">
+										<td>{{$index + 1}}</td>
+										<td ng-bind="x.name"></td>
+										<td>{{x.role==1 ? 'admin' : 'user'}}</td>
+										<td><a ui-sref="dashboard.team({tId:x._id})"><button type="button" class="btn btn-circle btn-info"><i class="fa fa-eye"></i></button></a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<h2 class="text-center" ng-show="!userData.teams.length">No Team's created</h2>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-inverse text-center">
+				<div class="panel-heading">Manage</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<a href="javascript:void(0)" ng-click="delUser()">
+								<div class="white-box">
+									<h3 class="text-danger"><i class="fa fa-close fa-2x"></i></h3>
+									<h3 class="text-danger">Delete</h3>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" ng-show="userData.block">
+							<a href="javascript:void(0)" ng-click="unBlockUser()">
+								<div class="white-box">
+									<h3 class="text-danger"><i class="fa fa-user-plus fa-2x"></i></h3>
+									<h3 class="text-danger">Unblock</h3>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" ng-show="!userData.block">
+							<a href="javascript:void(0)" ng-click="blockUser()">
+								<div class="white-box">
+									<h3 class="text-danger"><i class="fa fa-user-times fa-2x"></i></h3>
+									<h3 class="text-danger">Block</h3>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+							<a ui-sref="dashboard.userActivity({uId:uId})">
+								<div class="white-box">
+									<h3 class="text-danger"><i class="fa fa-list fa-2x"></i></h3>
+									<h3 class="text-danger">Activity</h3>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-			<div class="panel panel-info">
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">User Info</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
