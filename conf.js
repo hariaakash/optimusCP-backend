@@ -18,7 +18,7 @@ module.exports = {
         app.use(cors());
         app.use(function(req, res, next) {
             function checkUrl() {
-                if (req.url.match('/api') || req.url.match('server/metrics') || req.url.match('tserver/metrics'))
+                if (req.url.match('/api') || req.url.match('server/metrics') || req.url.match('tserver/metrics') || req.url.match('/bash'))
                     return true
                 else
                     return false
