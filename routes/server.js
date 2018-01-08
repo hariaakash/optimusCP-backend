@@ -33,7 +33,7 @@ app.get('/m-det', function(req, res) {
             })
             .then(function(user) {
                 if (user) {
-                    require('../controllers/server/m-det')(req, res, formatBytes, uniR, user);
+                    require('../controllers/server/m-det')(req, res, formatBytes, moment, uniR, user);
                 } else {
                     uniR(res, false, 'Account not found !!');
                 }
@@ -298,6 +298,7 @@ app.post('/metrics/:userId/:serverId', function(req, res) {
                             m_u: req.body.m_u,
                             d_t: req.body.d_t,
                             d_u: req.body.d_u,
+                            cpu: req.body.cpu,
                             m: parseFloat((req.body.m_u * 100 / req.body.m_t).toFixed(2)),
                             d: parseFloat((req.body.d_u * 100 / req.body.d_t).toFixed(2))
                         });

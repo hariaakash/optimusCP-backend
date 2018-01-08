@@ -14,7 +14,6 @@ angular.module('optimusApp')
 					.then(function (res) {
 						if (res.data.status == true) {
 							$rootScope.userData = res.data.data;
-							console.log(res.data.data)
 						} else {
 							$rootScope.toast('Error', res.data.msg, "error");
 							$state.go('dashboard.home');

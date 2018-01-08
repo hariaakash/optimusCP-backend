@@ -35,6 +35,7 @@ var serverSchema = new Schema({
         d_u: Number,
         d: Number,
         m: Number,
+        cpu: Number,
         date: {
             type: Date,
             default: Date.now

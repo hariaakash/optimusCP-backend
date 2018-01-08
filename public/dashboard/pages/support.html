@@ -38,7 +38,7 @@
 										<tr ng-repeat="x in supportTickets.open">
 											<td>{{$index + 1}}</td>
 											<td>{{ x.sub | limitTo: 20 }}{{x.sub.length > 20 ? '...' : ''}}</td>
-											<td>{{ x.conv[x.conv.length-1].person===true ? 'Staff' : 'Me' }}</td>
+											<td>{{ x.conv[x.conv.length-1].person===true ? 'Staff' : homeData.info.name }}</td>
 											<td><a ui-sref="dashboard.ticket({tId: x._id})"><button type="button" class="btn btn-circle btn-danger"><i class="fa fa-envelope"></i></button></a></td>
 										</tr>
 									</tbody>
@@ -61,7 +61,7 @@
 										<tr ng-repeat="x in supportTickets.closed">
 											<td>{{$index + 1}}</td>
 											<td>{{ x.sub | limitTo: 20 }}{{x.sub.length > 20 ? '...' : ''}}</td>
-											<td>{{ x.conv[x.conv.length-1].person===true ? 'Staff' : 'Me' }}</td>
+											<td>{{ x.conv[x.conv.length-1].person===true ? 'Staff' : homeData.info.name }}</td>
 											<td><a ui-sref="dashboard.ticket({tId: x._id})"><button type="button" class="btn btn-circle btn-danger"><i class="fa fa-envelope"></i></button></a></td>
 										</tr>
 									</tbody>

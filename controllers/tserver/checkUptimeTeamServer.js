@@ -20,7 +20,7 @@ module.exports = function() {
                                                 isReachable: true
                                             });
                                             var helper = require('sendgrid').mail;
-                                            var from = new helper.Email('support@optimuscp.io');
+                                            var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                                             var to = new helper.Email(teams[i].members[0].email);
                                             var subject = 'Server ' + teams[i].added[j].name + ' is UP [OptimusCP]';
                                             var body = new helper.Content('text/html', 'Welcome to OptimusCP');
@@ -46,7 +46,7 @@ module.exports = function() {
                                                 isReachable: false
                                             });
                                             var helper = require('sendgrid').mail;
-                                            var from = new helper.Email('support@optimuscp.io');
+                                            var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                                             var to = new helper.Email(teams[i].members[0].email);
                                             var subject = 'Server ' + teams[i].added[j].name + ' is DOWN [OptimusCP]';
                                             var body = new helper.Content('text/html', 'Welcome to OptimusCP');

@@ -66,7 +66,8 @@ app.get('/', function(req, res) {
                             stats: user.stats,
                             teams: user.teams,
                             added: added,
-                            block: user.conf.block
+                            block: user.conf.block,
+                            apis: user.apis.length
                         }
                     });
                 } else {
@@ -74,7 +75,6 @@ app.get('/', function(req, res) {
                 }
             })
             .catch(function(err) {
-                console.log(err)
                 uniR(res, false, 'Error when querying');
             });
     } else {
@@ -101,7 +101,7 @@ app.post('/register', function(req, res) {
                 .then(function(user) {
                     uniR(res, true, 'Successfully Registered, Verify Email by checking your inbox to continue....');
                     var helper = require('sendgrid').mail;
-                    var from = new helper.Email('support@optimuscp.io');
+                    var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                     var to = new helper.Email(user.email);
                     var subject = 'Welcome to OptimusCP ! Confirm Your Email';
                     var body = new helper.Content('text/html', 'Welcome to OptimusCP');
@@ -118,7 +118,6 @@ app.post('/register', function(req, res) {
                     sg.API(request);
                 })
                 .catch(function(err) {
-                    console.log(err);
                     uniR(res, false, 'Chosen email is already registered !!');
                 });
         });
@@ -181,7 +180,7 @@ app.post('/verifyEmail', function(req, res) {
                     });
                     user.save();
                     var helper = require('sendgrid').mail;
-                    var from = new helper.Email('support@optimuscp.io');
+                    var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                     var to = new helper.Email(user.email);
                     var subject = 'Your OptimusCP account has been provisioned!';
                     var body = new helper.Content('text/html', 'Welcome to OptimusCP');
@@ -220,7 +219,7 @@ app.post('/sendEmailVerification', function(req, res) {
                         user.conf.verified = hat();
                         user.save();
                         var helper = require('sendgrid').mail;
-                        var from = new helper.Email('support@optimuscp.io');
+                        var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                         var to = new helper.Email(user.email);
                         var subject = 'Welcome to OptimusCP ! Confirm Your Email';
                         var body = new helper.Content('text/html', 'Welcome to OptimusCP');
@@ -261,7 +260,7 @@ app.post('/forgotPassword', function(req, res) {
                     user.conf.pVerify = hat();
                     user.save();
                     var helper = require('sendgrid').mail;
-                    var from = new helper.Email('support@optimuscp.io');
+                    var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                     var to = new helper.Email(user.email);
                     var subject = 'Reset your password !!';
                     var body = new helper.Content('text/html', user.conf.pVerify);

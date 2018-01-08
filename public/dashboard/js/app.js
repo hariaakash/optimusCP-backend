@@ -442,9 +442,14 @@ angular.module('optimusApp')
                             $('#btnLoad').button('reset');
                             $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                         });
-                } else if (!$rootScope.homeData.info.set) {
-                    $rootScope.teamIndex = $rootScope.homeData.teams.findIndex(x => x._id == $rootScope.teamId);
-                    $state.go('dashboard.account.editProfile')
+                } else if ($rootScope.homeData) {
+                    if (!$rootScope.homeData.info.set) {
+                        $state.go('dashboard.account.editProfile')
+                    } else {
+                        $rootScope.teamIndex = $rootScope.homeData.teams.findIndex(x => x._id == $rootScope.teamId);
+                    }
+                } else {
+                    $rootScope.logout();
                 }
                 var path = $location.path();
                 if (path == '/login' || path == '/register' || path == '/verifyEmail')
@@ -458,9 +463,11 @@ angular.module('optimusApp')
                     $state.go('login');
             }
         };
-        $rootScope.logout = function() {
+        $rootScope.logout = function(x) {
             Cookies.remove('authKey');
-            $rootScope.toast('Success', 'Logged out !!', "info");
+            delete $rootScope.authKey;
+            $rootScope.signStatus = false;
+            if (x) $rootScope.toast('Success', 'Logged out !!', "info");
             $state.go('login');
         };
         $rootScope.openModal = function(x) {
@@ -473,6 +480,10 @@ angular.module('optimusApp')
         $rootScope.toast = function(heading, text, status, hideAfter = 10000) {
             // info, warning, error, success
             if (hideAfter == 0) hideAfter = false;
+            if (text == 'Account not found !!') {
+                text = 'Session ended!!';
+                $rootScope.logout(false);
+            }
             $.toast({
                 heading: heading,
                 text: text,

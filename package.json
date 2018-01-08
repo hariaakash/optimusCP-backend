@@ -29,6 +29,7 @@
     "request-ip": "^2.0.2",
     "rotating-file-stream": "^1.2.2",
     "sendgrid": "^5.1.1",
+    "socket.io": "^2.0.4",
     "ssh2": "^0.5.5",
     "vultr-promise": "^1.2.2"
   }

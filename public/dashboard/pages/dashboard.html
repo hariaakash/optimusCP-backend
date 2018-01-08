@@ -25,7 +25,7 @@
 						<li><a href="javascript:void(0)" ng-click="openModal('createTeam')">Create Team</a></li>
 					</ul>
 				</li>
-				<li class="dropdown" ng-show="signStatus" ng-click="logout()"> <a class="waves-effect waves-light"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Logout</a></li>
+				<li class="dropdown" ng-show="signStatus" ng-click="logout(true)"> <a class="waves-effect waves-light"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Logout</a></li>
 				<li class="dropdown" ng-show="!signStatus"> <a class="waves-effect waves-light" href="#!/login"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</a></li>
 				<li class="dropdown" ng-show="!signStatus"> <a class="waves-effect waves-light" href="#!/register"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Register</a></li>
 			</ul>
@@ -55,7 +55,7 @@ includedByState) || ('dashboard.ticket' | includedByState)}" class="waves-effect
 					<a ui-sref="dashboard.api" ng-if="profile" ui-sref-active="active" class="waves-effect"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>
 					<a ui-sref="dashboard.tapi({teamId: teamId})" ng-if="!profile" ui-sref-active="active" class="waves-effect"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>
 				</li>
-				<li ng-click="logout()" ng-show="signStatus">
+				<li ng-click="logout(true)" ng-show="signStatus">
 					<a class="waves-effect"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu">Logout</span></a>
 				</li>
 			</ul>

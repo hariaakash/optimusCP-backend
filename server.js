@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -13,11 +14,11 @@ var conf = require('./conf');
 conf.MONGOOSE(mongoose);
 
 
-conf.MW(app, express, morgan, cors);
+conf.MW(app, express, morgan, cors, Raven);
 
 
 conf.ROUTES(app);
-//require('./routes/socket')(io);
+// require('./routes/socket')(io);
 
 
 server.listen(conf.PORT);

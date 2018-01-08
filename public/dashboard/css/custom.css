@@ -13,6 +13,7 @@
     background-color: #353c48;
     border-radius: 50%;
     position: fixed;
+    z-index: 99999;
     top: calc(50% - 64px);
     left: calc(50% - 64px);
 }

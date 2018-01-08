@@ -72,7 +72,7 @@ app.get('/m-det/:tId', function(req, res) {
                         .then(function(data) {
                             if (data.status) {
                                 var team = data.team;
-                                require('../controllers/tserver/m-det')(req, res, uniR, formatBytes, uniR, user, team);
+                                require('../controllers/tserver/m-det')(req, res, uniR, formatBytes, moment, uniR, user, team);
                             } else {
                                 uniR(res, false, 'Not authorized !!')
                             }
@@ -271,7 +271,7 @@ app.post('/stack/:tId', function(req, res) {
                         .then(function(data) {
                             if (data.status) {
                                 var team = data.team;
-                                require('../controllers/tserver/stack')(req, res, ssh, requestIp, uniR, user, team);
+                                require('../controllers/tserver/stack')(req, res, ssh, uniR, user, team);
                             } else {
                                 uniR(res, false, 'Not authorized !!')
                             }
@@ -471,6 +471,7 @@ app.post('/metrics/:teamId/:serverId', function(req, res) {
                             m_u: req.body.m_u,
                             d_t: req.body.d_t,
                             d_u: req.body.d_u,
+                            cpu: req.body.cpu,
                             m: parseFloat((req.body.m_u * 100 / req.body.m_t).toFixed(2)),
                             d: parseFloat((req.body.d_u * 100 / req.body.d_t).toFixed(2))
                         });

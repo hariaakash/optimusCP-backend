@@ -364,7 +364,7 @@ app.post('/addUser', function(req, res) {
                                             .then(function(user) {
                                                 uniR(res, true, 'User Added successfully !!');
                                                 var helper = require('sendgrid').mail;
-                                                var from = new helper.Email('support@optimuscp.io');
+                                                var from = new helper.Email('support@optimuscp.io', 'OptimusCP');
                                                 var to = new helper.Email(user.email);
                                                 var subject = 'Welcome to OptimusCP !! Account Details';
                                                 var body = new helper.Content('text/html', 'Welcome to OptimusCP');

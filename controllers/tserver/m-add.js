@@ -49,7 +49,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user, team) {
                                                             password: String(team.added[team.added.length - 1]._id)
                                                         })
                                                         .then(function() {
-                                                            ssh.execCommand('sudo ' + oscmd + ' -y install dos2unix wget && wget https://optimuscp.io/bash/tmetrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + team._id + ' ' + team.added[team.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+                                                            ssh.execCommand('sudo ' + oscmd + ' -y install wget && wget https://optimuscp.io/bash/tmetrics.sh && chmod +x metrics.sh && sed -i "s/\x0D$//" metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + team._id + ' ' + team.added[team.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
                                                                 .then(function(result) {
                                                                     team.save();
                                                                     uniR(res, true, 'Server added successfully !!');
@@ -127,7 +127,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user, team) {
                                                             password: String(team.added[team.added.length - 1]._id)
                                                         })
                                                         .then(function() {
-                                                            ssh.execCommand('sudo ' + oscmd + ' -y install dos2unix wget && wget https://optimuscp.io/bash/tmetrics.sh -O metrics.sh && chmod +x metrics.sh && dos2unix metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + team._id + ' ' + team.added[team.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
+                                                            ssh.execCommand('sudo ' + oscmd + ' -y install wget && wget https://optimuscp.io/bash/tmetrics.sh && chmod +x metrics.sh && sed -i "s/\x0D$//" metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + team._id + ' ' + team.added[team.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
                                                                 .then(function(result) {
                                                                     team.save();
                                                                     uniR(res, true, 'Server added successfully !!');

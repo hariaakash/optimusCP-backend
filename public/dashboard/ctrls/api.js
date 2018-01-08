@@ -37,6 +37,7 @@ angular.module('optimusApp')
                 if (res.data.status == true) {
                     $rootScope.closeModal();
                     $state.reload();
+                    $rootScope.checkAuth(true);
                     $rootScope.toast('Success', res.data.msg, "success");
                 } else {
                     $('#btnLoad').button('reset');
@@ -59,6 +60,7 @@ angular.module('optimusApp')
                 if (res.data.status == true) {
                     $rootScope.closeModal();
                     $state.reload();
+                    $rootScope.checkAuth(true);
                     $rootScope.toast('Success', res.data.msg, "success");
                 } else {
                     $('#btnLoad').button('reset');

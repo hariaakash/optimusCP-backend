@@ -11,7 +11,6 @@ angular.module('optimusApp')
                 if (res.data.status == true) {
                     var authKey = res.data.authKey;
                     Cookies.set('authKey', authKey);
-                    $state.reload();
                     $rootScope.checkAuth(true);
                     $rootScope.toast('Success', res.data.msg, "success");
                 } else {

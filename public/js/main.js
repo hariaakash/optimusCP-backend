@@ -8,6 +8,7 @@
             nul = $('nav ul li'),
             ha = $("header .arrow"),
             sl = $('.skill-line');
+        new WOW().init();
         // --------------------------
         // Check navigation for children
         // --------------------------

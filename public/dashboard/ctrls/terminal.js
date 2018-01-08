@@ -16,7 +16,7 @@ angular.module('optimusApp')
                     .then(function(res) {
                         if (res.data.status == true) {
                             $rootScope.serverData = res.data.data;
-                            $scope.url = $sce.trustAsResourceUrl('https://terminal.optimuscp.io/ssh/host/' + $rootScope.serverData.ip + '?port=' + $rootScope.serverData.port + '&uname=optimusCP&pass=' + $rootScope.serverData.id);
+                            $scope.url = $sce.trustAsResourceUrl('https://terminal.optimuscp.io/ssh/host/' + $rootScope.serverData.ip + '?port=' + $rootScope.serverData.port + '&authKey=' + $rootScope.authKey + '&uname=optimusCP&serverId=' + $rootScope.serverData.id);
                         } else {
                             $rootScope.toast('Failed', res.data.msg, "error");
                             $state.go('dashboard.home');

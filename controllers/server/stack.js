@@ -1,6 +1,5 @@
-var lamp = 'https://bitnami.com/redirect/to/167501/bitnami-lampstack-7.1.12-0-linux-x64-installer.run';
 module.exports = function(req, res, ssh, uniR, user) {
-    function exec(user) {
+    function exec() {
         ssh.connect({
                 host: user.added[x].ip,
                 port: user.added[x].port,
@@ -8,41 +7,45 @@ module.exports = function(req, res, ssh, uniR, user) {
                 password: String(user.added[x]._id)
             })
             .then(function() {
-                uniR(res, true, msg)
-                ssh.exec(cmd)
-                    .then(function(result) {
-                        console.log('qq')
-                        // if (result.stdout.indexOf("optimus-finished") >= 0) {
-                        //     user.added[x].stack.id = req.body.stack;
-                        //     user.added[x].logs.push({
-                        //         msg: 'LAMP stack installation successfull !!'
-                        //     });
-                        //     user.save();
-                        //     console.log('qq1')
-                        // } else {
-                        //     user.added[x].logs.push({
-                        //         msg: 'LAMP stack installation failed !!'
-                        //     });
-                        //     user.save();
-                        //     console.log('qq2')
-                        // }
-                    })
-                    .catch(function(err) {
-                        console.log('qqerr')
+                user.save()
+                    .then(function(user) {
+                        uniR(res, true, msg)
+                        ssh.exec(cmd)
+                            .then(function(result) {
+                                if (result.stdout.split(':')[0] == "TRUE") {
+                                    user.added[x].stack.id = req.body.stack;
+                                    user.added[x].logs.push({
+                                        msg: 'Installation successfull !!'
+                                    });
+                                    user.save();
+                                    console.log(result)
+                                } else {
+                                    user.added[x].logs.push({
+                                        msg: 'Installation failed, error: ' + result.stdout.split(':')[1]
+                                    });
+                                    user.save();
+                                    console.log(result)
+                                }
+                            })
+                            .catch(function(err) {
+                                console.log(err)
+                                uniR(res, false, 'Some error occurred !!');
+                            });
                     });
             })
             .catch(function(err) {
+                console.log(err)
                 uniR(res, false, 'Some error occurred !!');
             });
     }
     if ((x = user.added.findIndex(x => x._id == req.body.serverId)) >= 0) {
         var cmd = '',
-            msg = '';
+            msg = '',
+            os = (user.added[x].info.os.indexOf("CentOS") >= 0) ? 'centos' : 'ubuntu';
         switch (req.body.stack) {
             case 1:
-                var oscmd = (user.added[x].info.os.indexOf("CentOS") >= 0) ? 'yum' : 'apt-get';
-                cmd = 'sudo ' + oscmd + ' -y update && wget ' + lamp + ' -O lamp.run && chmod +x lamp.run && ./lamp.run --mode unattended --disable_glibcxx_version_check 1 --disable-components varnish,phpmyadmin --prefix /opt/lamp --base_password "' + user.added[x]._id + '" && rm lamp.run && cd /opt/lamp/ && ./use_lampstack';
-                msg = 'LAMP is getting installed with mysql password: ' + user.added[x]._id
+                cmd = 'wget https://optimuscp.io/bash/stack.sh && chmod +x stack.sh && sed -i "s/\r//" stack.sh && ./stack.sh ' + os + ' lamp ' + user.added[x]._id;
+                msg = 'LAMP is getting installed'
                 user.added[x].logs.push({
                     msg: 'LAMP stack installation started !!'
                 });
@@ -51,36 +54,45 @@ module.exports = function(req, res, ssh, uniR, user) {
                     time: 2 * 60 * 1000,
                     date: Date.now()
                 };
-                user.save()
-                    .then(function(user) {
-                        exec(user);
-                    });
+                exec();
                 break;
             case 2:
-                cmd = 'wget https://optimuscp.io/bash/mean.sh -O mean.sh && chmod +x mean.sh && dos2unix mean.sh && ./mean.sh';
+                cmd = 'wget https://optimuscp.io/bash/stack.sh && chmod +x stack.sh && sed -i "s/\r//" stack.sh && ./stack.sh ' + os + ' mean ' + user.added[x]._id;
                 msg = 'MEAN is getting installed'
                 user.added[x].logs.push({
-                    msg: 'Installed MEAN Stack'
+                    msg: 'MEAN stack installation started !!'
                 });
-                user.save();
+                user.added[x].msgboard = {
+                    msg: 'MEAN stack is currently being installed !!',
+                    time: 2 * 60 * 1000,
+                    date: Date.now()
+                };
                 exec();
                 break;
             case 3:
-                cmd = 'wget https://optimuscp.io/bash/django.sh -O django.sh && chmod +x django.sh && dos2unix django.sh && ./django.sh';
+                cmd = 'wget https://optimuscp.io/bash/stack.sh && chmod +x stack.sh && sed -i "s/\r//" stack.sh && ./stack.sh ' + os + ' django ' + user.added[x]._id;
                 msg = 'Django is getting installed'
                 user.added[x].logs.push({
-                    msg: 'Installed Django Framework'
+                    msg: 'Django stack installation started !!'
                 });
-                user.save();
+                user.added[x].msgboard = {
+                    msg: 'Django stack is currently being installed !!',
+                    time: 2 * 60 * 1000,
+                    date: Date.now()
+                };
                 exec();
                 break;
             case 4:
-                cmd = 'wget https://optimuscp.io/bash/rails.sh -O rails.sh && chmod +x rails.sh && dos2unix rails.sh && ./rails.sh';
+                cmd = 'wget https://optimuscp.io/bash/stack.sh -O stack.sh && chmod +x stack.sh && sed -i "s/\r//" stack.sh && ./stack.sh ' + os + ' rails ' + user.added[x]._id;
                 msg = 'Ruby on Rails is getting installed'
                 user.added[x].logs.push({
-                    msg: 'Installed Ruby on Rails Framework'
+                    msg: 'Ruby on Rails stack installation started !!'
                 });
-                user.save();
+                user.added[x].msgboard = {
+                    msg: 'Ruby on Rails stack is currently being installed !!',
+                    time: 2 * 60 * 1000,
+                    date: Date.now()
+                };
                 exec();
                 break;
             default:

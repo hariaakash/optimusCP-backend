@@ -214,8 +214,11 @@ angular.module('optimusApp')
                             $('#btnLoad').button('reset');
                             $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                         });
-                } else if (!$rootScope.homeData.info.set) {
-                    $state.go('dashboard.account.editProfile')
+                } else if ($rootScope.homeData) {
+                    if (!$rootScope.homeData.info.set)
+                        $state.go('dashboard.account.editProfile')
+                } else {
+                    $rootScope.logout();
                 }
                 var path = $location.path();
                 if (path == '/login')
@@ -240,6 +243,7 @@ angular.module('optimusApp')
                 })
                 .then(function(res) {
                     delete $rootScope.adminKey;
+                    $rootScope.signStatus = false;
                     $rootScope.toast('Success', 'Logged out !!', "info");
                     $state.go('login');
                 }, function(res) {
@@ -257,6 +261,10 @@ angular.module('optimusApp')
         $rootScope.toast = function(heading, text, status, hideAfter = 10000) {
             // info, warning, error, success
             if (hideAfter == 0) hideAfter = false;
+            if (text == 'Account not found !!') {
+                text = 'Session ended!!';
+                $rootScope.logout();
+            }
             $.toast({
                 heading: heading,
                 text: text,

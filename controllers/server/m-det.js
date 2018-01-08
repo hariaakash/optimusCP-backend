@@ -1,4 +1,4 @@
-module.exports = function(req, res, formatBytes, uniR, user) {
+module.exports = function(req, res, formatBytes, moment, uniR, user) {
     var server = user.added.filter(function(server) {
         return server._id == req.query.serverId;
     });
