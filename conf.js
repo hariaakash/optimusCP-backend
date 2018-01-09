@@ -23,8 +23,11 @@ module.exports = {
                 else
                     return false
             }
-            if (req.xhr || req.headers.accept.indexOf('json') > -1 || checkUrl())
-                next();
+            if (req.headers.accept)
+                if (req.xhr || req.headers.accept.indexOf('json') > -1 || checkUrl())
+                    next();
+                else
+                    res.json(403);
             else
                 res.json(403);
         });
