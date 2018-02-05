@@ -37,7 +37,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                     });
                                     if ((result.stdout.split('\n')[0].indexOf("CentOS") >= 0) || (result.stdout.split('\n')[0].indexOf("Ubuntu") >= 0)) {
                                         var oscmd = (result.stdout.split('\n')[0].indexOf("CentOS") >= 0) ? 'yum' : 'apt-get';
-                                        ssh.execCommand('sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && echo -e "\\nAllowUsers optimusCP\@optimuscp.io" >> /etc/ssh/sshd_config && service ssh restart')
+                                        ssh.execCommand('sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e "' + user.added[user.added.length - 1]._id + '\n' + user.added[user.added.length - 1]._id + '" | passwd optimusCP && echo "optimusCP ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && echo -e "\\nAllowUsers optimusCP\@52.91.96.129" >> /etc/ssh/sshd_config && service ssh restart')
                                             .then(function(result) {
                                                 if (!result.stderr.includes('already exists')) {
                                                     ssh.connect({
@@ -114,7 +114,7 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                     });
                                     if ((result.stdout.split('\n')[0].indexOf("CentOS") >= 0) || (result.stdout.split('\n')[0].indexOf("Ubuntu") >= 0)) {
                                         var oscmd = (result.stdout.split('\n')[0].indexOf("CentOS") >= 0) ? 'yum' : 'apt-get';
-                                        ssh.execCommand('sudo -i /bin/bash -c "sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && sudo sed -i \\"s/^PermitRootLogin.*/PermitRootLogin yes/\\" /etc/ssh/sshd_config && echo -e "\\nAllowUsers optimusCP\@optimuscp.io" >> /etc/ssh/sshd_config && service sshd reload"')
+                                        ssh.execCommand('sudo -i /bin/bash -c "sudo useradd -m -ou 0 -g 0 -s /bin/bash optimusCP && echo -e \\"' + user.added[user.added.length - 1]._id + '\\n' + user.added[user.added.length - 1]._id + '\\" | sudo passwd optimusCP && echo \\"optimusCP ALL=(ALL:ALL) NOPASSWD: ALL\\" >> /etc/sudoers && service ssh restart && sudo sed -i \\"s/^PasswordAuthentication.*/PasswordAuthentication yes/\\" /etc/ssh/sshd_config && sudo sed -i \\"s/^PermitRootLogin.*/PermitRootLogin yes/\\" /etc/ssh/sshd_config && echo -e "\\nAllowUsers optimusCP\@52.91.96.129" >> /etc/ssh/sshd_config && service sshd reload"')
                                             .then(function(result) {
                                                 fs.unlink(file, function(err) {});
                                                 if (!result.stderr.includes('already exists')) {
