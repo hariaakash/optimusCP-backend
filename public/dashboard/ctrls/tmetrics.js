@@ -311,7 +311,7 @@ angular.module('optimusApp')
                                     split: true
                                 },
                                 series: [{
-                                    name: 'Storage',
+                                    name: 'CPU',
                                     data: res.data.data.seriesOptions[2].data,
                                     tooltip: {
                                         valueDecimals: 2
