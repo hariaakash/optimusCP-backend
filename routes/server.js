@@ -24,7 +24,7 @@ var uniR = require('../controllers/uniR');
 var formatBytes = require('../controllers/formatBytes');
 
 //Check uptime
-// require('../controllers/server/checkServerUptime')();
+require('../controllers/server/checkServerUptime')();
 
 app.get('/m-det', function(req, res) {
     if (req.query.authKey && req.query.serverId) {

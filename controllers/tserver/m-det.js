@@ -7,12 +7,14 @@ module.exports = function(req, res, uniR, formatBytes, moment, uniR, user, team)
         var latest = [],
             d = [],
             m = [],
+            cpu = [],
             seriesOptions = [];
         if (metrics > 8640)
             metrics = metrics.slice().reverse().slice(0, 8640).reverse();
         for (i = 0; i < metrics.length; i++) {
             d.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].d_u * 100 / metrics[i].d_t).toFixed(2))]);
             m.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].m_u * 100 / metrics[i].m_t).toFixed(2))]);
+            cpu.push([moment(metrics[i].date).valueOf(), metrics[i].cpu]);
         }
         latest.push({
             cpu: metrics[metrics.length - 1].cpu,
@@ -27,6 +29,12 @@ module.exports = function(req, res, uniR, formatBytes, moment, uniR, user, team)
             type: 'area'
         }, {
             name: 'Disk',
+            compare: 'percent',
+            gapSize: 5,
+            data: d,
+            type: 'area'
+        }, {
+            name: 'CPU',
             compare: 'percent',
             gapSize: 5,
             data: d,

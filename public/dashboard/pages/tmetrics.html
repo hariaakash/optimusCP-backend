@@ -36,6 +36,17 @@
 				</div>
 			</div>
 			<div class="panel panel-inverse">
+				<div class="panel-heading text-center">CPU
+					<div class="pull-right"><a href="javascript:void(0)"><i class="fa fa-code" style="font-size:20px" ng-click="copyEmbedModal(4)"></i></a></div>
+				</div>
+				<div class="panel-wrapper">
+					<div class="panel-body">
+						<div id="container3" ng-show="serverData.seriesOptions[2].data.length>=2"></div>
+						<h2 class="text-center" ng-show="!serverData.seriesOptions[2].data.length<2">No Data to Display</h2>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-inverse">
 				<div class="panel-heading text-center">Monitoring</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
