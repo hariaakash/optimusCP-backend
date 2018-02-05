@@ -16,11 +16,12 @@ module.exports = function(req, res, uniR, formatBytes, moment, uniR, user, team)
             m.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].m_u * 100 / metrics[i].m_t).toFixed(2))]);
             cpu.push([moment(metrics[i].date).valueOf(), metrics[i].cpu]);
         }
-        latest.push({
-            cpu: metrics[metrics.length - 1].cpu,
-            m: (metrics[metrics.length - 1].m_u * 100 / metrics[metrics.length - 1].m_t).toFixed(2),
-            d: (metrics[metrics.length - 1].d_u * 100 / metrics[metrics.length - 1].d_t).toFixed(2)
-        });
+        if (metrics.length)
+            latest.push({
+                cpu: metrics[metrics.length - 1].cpu,
+                m: (metrics[metrics.length - 1].m_u * 100 / metrics[metrics.length - 1].m_t).toFixed(2),
+                d: (metrics[metrics.length - 1].d_u * 100 / metrics[metrics.length - 1].d_t).toFixed(2)
+            });
         seriesOptions.push({
             name: 'Memory',
             compare: 'percent',
