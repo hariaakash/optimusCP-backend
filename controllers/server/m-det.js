@@ -11,18 +11,14 @@ module.exports = function(req, res, formatBytes, moment, uniR, user) {
         if (metrics > 8640)
             metrics = metrics.slice().reverse().slice(0, 8640).reverse();
         for (i = 0; i < metrics.length; i++) {
-            latest.push({
-                date: metrics[i].date,
-                d_u: formatBytes(metrics[i].d_u),
-                d_t: formatBytes(metrics[i].d_t),
-                m_u: formatBytes(metrics[i].m_u),
-                m_t: formatBytes(metrics[i].m_t),
-                m: (metrics[i].m_u * 100 / metrics[i].m_t).toFixed(2),
-                d: (metrics[i].d_u * 100 / metrics[i].d_t).toFixed(2)
-            });
             d.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].d_u * 100 / metrics[i].d_t).toFixed(2))]);
             m.push([moment(metrics[i].date).valueOf(), parseFloat((metrics[i].m_u * 100 / metrics[i].m_t).toFixed(2))]);
         }
+        latest.push({
+            cpu: metrics[metrics.length - 1].cpu,
+            m: (metrics[metrics.length - 1].m_u * 100 / metrics[metrics.length - 1].m_t).toFixed(2),
+            d: (metrics[metrics.length - 1].d_u * 100 / metrics[metrics.length - 1].d_t).toFixed(2)
+        });
         seriesOptions.push({
             name: 'Memory',
             compare: 'percent',
@@ -45,7 +41,7 @@ module.exports = function(req, res, formatBytes, moment, uniR, user) {
                 name: server[0].name,
                 msgboard: server[0].msgboard,
                 info: server[0].info,
-                metrics: latest[latest.length - 1],
+                metrics: latest[0],
                 seriesOptions: seriesOptions,
                 crons: server[0].crons,
                 startupScripts: server[0].startupScripts,
