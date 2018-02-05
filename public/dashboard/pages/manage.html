@@ -227,7 +227,7 @@
 								</tr>
 							</tbody>
 						</table>
-						<h5 ng-show="serverData.metrics.d">CPU<span class="pull-right">{{serverData.metrics.cou}}%</span></h5>
+						<h5 ng-show="serverData.metrics.cou">CPU<span class="pull-right">{{serverData.metrics.cpu}}%</span></h5>
 						<div class="progress" ng-show="serverData.metrics.cpu">
 							<div class="progress-bar progress-bar-info" aria-valuenow="{{serverData.metrics.cpu}}" aria-valuemin="0" aria-valuemax="100" style="width: {{serverData.metrics.cpu}}%" role="progressbar"></div>
 						</div>

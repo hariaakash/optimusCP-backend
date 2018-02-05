@@ -227,6 +227,10 @@
 								</tr>
 							</tbody>
 						</table>
+						<h5 ng-show="serverData.metrics.cpu">CPU<span class="pull-right">{{serverData.metrics.cpu}}%</span></h5>
+						<div class="progress" ng-show="serverData.metrics.cpu">
+							<div class="progress-bar progress-bar-info" aria-valuenow="{{serverData.metrics.cpu}}" aria-valuemin="0" aria-valuemax="100" style="width: {{serverData.metrics.cpu}}%" role="progressbar"></div>
+						</div>
 						<h5 ng-show="serverData.metrics.d">Disk<span class="pull-right">{{serverData.metrics.d}}%</span></h5>
 						<div class="progress" ng-show="serverData.metrics.d">
 							<div class="progress-bar progress-bar-info" aria-valuenow="{{serverData.metrics.d}}" aria-valuemin="0" aria-valuemax="100" style="width: {{serverData.metrics.d}}%" role="progressbar"></div>
