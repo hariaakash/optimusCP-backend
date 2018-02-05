@@ -21,7 +21,7 @@
 				<div class="panel-wrapper">
 					<div class="panel-body">
 						<div id="container" ng-show="serverData.seriesOptions[0].data.length>=2"></div>
-						<h2 class="text-center" ng-show="!serverData.seriesOptions[0].data.length>=2">No Data to Display</h2>
+						<h2 class="text-center" ng-hide="serverData.seriesOptions[0].data.length>=2">No Data to Display</h2>
 					</div>
 				</div>
 			</div>
@@ -227,7 +227,7 @@
 								</tr>
 							</tbody>
 						</table>
-						<h5 ng-show="serverData.metrics.cou">CPU<span class="pull-right">{{serverData.metrics.cpu}}%</span></h5>
+						<h5 ng-show="serverData.metrics.cpu">CPU<span class="pull-right">{{serverData.metrics.cpu}}%</span></h5>
 						<div class="progress" ng-show="serverData.metrics.cpu">
 							<div class="progress-bar progress-bar-info" aria-valuenow="{{serverData.metrics.cpu}}" aria-valuemin="0" aria-valuemax="100" style="width: {{serverData.metrics.cpu}}%" role="progressbar"></div>
 						</div>
