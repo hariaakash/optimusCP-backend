@@ -87,7 +87,7 @@ app.get('/:tId', function(req, res) {
                                 var role = data.role;
                                 data = data.team.toJSON();
                                 data.role = role;
-                                var logs = data.logs.reverse()
+                                var logs = data.logs.reverse().slice(0, 100)
                                 for (i = 0; i < logs.length; i++)
                                     logs[i].no = i;
                                 data.logs = logs;

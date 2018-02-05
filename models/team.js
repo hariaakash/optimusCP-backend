@@ -80,7 +80,6 @@ var teamSchema = new Schema({
     }
 });
 
-
 module.exports = mongoose.model('Team', teamSchema);
 
 // perms role: 1- delete or add member and server, 2- normal perms

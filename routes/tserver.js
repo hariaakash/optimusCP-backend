@@ -25,7 +25,7 @@ var uniR = require('../controllers/uniR');
 var formatBytes = require('../controllers/formatBytes');
 
 //Check uptime
-require('../controllers/tserver/checkUptimeTeamServer')();
+// require('../controllers/tserver/checkServerUptime')();
 
 //Retrieve team info
 function checkUserInTeam(uId, teamId) {
@@ -334,6 +334,69 @@ app.post('/m-name/:tId', function(req, res) {
     }
 });
 
+app.post('/enableAlert/:tId', function(req, res) {
+    if (req.body.authKey && req.params.tId && req.body.serverId && req.body.type && req.body.interval && req.body.val) {
+        User.findOne({
+                authKey: req.body.authKey
+            })
+            .then(function(user) {
+                if (user) {
+                    checkUserInTeam(user._id, req.params.tId)
+                        .then(function(data) {
+                            if (data.status) {
+                                var team = data.team;
+                                require('../controllers/tserver/enableAlert')(req, res, requestIp, uniR, user, team);
+                            } else {
+                                uniR(res, false, 'Not authorized !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+app.post('/disableAlert/:tId', function(req, res) {
+    if (req.body.authKey && req.params.tId && req.body.serverId && req.body.type) {
+        User.findOne({
+                authKey: req.body.authKey
+            })
+            .then(function(user) {
+                if (user) {
+                    checkUserInTeam(user._id, req.params.tId)
+                        .then(function(data) {
+                            if (data.status) {
+                                var team = data.team;
+                                require('../controllers/tserver/disableAlert')(req, res, requestIp, uniR, user, team);
+                            } else {
+                                uniR(res, false, 'Not authorized !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            console.log(err)
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
 app.post('/addCron/:tId', function(req, res) {
     if (req.body.authKey && req.params.tId && req.body.serverId && req.body.cmd && req.body.exp) {
         User.findOne({
@@ -465,21 +528,7 @@ app.post('/metrics/:teamId/:serverId', function(req, res) {
         Team.findById(req.params.teamId)
             .then(function(team) {
                 if (team) {
-                    if ((x = team.added.findIndex(x => x._id == req.params.serverId)) >= 0) {
-                        team.added[x].metrics.push({
-                            m_t: req.body.m_t,
-                            m_u: req.body.m_u,
-                            d_t: req.body.d_t,
-                            d_u: req.body.d_u,
-                            cpu: req.body.cpu,
-                            m: parseFloat((req.body.m_u * 100 / req.body.m_t).toFixed(2)),
-                            d: parseFloat((req.body.d_u * 100 / req.body.d_t).toFixed(2))
-                        });
-                        team.save();
-                        uniR(res, true, 'Metrics received !!');
-                    } else {
-                        uniR(res, false, 'Error receiving');
-                    }
+                    require('../controllers/tserver/metrics')(req, res, uniR, team);
                 } else {
                     uniR(res, false, 'Account not found !!');
                 }
@@ -498,7 +547,7 @@ app.get('/embed', function(req, res) {
             })
             .then(function(team) {
                 if (team) {
-                    require('../controllers/tserver/embed')(req, res, uniR, team);
+                    require('../controllers/tserver/embed')(req, res, moment, team);
                 } else {
                     uniR(res, false, 'Account not found !!');
                 }

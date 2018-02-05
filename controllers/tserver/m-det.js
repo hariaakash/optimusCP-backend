@@ -8,6 +8,8 @@ module.exports = function(req, res, uniR, formatBytes, moment, uniR, user, team)
             d = [],
             m = [],
             seriesOptions = [];
+        if (metrics > 8640)
+            metrics = metrics.slice().reverse().slice(0, 8640).reverse();
         for (i = 0; i < metrics.length; i++) {
             latest.push({
                 date: metrics[i].date,
@@ -47,6 +49,7 @@ module.exports = function(req, res, uniR, formatBytes, moment, uniR, user, team)
                 seriesOptions: seriesOptions,
                 crons: server[0].crons,
                 startupScripts: server[0].startupScripts,
+                alerts: server[0].alerts,
                 monitorLogs: server[0].monitorLogs[server[0].monitorLogs.length - 1]
             }
         });

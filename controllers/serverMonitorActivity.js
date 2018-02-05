@@ -19,7 +19,7 @@ module.exports = function(req, res, uniR, added) {
     });
     if (server[0]) {
         var logs = [];
-        server[0].monitorLogs = server[0].monitorLogs.reverse();
+        server[0].monitorLogs = server[0].monitorLogs.reverse().slice(0,8640);
         for (i = 0; i < server[0].monitorLogs.length; i++)
             logs.push({
                 no: i,

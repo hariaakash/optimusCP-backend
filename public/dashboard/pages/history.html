@@ -1,0 +1,26 @@
+<div class="row">
+	<h2 ng-show="!historyData.length" class="text-center">No Payments yet</h2>
+	<table class="table table-hover margin bottom" ng-show="historyData.length">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Date</th>
+				<th>Amount</th>
+				<th>Status</th>
+				<th>View</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr dir-paginate="x in historyData | itemsPerPage: pageSize" current-page="currentPage">
+				<td>{{ x.no+1 }}</td>
+				<td>{{ x.modified_at | date: 'MMM d, y H:mm:ss' }}</td>
+				<td><i class="fa fa-usd"></i> {{ x.amount }}</td>
+				<td><i class="fa fa-dot-circle-o fa-blink" ng-class="{'text-success': x.status == 'Credit', 'text-red': x.status == 'Failed', 'text-warning': x.status == 'Pending'}"></i> {{ x.status }}</td>
+				<td><button type="button" class="btn btn-circle btn-info" ui-sref="dashboard.invoice({invoiceId: x._id})"><i class="fa fa-envelope"></i></button></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="pull-right">
+		<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+	</div>
+</div>

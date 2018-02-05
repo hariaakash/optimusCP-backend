@@ -3,6 +3,23 @@ angular.module('optimusApp')
         $rootScope.checkAuth();
         $rootScope.profile = true;
         $scope.serverId = $stateParams.serverId;
+        $scope.intervals = [{
+                name: "5 m",
+                val: 5 * 60 * 1000
+            },
+            {
+                name: "10 m",
+                val: 10 * 60 * 1000
+            },
+            {
+                name: "30 m",
+                val: 30 * 60 * 1000
+            },
+            {
+                name: "1 h",
+                val: 60 * 60 * 1000
+            }
+        ];
         $scope.getServerInfo = function() {
             if ($scope.serverId) {
                 $http({
@@ -248,20 +265,20 @@ angular.module('optimusApp')
                 $scope.data.authKey = $rootScope.authKey;
                 $scope.data.serverId = $scope.serverId;
                 $http({
-                    method: 'POST',
-                    url: $rootScope.apiUrl + 'server/stack',
-                    data: $scope.data
-                })
-                .then(function(res) {
-                    if (res.data.status == true) {
-                        $state.reload();
-                        $rootScope.toast('Success', res.data.msg, "success");
-                    } else {
-                        $rootScope.toast('Failed', res.data.msg, "error");
-                    }
-                }, function(res) {
-                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
-                });
+                        method: 'POST',
+                        url: $rootScope.apiUrl + 'server/stack',
+                        data: $scope.data
+                    })
+                    .then(function(res) {
+                        if (res.data.status == true) {
+                            $state.reload();
+                            $rootScope.toast('Success', res.data.msg, "success");
+                        } else {
+                            $rootScope.toast('Failed', res.data.msg, "error");
+                        }
+                    }, function(res) {
+                        $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                    });
             };
             $scope.stack = stack;
             if ($scope.stack == 1)
@@ -322,6 +339,54 @@ angular.module('optimusApp')
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
             }).catch(swal.noop);
+        };
+        $scope.enableAlert = function(x, val, interval) {
+            if (val > 30 && val < 100) {
+                $http({
+                        method: 'POST',
+                        url: $rootScope.apiUrl + 'server/enableAlert',
+                        data: {
+                            authKey: $rootScope.authKey,
+                            serverId: $scope.serverId,
+                            type: x,
+                            interval: interval,
+                            val: val
+                        }
+                    })
+                    .then(function(res) {
+                        if (res.data.status == true) {
+                            $state.reload();
+                            $rootScope.toast('Success', res.data.msg, "success");
+                        } else {
+                            $rootScope.toast('Failed', res.data.msg, "error");
+                        }
+                    }, function(res) {
+                        $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                    });
+            } else {
+                $rootScope.toast('Failed', "Value should be between 30 & 100.", "error");
+            }
+        };
+        $scope.disableAlert = function(x) {
+            $http({
+                    method: 'POST',
+                    url: $rootScope.apiUrl + 'server/disableAlert',
+                    data: {
+                        authKey: $rootScope.authKey,
+                        serverId: $scope.serverId,
+                        type: x
+                    }
+                })
+                .then(function(res) {
+                    if (res.data.status == true) {
+                        $state.reload();
+                        $rootScope.toast('Success', res.data.msg, "success");
+                    } else {
+                        $rootScope.toast('Failed', res.data.msg, "error");
+                    }
+                }, function(res) {
+                    $rootScope.toast('Failed', "Some error occurred, try again.", "error");
+                });
         };
         $scope.copySuccess = function() {
             $rootScope.toast("Success", "Code copied to clipboard.", "info");

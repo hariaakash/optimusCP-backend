@@ -1,0 +1,42 @@
+<form name="addCreditForm" class="form-horizontal" ng-hide="redirectStatus">
+    <h2 class="text-center">Add Credit</h2>
+    <div class="btn-group btn-group-justified" ng-init="amount=10">
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="btn btn-block btn-outline" ng-class="{10: 'btn-success'}[amount]" role="button" ng-click="amount=10;selected=false"><i class="fa fa-dollar"></i> 10</a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="btn btn-block btn-outline" ng-class="{25: 'btn-success'}[amount]" role="button" ng-click="amount=25;selected=false"><i class="fa fa-dollar"></i> 25</a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="btn btn-block btn-outline" ng-class="{50: 'btn-success'}[amount]" role="button" ng-click="amount=50;selected=false"><i class="fa fa-dollar"></i> 50</a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="btn btn-block btn-outline" ng-class="{100: 'btn-success'}[amount]" role="button" ng-click="amount=100;selected=false"><i class="fa fa-dollar"></i> 100</a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="btn btn-block btn-outline" ng-class="{150: 'btn-success'}[amount]" role="button" ng-click="amount=150;selected=false"><i class="fa fa-dollar"></i> 150</a>
+        </div>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="btn btn-block btn-outline" ng-class="{0: 'btn-success'}[amount]" role="button" ng-click="amount=0;selected=true">Other</a>
+        </div>
+    </div>
+    <br />
+    <div class="form-group" ng-show="amount!=10 && amount!=25 && amount!=50 && amount!=100 && amount!=150 || selected==true">
+        <div class="col-xs-12">
+            <label>Amount:</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                <input type="number" ng-model="amount" class="form-control" placeholder="Enter amount" required>
+            </div>
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <div class="col-xs-12">
+            <button class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" id="btnLoad" data-loading-text="<i class='fa fa-spinner fa-spin '>
+            </i> Submitting" type="submit" ng-disabled="addCreditForm.$invalid" ng-click="addCredit(amount)">Make Payment</button>
+        </div>
+    </div>
+</form>
+<div class="alert alert-success text-center" ng-show="redirectStatus">
+    <h1 class="text-white">Redirecting to Payment Gateway ...</b>
+</div>

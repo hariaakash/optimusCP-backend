@@ -1,7 +1,8 @@
 angular.module('optimusApp')
     .controller('homeCtrl', function($rootScope, $scope, $http, $state) {
         $rootScope.checkAuth();
-        $scope.currentPage = 1;
+        if (!$rootScope.homeCurrentPage)
+            $rootScope.homeCurrentPage = 1;
         $scope.pageSize = 10;
         $scope.blockUser = function(x) {
             $http({
@@ -14,8 +15,7 @@ angular.module('optimusApp')
                 })
                 .then(function(res) {
                     if (res.data.status == true) {
-                        $state.reload();
-                        $rootScope.checkAuth();
+                        $rootScope.checkAuth(true);
                         $rootScope.toast('Success', res.data.msg, "success");
                     } else {
                         $('#btnLoad').button('reset');
@@ -36,8 +36,7 @@ angular.module('optimusApp')
                 })
                 .then(function(res) {
                     if (res.data.status == true) {
-                        $state.reload();
-                        $rootScope.checkAuth();
+                        $rootScope.checkAuth(true);
                         $rootScope.toast('Success', res.data.msg, "success");
                     } else {
                         $('#btnLoad').button('reset');
@@ -46,5 +45,8 @@ angular.module('optimusApp')
                 }, function(res) {
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
+        };
+        $scope.updatePage = function (x) {
+            $rootScope.homeCurrentPage = x;
         };
     });

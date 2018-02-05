@@ -10,8 +10,10 @@ module.exports = function(req, res, ssh, uniR, user, team) {
                 team.save()
                     .then(function(team) {
                         uniR(res, true, msg)
+                        console.log('result');
                         ssh.exec(cmd)
                             .then(function(result) {
+                                console.log(result)
                                 if (result.stdout.split(':')[0] == "TRUE") {
                                     team.added[x].stack.id = req.body.stack;
                                     team.added[x].logs.push({
@@ -19,14 +21,12 @@ module.exports = function(req, res, ssh, uniR, user, team) {
                                         user: user.email
                                     });
                                     team.save();
-                                    console.log(result)
                                 } else {
                                     team.added[x].logs.push({
                                         msg: 'Installation failed, error: ' + result.stdout.split(':')[1],
                                         user: user.email
                                     });
                                     team.save();
-                                    console.log(result)
                                 }
                             })
                             .catch(function(err) {

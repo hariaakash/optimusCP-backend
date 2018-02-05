@@ -1,6 +1,6 @@
 angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad'])
     .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
-        cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/logo.png" style="width: 64px; height: 64px;"></div>';
+        cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="../img/logo.png" style="width: 64px; height: 64px;"></div>';
     }])
     .filter('range', function() {
         return function(input, total) {
@@ -40,6 +40,32 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                         return $ocLazyLoad.load({
                             name: 'User',
                             files: ['./ctrls/user.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.userPayment", {
+                url: "/userPayment/:uId",
+                templateUrl: "pages/userPayment.html",
+                controller: "userPaymentCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'User Payment',
+                            files: ['./ctrls/userPayment.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.userInvoice", {
+                url: "/userInvoice/:uId/:iId",
+                templateUrl: "pages/userInvoice.html",
+                controller: "userInvoiceCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'User Invoice',
+                            files: ['./ctrls/userInvoice.js', './plugins/jquery.PrintArea/jquery.PrintArea.min.js']
                         })
                     }]
                 }
@@ -166,6 +192,19 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                     }]
                 }
             })
+            .state("dashboard.system", {
+                url: "/system",
+                templateUrl: "pages/system.html",
+                controller: "systemCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'System',
+                            files: ['./ctrls/system.js']
+                        })
+                    }]
+                }
+            })
             .state("login", {
                 url: "/login",
                 templateUrl: "pages/login.html",
@@ -217,8 +256,6 @@ angular.module('optimusApp')
                 } else if ($rootScope.homeData) {
                     if (!$rootScope.homeData.info.set)
                         $state.go('dashboard.account.editProfile')
-                } else {
-                    $rootScope.logout();
                 }
                 var path = $location.path();
                 if (path == '/login')
@@ -243,6 +280,7 @@ angular.module('optimusApp')
                 })
                 .then(function(res) {
                     delete $rootScope.adminKey;
+                    delete $rootScope.homeData;
                     $rootScope.signStatus = false;
                     $rootScope.toast('Success', 'Logged out !!', "info");
                     $state.go('login');

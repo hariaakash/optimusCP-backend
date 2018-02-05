@@ -56,6 +56,45 @@ var serverSchema = new Schema({
             default: true
         }
     }],
+    alerts: {
+        cpu: {
+            interval: Number,
+            val: Number,
+            enabled: {
+                type: Boolean,
+                default: false
+            },
+            current: {
+                type: Date,
+                default: Date.now
+            }
+        },
+        m: {
+            interval: Number,
+            val: Number,
+            enabled: {
+                type: Boolean,
+                default: false
+            },
+            current: {
+                type: Date,
+                default: Date.now
+            }
+        },
+        d: {
+            interval: Number,
+            val: Number,
+            enabled: {
+                type: Boolean,
+                default: false
+            },
+            current: {
+                type: Date,
+                default: Date.now
+            }
+        }
+
+    },
     logs: [{
         msg: String,
         ip: String,

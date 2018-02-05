@@ -2,6 +2,7 @@ module.exports = function (app) {
 
 	// Require Routes
 	var user = require('./routes/user');
+	var payment = require('./routes/payment');
 	var server = require('./routes/server');
 	var apiKey = require('./routes/apiKey');
 	var api = require('./routes/api');
@@ -11,6 +12,7 @@ module.exports = function (app) {
 
 	// Use Routes
 	app.use('/webapi/user', user);
+	app.use('/webapi/payment', payment);
 	app.use('/webapi/server', server);
 	app.use('/webapi/apiKey', apiKey);
 	app.use('/api', api);

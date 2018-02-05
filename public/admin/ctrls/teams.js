@@ -1,7 +1,8 @@
 angular.module('optimusApp')
     .controller('teamsCtrl', function($rootScope, $scope, $http, $state) {
         $rootScope.checkAuth();
-        $scope.currentPage = 1;
+        if (!$rootScope.teamsCurrentPage)
+            $rootScope.teamsCurrentPage = 1;
         $scope.pageSize = 10;
         $scope.getTeamsInfo = function(x) {
             $http({
@@ -66,5 +67,8 @@ angular.module('optimusApp')
                 }, function(res) {
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
+        };
+        $scope.updatePage = function(x) {
+            $rootScope.teamsCurrentPage = x;
         };
     });

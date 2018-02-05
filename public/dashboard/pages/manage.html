@@ -58,10 +58,10 @@
 							</a>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-							<a ui-sref="dashboard.metrics({serverId: serverId})">
+							<a href="javascript:void(0)" ng-click="openModal('alerts')">
 								<div class="white-box">
-									<h3 class="text-danger"><i class="fa fa-line-chart fa-2x"></i></h3>
-									<h3 class="text-danger">Metrics</h3>
+									<h3 class="text-danger"><i class="fa fa-exclamation-triangle fa-2x"></i></h3>
+									<h3 class="text-danger">Alerts</h3>
 								</div>
 							</a>
 						</div>
@@ -256,6 +256,96 @@
 					</div>
 					<div class="col-md-2">
 						<button type="button" class="btn btn-danger btn-circle" ng-click="copySuccess()" clipboard supported="supported" text="embedCode"><i class="fa fa-clone"></i></button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="alerts" class="modal fade" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header text-center">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<i class="fa fa-exclamation-triangle modal-icon"></i>
+				<h2 class="modal-title">Alerts</h2>
+			</div>
+			<div class="modal-body text-center">
+				<div class="row">
+					<div class="col-md-4 col-sm-4 col-xs-12">
+						<h3 class="box-title">CPU</h3>
+						<ul class="list-inline two-part" ng-show="serverData.alerts.cpu.enabled">
+							<li ng-click="disableAlert(1)"><i class="fa fa-pause text-danger"></i></li>
+							<li class="text-right">
+								<span>{{serverData.alerts.cpu.val}}%</span>
+							</li>
+						</ul>
+						<form name="cpuForm" class="form-inline row" ng-show="!serverData.alerts.cpu.enabled">
+							<br />
+							<div class="col-md-4 col-sm-12 col-xs-12">
+								<label>Alert %</label>
+								<input name="val" type="number" class="form-control" ng-model="val1" placeholder="Limit" required>
+							</div>
+							<div class="col-md-4 col-sm-12 col-xs-12">
+								<label>Interval</label>
+								<select name="interval" class="form-control" ng-model="int1" ng-init="int1=intervals[2].val" ng-options="x.val as x.name for x in intervals">
+								</select>
+							</div>
+							<div class="col-md-4 col-sm-12 col-xs-12"><br />
+								<button type="button" ng-click="enableAlert(1, val1, int1)" class="btn btn-danger btn-rounded" ng-disabled="cpuForm.$invalid"><i class="fa fa-play"></i> Enable</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-12">
+						<h3 class="box-title">RAM</h3>
+						<ul class="list-inline two-part" ng-show="serverData.alerts.m.enabled">
+							<li ng-click="disableAlert(2)"><i class="fa fa-pause text-danger"></i></li>
+							<li class="text-right">
+								<span>{{serverData.alerts.m.val}}%</span>
+							</li>
+						</ul>
+						<form name="mForm" class="form-inline row" ng-show="!serverData.alerts.m.enabled">
+							<br />
+							<div class="col-md-4 col-sm-12 col-xs-12">
+								<label>Alert %</label>
+								<input name="val" type="number" class="form-control" ng-model="val2" placeholder="Limit" required>
+							</div>
+							<div class="col-md-4 col-sm-12 col-xs-12">
+								<label>Interval</label>
+								<select name="interval" class="form-control" ng-model="int2" ng-init="int2=intervals[2].val" ng-options="x.val as x.name for x in intervals">
+								</select>
+							</div>
+							<div class="col-md-4 col-sm-12 col-xs-12"><br />
+								<button type="button" ng-click="enableAlert(2, val2, int2)" class="btn btn-danger btn-rounded" ng-disabled="mForm.$invalid"><i class="fa fa-play"></i> Enable</button>
+							</div>
+						</form>
+					</div>
+					<div class="col-md-4 col-sm-4 col-xs-12">
+						<h3 class="box-title">ROM</h3>
+						<ul class="list-inline two-part" ng-show="serverData.alerts.d.enabled">
+							<li ng-click="disableAlert(3)"><i class="fa fa-pause text-danger"></i></li>
+							<li class="text-right">
+								<span>{{serverData.alerts.d.val}}%</span>
+							</li>
+						</ul>
+						<form name="dForm" class="form-inline row" ng-show="!serverData.alerts.d.enabled">
+							<br />
+							<div class="col-md-4 col-sm-12 col-xs-12">
+								<label>Alert %</label>
+								<input name="val" type="number" class="form-control" ng-model="val3" placeholder="Limit" required>
+							</div>
+							<div class="col-md-4 col-sm-12 col-xs-12">
+								<label>Interval</label>
+								<select name="interval" class="form-control" ng-model="int3" ng-init="int3=intervals[2].val" ng-options="x.val as x.name for x in intervals">
+								</select>
+							</div>
+							<div class="col-md-4 col-sm-12 col-xs-12"><br />
+								<button type="button" ng-click="enableAlert(3, val3, int3)" class="btn btn-danger btn-rounded" ng-disabled="dForm.$invalid"><i class="fa fa-play"></i> Enable</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>

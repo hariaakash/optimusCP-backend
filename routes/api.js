@@ -79,6 +79,80 @@ app.get('/tservers', function(req, res) {
     }
 });
 
+app.get('/server', function(req, res) {
+    if (req.headers.apikey && req.query.serverId) {
+        User.findOne({
+                'apis.key': req.headers.apikey
+            })
+            .then(function(user) {
+                if (user) {
+                    if ((i = user.added.findIndex(x => x._id == req.query.serverId)) >= 0) {
+                        var server = user.added[i];
+                        res.json({
+                            status: true,
+                            data: {
+                                id: String(server._id),
+                                ip: server.ip,
+                                port: server.port,
+                                name: server.name,
+                                info: server.info,
+                                crons: server.crons.length,
+                                startupScripts: server.startupScripts.length,
+                                monitor: server.monitorLogs[server.monitorLogs.length - 1].isReachable
+                            }
+                        });
+                    } else {
+                        uniR(res, false, 'Server Id wrong !!');
+                    }
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying - Server Error !!');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+app.get('/tserver', function(req, res) {
+    if (req.headers.apikey && req.query.serverId) {
+        Team.findOne({
+                'apis.key': req.headers.apikey
+            })
+            .then(function(team) {
+                if (team) {
+                    if ((i = team.added.findIndex(x => x._id == req.body.serverId)) >= 0) {
+                        var server = team.added[i];
+                        res.json({
+                            status: true,
+                            data: {
+                                id: String(server._id),
+                                ip: server.ip,
+                                port: server.port,
+                                name: server.name,
+                                info: server.info,
+                                crons: server.crons.length,
+                                startupScripts: server.startupScripts.length,
+                                monitor: server.monitorLogs[server.monitorLogs.length - 1].isReachable
+                            }
+                        });
+                    } else {
+                        uniR(res, false, 'Server Id wrong !!');
+                    }
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying - Server Error !!');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
 app.post('/server/exec', function(req, res) {
     if (req.headers.apikey && req.body.serverId && req.body.cmd) {
         User.findOne({

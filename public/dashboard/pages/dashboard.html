@@ -5,16 +5,18 @@
 			<a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="fa fa-bars"></i></a>
 			<div class="top-left-part">
 				<a class="logo" href="https://optimuscp.io" target="_blank">
-					<b><img src="./images/logo.png" alt="home" width="40px" height="40px" /></b>
-					<span class="hidden-xs" style="text-transform: none;">OptimusCP</span>
+					<b>
+						<img src="../img/text-logo2.png" alt="home" class="hidden-xs hidden-sm hidden-md" height="40px" width="220px" />
+						<img src="../img/logo.png" alt="home" class="hidden-lg" width="40px" height="40px" />
+					</b>
 				</a>
 			</div>
 			<ul class="nav navbar-top-links navbar-left hidden-xs">
-				<li><a class="waves-effect waves-light" href="https://optimuscp.io" target="_blank"><i class="fa fa-home"></i>&nbsp;Home</a></li>
+				<li><a href="https://optimuscp.io" target="_blank"><i class="fa fa-home"></i>&nbsp;Home</a></li>
 			</ul>
 			<ul class="nav navbar-top-links navbar-right pull-right">
 				<li class="dropdown" ng-show="signStatus">
-					<a class="waves-effect waves-light dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+					<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						<span>{{profile?"Profile":(teamData.name || homeData.teams[teamIndex].name)}}&nbsp;&nbsp;<span class="fa fa-caret-down"></span></span>
 					</a>
 					<ul class="dropdown-menu">
@@ -25,9 +27,9 @@
 						<li><a href="javascript:void(0)" ng-click="openModal('createTeam')">Create Team</a></li>
 					</ul>
 				</li>
-				<li class="dropdown" ng-show="signStatus" ng-click="logout(true)"> <a class="waves-effect waves-light"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Logout</a></li>
-				<li class="dropdown" ng-show="!signStatus"> <a class="waves-effect waves-light" href="#!/login"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</a></li>
-				<li class="dropdown" ng-show="!signStatus"> <a class="waves-effect waves-light" href="#!/register"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Register</a></li>
+				<li class="dropdown" ng-show="signStatus" ng-click="logout(true)"> <a><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Logout</a></li>
+				<li class="dropdown" ng-show="!signStatus"> <a href="#!/login"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</a></li>
+				<li class="dropdown" ng-show="!signStatus"> <a href="#!/register"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Register</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -38,25 +40,27 @@
 			<ul class="nav" id="side-menu">
 				<li>
 					<a ui-sref="dashboard.home" ng-if="profile" ng-class="{active: ('dashboard.home' |
-includedByState) || ('dashboard.manage' | includedByState) || ('dashboard.terminal' | includedByState) || ('dashboard.cron' | includedByState) || ('dashboard.metrics' | includedByState) || ('dashboard.startupScript' | includedByState) || ('dashboard.serverActivity' | includedByState) || ('dashboard.fileManager' | includedByState)}"
-					    class="waves-effect"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Dashboard</span></a>
-					<a ui-sref="dashboard.team({teamId: teamId})" ng-if="!profile" ng-class="{active: ('dashboard.team' | includedByState) || ('dashboard.tmanage' | includedByState) || ('dashboard.tterminal' | includedByState) || ('dashboard.tcron' | includedByState) || ('dashboard.tmetrics' | includedByState) || ('dashboard.tstartupScript' | includedByState) || ('dashboard.tserverActivity' | includedByState) || ('dashboard.tfileManager' | includedByState)}"
-					    class="waves-effect"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Team</span></a>
+includedByState) || ('dashboard.manage' | includedByState) || ('dashboard.terminal' | includedByState) || ('dashboard.cron' | includedByState) || ('dashboard.metrics' | includedByState) || ('dashboard.startupScript' | includedByState) || ('dashboard.serverActivity' | includedByState) || ('dashboard.fileManager' | includedByState)}"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Dashboard</span></a>
+					<a ui-sref="dashboard.team({teamId: teamId})" ng-if="!profile" ng-class="{active: ('dashboard.team' | includedByState) || ('dashboard.tmanage' | includedByState) || ('dashboard.tterminal' | includedByState) || ('dashboard.tcron' | includedByState) || ('dashboard.tmetrics' | includedByState) || ('dashboard.tstartupScript' | includedByState) || ('dashboard.tserverActivity' | includedByState) || ('dashboard.tfileManager' | includedByState)}"><i class="fa fa-dashboard fa-fw"></i> <span class="hide-menu">Team</span></a>
 				</li>
 				<li ng-show="profile">
 					<a ui-sref="dashboard.account.activity" ng-class="{active: ('dashboard.account.editProfile' |
-includedByState) || ('dashboard.account.changePasswordAccount' | includedByState) || ('dashboard.account.activity' | includedByState)}" class="waves-effect"><i class="fa fa-user fa-fw"></i> <span class="hide-menu">Account</span></a>
+includedByState) || ('dashboard.account.changePasswordAccount' | includedByState) || ('dashboard.account.activity' | includedByState)}"><i class="fa fa-user fa-fw"></i> <span class="hide-menu">Account</span></a>
+				</li>
+				<li ng-show="profile">
+					<a ui-sref="dashboard.billing.addCredit" ng-class="{active: ('dashboard.billing.addCredit' |
+includedByState) || ('dashboard.billing.history' | includedByState) || ('dashboard.invoice' | includedByState)}"><i class="fa fa-money fa-fw"></i> <span class="hide-menu">Billing</span></a>
 				</li>
 				<li>
 					<a ui-sref="dashboard.support" ng-if="profile" ng-class="{active: ('dashboard.support' |
-includedByState) || ('dashboard.ticket' | includedByState)}" class="waves-effect"><i class="fa fa-support fa-fw"></i> <span class="hide-menu">Support</span></a>
+includedByState) || ('dashboard.ticket' | includedByState)}"><i class="fa fa-support fa-fw"></i> <span class="hide-menu">Support</span></a>
 				</li>
 				<li>
-					<a ui-sref="dashboard.api" ng-if="profile" ui-sref-active="active" class="waves-effect"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>
-					<a ui-sref="dashboard.tapi({teamId: teamId})" ng-if="!profile" ui-sref-active="active" class="waves-effect"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>
+					<a ui-sref="dashboard.api" ng-if="profile" ui-sref-active="active"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>
+					<a ui-sref="dashboard.tapi({teamId: teamId})" ng-if="!profile" ui-sref-active="active"><i class="fa fa-code fa-fw"></i> <span class="hide-menu">API</span></a>
 				</li>
 				<li ng-click="logout(true)" ng-show="signStatus">
-					<a class="waves-effect"><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu">Logout</span></a>
+					<a><i class="fa fa-power-off fa-fw"></i> <span class="hide-menu">Logout</span></a>
 				</li>
 			</ul>
 		</div>
@@ -87,8 +91,8 @@ includedByState) || ('dashboard.ticket' | includedByState)}" class="waves-effect
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-				<button type="button" id="btnLoad" class="btn btn-danger waves-effect" ng-disabled="createTeamForm.$invalid" data-loading-text="<i class='fa fa-spinner fa-spin '></i> Submitting" ng-click="createTeam(teamName)">Create</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" id="btnLoad" class="btn btn-danger ng-disabled=" createTeamForm.$invalid " data-loading-text="<i class='fa fa-spinner fa-spin '></i> Submitting" ng-click="createTeam(teamName)">Create</button>
 			</div>
 		</div>
 	</div>

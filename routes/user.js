@@ -398,7 +398,7 @@ app.get('/activity', function(req, res) {
             .then(function(user) {
                 if (user) {
                     var logs = [];
-                    user.logs = user.logs.reverse()
+                    user.logs = user.logs.reverse().slice(0,100)
                     for (i = 0; i < user.logs.length; i++)
                         logs.push({
                             no: i,
@@ -651,60 +651,6 @@ app.post('/team/create', function(req, res) {
             .catch(function(err) {
                 uniR(res, false, 'Error when querying');
             });
-    } else {
-        uniR(res, false, 'Empty Fields !!');
-    }
-});
-
-app.post('/payment', function(req, res) {
-    if (req.body.authKey && req.body.email && req.body.amount) {
-        var headers = {
-            'X-Api-Key': '6cbe1d7f5c66201e59e6e1d0d8bd32b4',
-            'X-Auth-Token': 'fb30cd538c9483393a9eb8e26287c25e'
-        };
-        var payload = {
-            purpose: 'Server Credits',
-            amount: req.body.amount,
-            redirect_url: 'http://www.example.com/redirect/',
-            email: req.body.email,
-            allow_repeated_payments: false
-        };
-        request.post('https://test.instamojo.com/api/1.1/payment-requests/', {
-            form: payload,
-            headers: headers
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 201) {
-                res.json(JSON.parse(body));
-            } else if (!body.success) {
-                res.json('failed');
-            } else {
-                res.json('error');
-                console.log(error);
-            }
-        });
-    } else {
-        uniR(res, false, 'Empty Fields !!');
-    }
-});
-
-app.get('/payment', function(req, res) {
-    if (!req.query.authKey) {
-        var headers = {
-            'X-Api-Key': '6cbe1d7f5c66201e59e6e1d0d8bd32b4',
-            'X-Auth-Token': 'fb30cd538c9483393a9eb8e26287c25e'
-        };
-        request.get('https://test.instamojo.com/api/1.1/payment-requests/', {
-            headers: headers
-        }, function(error, response, body) {
-            if (!error && response.statusCode == 200) {
-                res.json(JSON.parse(body));
-            } else if (!body.success) {
-                res.json('failed');
-            } else {
-                res.json('error');
-                console.log(error);
-            }
-        });
     } else {
         uniR(res, false, 'Empty Fields !!');
     }

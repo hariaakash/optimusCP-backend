@@ -1,0 +1,78 @@
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">User Payment</h4>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a ui-sref="dashboard.home" class="active">Home</a></li>
+                <li><a ui-sref="dashboard.user({uId:uId})" class="active">User</a></li>
+                <li><a ui-sref="dashboard.userPayment({uId:uId})" class="active">Payments</a></li>
+                <li class="active">Invoice</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="white-box printableArea">
+                <h3>INVOICE : {{invoiceId}}</h3>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="pull-left">
+                            <address>
+                                <img src="https://optimuscp.io/img/logo.png" width="80px" height="80px" />
+                                <h3> &nbsp;<b class="text-danger">OptimusCP</b></h3>
+                                <p class="text-muted m-l-5">Z-206, Abode Valley, <br>
+                                    Potheri, Kattankulathur, <br>
+                                    Kanchipuram, Tamilnadu, <br>
+                                    India - 603203
+                                </p>
+                            </address>
+                        </div>
+                        <div class="pull-right text-right">
+                            <address>
+                                <h4>To,</h4>
+                                <h4 class="font-bold">{{invoiceData.info.name}}</h4>
+                                <p class="text-muted m-l-30">{{invoiceData.info.address}}, <br>
+                                    {{invoiceData.info.city}}, <br>
+                                    {{invoiceData.info.state}}, <br>
+                                    {{invoiceData.info.country}}
+                                </p>
+                                <p class="m-t-30"><b>Invoice Date :</b> <i class="fa fa-calendar"></i> {{ invoiceData.payment.modified_at | date: 'MMM d, y H:mm:ss' }}</p>
+                            </address>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive m-t-40" style="clear: both;">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-left">Description</th>
+                                        <th class="text-left">Status</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left">Server Credits</td>
+                                        <td class="text-left">{{invoiceData.payment.status}}</td>
+                                        <td class="text-right"> <i class="fa fa-usd"></i> {{invoiceData.payment.amount}} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="pull-right m-t-30 text-right">
+                            <h3><b>Total :</b> <i class="fa fa-usd"></i> {{invoiceData.payment.amount}}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right">
+                <button class="btn btn-default btn-outline" type="button" ng-click="printInvoice()"><span><i class="fa fa-print"></i> Print</span></button>
+            </div>
+        </div>
+    </div>
+</div>

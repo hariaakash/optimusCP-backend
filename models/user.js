@@ -103,6 +103,10 @@ var userSchema = new Schema({
         }]
     }],
     added: [Server],
+    payment: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Payment'
+    }],
     logs: [{
         ip: String,
         msg: String,
@@ -120,6 +124,5 @@ var userSchema = new Schema({
         }
     }]
 });
-
 
 module.exports = mongoose.model('User', userSchema);

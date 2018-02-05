@@ -39,7 +39,21 @@
 		</div>
 	</div>
 	<div class="row">
-		<h2 ng-show="!teamsData.teams.length">Not enough data</h2>
+		<h2 class="text-center" ng-show="!teamsData.teams.length">Not enough data</h2>
+		<div class="row" ng-show="teamsData.teams.length">
+			<div class="col-md-6 col-xs-12">
+				<div class="form-group">
+					<label>Search</label>
+					<input type="text" ng-model="search" class="form-control" placeholder="Search">
+				</div>
+			</div>
+			<div class="col-md-6 col-xs-12">
+				<div class="form-group">
+					<label>Filter (5 - 100)</label>
+					<input type="number" min="5" max="100" ng-model="pageSize" class="form-control" placeholder="Search">
+				</div>
+			</div>
+		</div>
 		<table class="table table-hover margin bottom" ng-show="teamsData.teams.length">
 			<thead>
 				<tr>
@@ -53,7 +67,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr dir-paginate="x in teamsData.teams | itemsPerPage: pageSize" current-page="currentPage">
+				<tr dir-paginate="x in teamsData.teams | filter: search | itemsPerPage: pageSize" current-page="teamsCurrentPage">
 					<td>{{ x.no }}</td>
 					<td>{{ x.name }}</td>
 					<td>{{ x.block }}</td>
@@ -65,7 +79,7 @@
 			</tbody>
 		</table>
 		<div class="pull-right">
-			<dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+			<dir-pagination-controls on-page-change="updatePage(newPageNumber)" boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
 		</div>
 	</div>
 </div>

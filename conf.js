@@ -5,7 +5,8 @@ module.exports = {
         mongoose.connect('mongodb://127.0.0.1:27017/optimus')
             .then(function() {
                 console.log('Connected to MONGOD !!');
-            }).catch(function(err) {
+            })
+            .catch(function(err) {
                 console.log('Failed to establish connection with MONGOD !!');
                 console.log(err.message);
             });
@@ -18,18 +19,18 @@ module.exports = {
         app.use(cors());
         app.use(function(req, res, next) {
             function checkUrl() {
-                if (req.url.match('/api') || req.url.match('server/metrics') || req.url.match('tserver/metrics') || req.url.match('/bash'))
+                if (req.url.match('/api') || req.url.match('server/metrics') || req.url.match('tserver/metrics') || req.url.match('instamojo'))
                     return true
                 else
                     return false
             }
-            if (req.headers.accept)
-                if (req.xhr || req.headers.accept.indexOf('json') > -1 || checkUrl())
+            // if (req.headers.accept)
+            //     if (req.xhr || req.headers.accept.indexOf('json') > -1 || checkUrl())
                     next();
-                else
-                    res.json(403);
-            else
-                res.json(403);
+            //     else
+            //         res.json(403);
+            // else
+            //     res.json(403);
         });
     },
     ROUTES: function(app) {

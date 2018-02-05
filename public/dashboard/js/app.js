@@ -1,6 +1,6 @@
 angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad'])
     .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
-        cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="./images/logo.png" style="width: 64px; height: 64px;"></div>';
+        cfpLoadingBarProvider.spinnerTemplate = '<div class="preloader"><img class="icon" src="../img/logo.png" style="width: 64px; height: 64px;"></div>';
     }])
     .filter('range', function() {
         return function(input, total) {
@@ -160,6 +160,63 @@ angular.module("optimusApp", ['angular-loading-bar', 'ui.router', 'oc.lazyLoad']
                         return $ocLazyLoad.load({
                             name: 'Activity',
                             files: ['./ctrls/activity.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.billing", {
+                url: "/billing",
+                templateUrl: "pages/billing.html",
+                abstract: true
+            })
+            .state("dashboard.billing.addCredit", {
+                url: "/addCredit",
+                templateUrl: "pages/addCredit.html",
+                controller: "addCreditCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Add Credit',
+                            files: ['./ctrls/addCredit.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.billing.history", {
+                url: "/history",
+                templateUrl: "pages/history.html",
+                controller: "historyCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'History',
+                            files: ['./ctrls/history.js', './plugins/pagination/dirPagination.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.invoice", {
+                url: "/invoice/:invoiceId",
+                templateUrl: "pages/invoice.html",
+                controller: "invoiceCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Invoice',
+                            files: ['./ctrls/invoice.js', './plugins/jquery.PrintArea/jquery.PrintArea.min.js']
+                        })
+                    }]
+                }
+            })
+            .state("dashboard.billing.processPayment", {
+                url: "/processPayment",
+                templateUrl: "pages/processPayment.html",
+                controller: "processPaymentCtrl",
+                resolve: {
+                    loadMyCtrl: ['$ocLazyLoad', function($ocLazyLoad) {
+                        return $ocLazyLoad.load({
+                            name: 'Process Payment',
+                            files: ['./ctrls/processPayment.js']
                         })
                     }]
                 }
@@ -448,8 +505,6 @@ angular.module('optimusApp')
                     } else {
                         $rootScope.teamIndex = $rootScope.homeData.teams.findIndex(x => x._id == $rootScope.teamId);
                     }
-                } else {
-                    $rootScope.logout();
                 }
                 var path = $location.path();
                 if (path == '/login' || path == '/register' || path == '/verifyEmail')

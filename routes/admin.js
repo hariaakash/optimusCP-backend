@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var os = require('os');
 var bodyParser = require('body-parser');
 var hat = require('hat');
 var bcrypt = require('bcryptjs');
@@ -7,9 +8,11 @@ var sg = require('sendgrid')('SG.iBm32W3WSByelr8xUMu5rg.2JOvDY6HqFxhYh0fcl7-R4yG
 var request = require('request');
 var cron = require('node-cron');
 var requestIp = require('request-ip');
+var cmd = require('node-cmd');
 var User = require('../models/user');
 var Team = require('../models/team');
 var Admin = require('../models/admin');
+var Payment = require('../models/payment');
 var adminUrl = 'http://optimuscp.io/admin/';
 
 
@@ -120,7 +123,7 @@ app.get('/activity', function(req, res) {
             .then(function(user) {
                 if (user) {
                     var logs = [];
-                    user.logs = user.logs.reverse()
+                    user.logs = user.logs.reverse().slice(0, 100)
                     for (i = 0; i < user.logs.length; i++)
                         logs.push({
                             no: i,
@@ -130,6 +133,57 @@ app.get('/activity', function(req, res) {
                     res.json({
                         status: true,
                         data: logs
+                    });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+app.get('/system', function(req, res) {
+    if (req.query.adminKey) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(user) {
+                if (user) {
+                    function formatBytes(bytes, exp, decimals) {
+                        if (bytes == 0) return '0 Bytes';
+                        var k = 1024,
+                            dm = decimals || 2,
+                            sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+                            i = Math.floor(Math.log(bytes) / Math.log(k));
+                        if (exp)
+                            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+                        else
+                            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm));
+                    }
+                    User.collection.stats(function(err, results) {
+                        var u = results.storageSize;
+                        Team.collection.stats(function(err, results) {
+                            var t = results.storageSize;
+                            Admin.collection.stats(function(err, results) {
+                                var a = results.storageSize;
+                                cmd.get('../system.sh', function(data, err, stderr) {
+                                    var info = err.replace('\n', '').split(':');
+                                    res.json({
+                                        status: true,
+                                        data: {
+                                            m: (info[1] * 100) / info[0],
+                                            d: (info[3] * 100) / info[2],
+                                            c: info[4],
+                                            db: formatBytes((u + t + a), true)
+                                        }
+                                    });
+                                });
+                            });
+                        });
                     });
                 } else {
                     uniR(res, false, 'Account not found !!');
@@ -615,7 +669,7 @@ app.get('/userActivity/:uId', function(req, res) {
                         .then(function(user) {
                             if (user) {
                                 var logs = [];
-                                user.logs = user.logs.reverse();
+                                user.logs = user.logs.reverse().slice(0, 100);
                                 for (i = 0; i < user.logs.length; i++)
                                     logs.push({
                                         no: i,
@@ -635,6 +689,103 @@ app.get('/userActivity/:uId', function(req, res) {
                                         logs: logs
                                     }
                                 });
+                            } else {
+                                uniR(res, false, 'User not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// View User Payment
+app.get('/userPayment/:uId', function(req, res) {
+    if (req.query.adminKey && req.params.uId) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    User.findById(req.params.uId)
+                        .populate('payment')
+                        .then(function(user) {
+                            if (user) {
+                                var payments = [];
+                                user.payment = user.payment.reverse();
+                                for (i = 0; i < user.payment.length; i++)
+                                    payments.push({
+                                        no: i,
+                                        _id: user.payment[i]._id,
+                                        status: user.payment[i].status,
+                                        amount: user.payment[i].amount,
+                                        modified_at: user.payment[i].modified_at
+                                    });
+                                res.json({
+                                    status: true,
+                                    data: {
+                                        id: user._id,
+                                        email: user.email,
+                                        info: user.info,
+                                        plan: user.conf.plan,
+                                        stats: user.stats,
+                                        apis: user.apis.length,
+                                        teams: user.teams.length,
+                                        payments: payments
+                                    }
+                                });
+                            } else {
+                                uniR(res, false, 'User not found !!')
+                            }
+                        })
+                        .catch(function(err) {
+                            uniR(res, false, 'Error when querying');
+                        });
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+// View User Payment Invoice
+app.get('/userInvoice/:uId', function(req, res) {
+    if (req.query.adminKey && req.params.uId && req.query.iId) {
+        Admin.findOne({
+                adminKey: req.query.adminKey
+            })
+            .then(function(admin) {
+                if (admin) {
+                    User.findById(req.params.uId)
+                        .populate('payment')
+                        .select('payment info')
+                        .then(function(user) {
+                            if (user && user.payment[0]) {
+                                if ((x = user.payment.findIndex(x => x._id == req.query.iId)) >= 0) {
+                                    res.json({
+                                        status: true,
+                                        data: {
+                                            info: user.info,
+                                            payment: user.payment[x]
+                                        }
+                                    });
+                                } else {
+                                    uniR(res, false, 'Invoice ID not found !!');
+                                }
                             } else {
                                 uniR(res, false, 'User not found !!')
                             }
@@ -995,7 +1146,7 @@ app.get('/teamActivity/:tId', function(req, res) {
                         .then(function(team) {
                             if (team) {
                                 var logs = [];
-                                team.logs = team.logs.reverse();
+                                team.logs = team.logs.reverse().slice(0, 100);
                                 for (i = 0; i < team.logs.length; i++)
                                     logs.push({
                                         no: i,

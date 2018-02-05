@@ -4,7 +4,7 @@ module.exports = function(req, res, uniR, added, flag) {
     });
     if (server[0]) {
         var logs = [];
-        server[0].logs = server[0].logs.reverse();
+        server[0].logs = server[0].logs.reverse().slice(0, 100);
         if (flag == 1)
             for (i = 0; i < server[0].logs.length; i++)
                 logs.push({

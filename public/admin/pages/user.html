@@ -76,7 +76,7 @@
 				<div class="panel-heading">Manage</div>
 				<div class="panel-wrapper">
 					<div class="panel-body">
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
 							<a href="javascript:void(0)" ng-click="delUser()">
 								<div class="white-box">
 									<h3 class="text-danger"><i class="fa fa-close fa-2x"></i></h3>
@@ -84,7 +84,7 @@
 								</div>
 							</a>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" ng-show="userData.block">
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-show="userData.block">
 							<a href="javascript:void(0)" ng-click="unBlockUser()">
 								<div class="white-box">
 									<h3 class="text-danger"><i class="fa fa-user-plus fa-2x"></i></h3>
@@ -92,7 +92,7 @@
 								</div>
 							</a>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" ng-show="!userData.block">
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" ng-show="!userData.block">
 							<a href="javascript:void(0)" ng-click="blockUser()">
 								<div class="white-box">
 									<h3 class="text-danger"><i class="fa fa-user-times fa-2x"></i></h3>
@@ -100,11 +100,19 @@
 								</div>
 							</a>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
 							<a ui-sref="dashboard.userActivity({uId:uId})">
 								<div class="white-box">
 									<h3 class="text-danger"><i class="fa fa-list fa-2x"></i></h3>
 									<h3 class="text-danger">Activity</h3>
+								</div>
+							</a>
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+							<a ui-sref="dashboard.userPayment({uId:uId})">
+								<div class="white-box">
+									<h3 class="text-danger"><i class="fa fa-money fa-2x"></i></h3>
+									<h3 class="text-danger">Payments</h3>
 								</div>
 							</a>
 						</div>

@@ -24,7 +24,7 @@ var uniR = require('../controllers/uniR');
 var formatBytes = require('../controllers/formatBytes');
 
 //Check uptime
-require('../controllers/server/checkUptimeUserServer')();
+// require('../controllers/server/checkServerUptime')();
 
 app.get('/m-det', function(req, res) {
     if (req.query.authKey && req.query.serverId) {
@@ -203,6 +203,46 @@ app.post('/m-name', function(req, res) {
     }
 });
 
+app.post('/enableAlert', function(req, res) {
+    if (req.body.authKey && req.body.serverId && req.body.type && req.body.interval && req.body.val) {
+        User.findOne({
+                authKey: req.body.authKey
+            })
+            .then(function(user) {
+                if (user) {
+                    require('../controllers/server/enableAlert')(req, res, uniR, user);
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
+app.post('/disableAlert', function(req, res) {
+    if (req.body.authKey && req.body.serverId && req.body.type) {
+        User.findOne({
+                authKey: req.body.authKey
+            })
+            .then(function(user) {
+                if (user) {
+                    require('../controllers/server/disableAlert')(req, res, uniR, user);
+                } else {
+                    uniR(res, false, 'Account not found !!');
+                }
+            })
+            .catch(function(err) {
+                uniR(res, false, 'Error when querying');
+            });
+    } else {
+        uniR(res, false, 'Empty Fields !!');
+    }
+});
+
 app.post('/addCron', function(req, res) {
     if (req.body.authKey && req.body.serverId && req.body.cmd && req.body.exp) {
         User.findOne({
@@ -288,25 +328,7 @@ app.post('/metrics/:userId/:serverId', function(req, res) {
         User.findById(req.params.userId)
             .then(function(user) {
                 if (user) {
-                    var index = -1;
-                    for (i = 0; i < user.added.length; i++)
-                        if (user.added[i]._id == req.params.serverId)
-                            index = i;
-                    if (index != -1) {
-                        user.added[index].metrics.push({
-                            m_t: req.body.m_t,
-                            m_u: req.body.m_u,
-                            d_t: req.body.d_t,
-                            d_u: req.body.d_u,
-                            cpu: req.body.cpu,
-                            m: parseFloat((req.body.m_u * 100 / req.body.m_t).toFixed(2)),
-                            d: parseFloat((req.body.d_u * 100 / req.body.d_t).toFixed(2))
-                        });
-                        user.save();
-                        uniR(res, true, 'Metrics received !!');
-                    } else {
-                        uniR(res, false, 'Error receiving');
-                    }
+                    require('../controllers/server/metrics')(req, res, uniR, user);
                 } else {
                     uniR(res, false, 'Account not found !!');
                 }
@@ -326,7 +348,7 @@ app.get('/embed', function(req, res) {
             })
             .then(function(user) {
                 if (user) {
-                    require('../controllers/server/embed')(req, res, user);
+                    require('../controllers/server/embed')(req, res, moment, user);
                 } else {
                     uniR(res, false, 'Account not found !!');
                 }

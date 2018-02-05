@@ -1,0 +1,92 @@
+<div class="container-fluid">
+    <div class="row bg-title">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title">User Payment</h4>
+        </div>
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a ui-sref="dashboard.home" class="active">Home</a></li>
+                <li><a ui-sref="dashboard.user({uId:uId})" class="active">User</a></li>
+                <li class="active">User Payment</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading text-center">Payments</div>
+                <div class="panel-wrapper">
+                    <div class="panel-body">
+                        <div class="row">
+                            <h2 ng-show="!userPaymentData.payments.length">Not enough data</h2>
+                            <table class="table table-hover margin bottom" ng-show="userPaymentData.payments.length">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr dir-paginate="x in userPaymentData.payments | itemsPerPage: pageSize" current-page="currentPage">
+                                        <td>{{ x.no+1 }}</td>
+                                        <td>{{ x.modified_at | date: 'MMM d, y H:mm:ss' }}</td>
+                                        <td><i class="fa fa-usd"></i> {{ x.amount }}</td>
+                                        <td><i class="fa fa-dot-circle-o fa-blink" ng-class="{'text-success': x.status == 'Credit', 'text-red': x.status == 'Failed', 'text-warning': x.status == 'Pending'}"></i> {{ x.status }}</td>
+                                        <td><button type="button" class="btn btn-circle btn-info" ui-sref="dashboard.userInvoice({uId:uId, iId:x._id})"><i class="fa fa-envelope"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="pull-right">
+                                <dir-pagination-controls boundary-links="true" template-url="./plugins/pagination/dirPagination.tpl.html"></dir-pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading text-center">User Info</div>
+                <div class="panel-wrapper">
+                    <div class="panel-body">
+                        <table class="table table-borderless server-info" style="font-size: 1em;">
+                            <tbody>
+                                <tr>
+                                    <td>UID: </td>
+                                    <td ng-bind="userPaymentData.id"></td>
+                                </tr>
+                                <tr>
+                                    <td>Email: </td>
+                                    <td ng-bind="userPaymentData.email"></td>
+                                </tr>
+                                <tr>
+                                    <td>Plan: </td>
+                                    <td ng-bind="userPaymentData.plan"></td>
+                                </tr>
+                                <tr ng-show="userPaymentData.info.name">
+                                    <td>Name: </td>
+                                    <td ng-bind="userPaymentData.info.name"></td>
+                                </tr>
+                                <tr>
+                                    <td>Servers: </td>
+                                    <td ng-bind="userPaymentData.stats.added"></td>
+                                </tr>
+                                <tr>
+                                    <td>APIs: </td>
+                                    <td ng-bind="userPaymentData.apis"></td>
+                                </tr>
+                                <tr ng-show="userPaymentData.info.country">
+                                    <td>Country: </td>
+                                    <td ng-bind="userPaymentData.info.country"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
