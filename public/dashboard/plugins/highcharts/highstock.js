@@ -518,7 +518,7 @@ a=0;a<e-1;a++)if(f=d[a]&&-1<b?d[a][b]:d[a],m(f)&&c[a+1]>=this.xAxis.min&&0!==f){
 (0<this.change?"+":"")+a.numberFormat(this.change,d(this.series.tooltipOptions.changeDecimals,2)));return y.apply(this,[b])};J(A.prototype,"render",function(a){this.chart.is3d&&this.chart.is3d()||this.chart.polar||!this.xAxis||this.xAxis.isRadial||(!this.clipBox&&this.animate?(this.clipBox=e(this.chart.clipBox),this.clipBox.width=this.xAxis.len,this.clipBox.height=this.yAxis.len):this.chart[this.sharedClipKey]?this.chart[this.sharedClipKey].attr({width:this.xAxis.len,height:this.yAxis.len}):this.clipBox&&
 (this.clipBox.width=this.xAxis.len,this.clipBox.height=this.yAxis.len));a.call(this)});J(D.prototype,"getSelectedPoints",function(a){var b=a.call(this);h(this.series,function(a){a.hasGroupedData&&(b=b.concat(x(a.points||[],function(a){return a.selected})))});return b});J(D.prototype,"update",function(a,b){"scrollbar"in b&&this.navigator&&(e(!0,this.options.scrollbar,b.scrollbar),this.navigator.update({},!1),delete b.scrollbar);return a.apply(this,Array.prototype.slice.call(arguments,1))})})(L);return L});
 Highcharts.theme = {
-	"colors": ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
+	"colors": ['rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'],
 	"chart": {
 		"backgroundColor": "#353c48",
 		"style": {
@@ -607,4 +607,3 @@ Highcharts.theme = {
 
 // Apply the theme
 Highcharts.setOptions(Highcharts.theme);
-
