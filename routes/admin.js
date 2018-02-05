@@ -170,13 +170,13 @@ app.get('/system', function(req, res) {
                             var t = results.storageSize;
                             Admin.collection.stats(function(err, results) {
                                 var a = results.storageSize;
-                                cmd.get('../system.sh', function(data, err, stderr) {
+                                cmd.get('cd /root/optimusCP && ./system.sh', function(data, err, stderr) {
                                     var info = err.replace('\n', '').split(':');
                                     res.json({
                                         status: true,
                                         data: {
-                                            m: (info[1] * 100) / info[0],
-                                            d: (info[3] * 100) / info[2],
+                                            d: (info[1] * 100) / info[0],
+                                            m: (info[3] * 100) / info[2],
                                             c: info[4],
                                             db: formatBytes((u + t + a), true)
                                         }
