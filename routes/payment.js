@@ -33,7 +33,7 @@ var payload = {
     phone: '9566211235',
     send_email: false,
     send_sms: false,
-    redirect_url: 'http://localhost/a/dashboard/#!/billing/processPayment',
+    redirect_url: 'https://optimuscp.io/dashboard/#!/billing/processPayment',
     webhook: 'https://optimuscp.io/webapi/payment/instamojo',
     allow_repeated_payments: false
 };
@@ -190,9 +190,9 @@ app.get('/instamojo', function(req, res) {
 });
 
 app.post('/instamojo', function(req, res) {
-    if (req.body.buyer && req.body.payment_id && req.body.status) {
+    if (req.body.buyer && req.body.payment_request_id && req.body.status) {
         Payment.findOne({
-                handlerId: req.body.payment_id
+                handlerId: req.body.payment_request_id
             })
             .then(function(payment) {
                 if (payment) {
