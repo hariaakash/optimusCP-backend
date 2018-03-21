@@ -11,7 +11,9 @@ module.exports = function() {
                 for (i = 0; i < users.length; i++) {
                     for (j = 0; j < users[i].added.length; j++) {
                         (function(i, j) {
-                            isReachable(users[i].added[j].ip + ':' + users[i].added[j].port)
+                            isReachable(users[i].added[j].ip + ':' + users[i].added[j].port, {
+                                    timeout: 1000
+                                })
                                 .then(function(reachable) {
                                     if (reachable) {
                                         users[i].added[j].monitorLogs[users[i].added[j].monitorLogs.length - 1].current = Date.now();
