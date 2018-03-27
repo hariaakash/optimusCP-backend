@@ -10,6 +10,7 @@ lamp="https://bitnami.com/redirect/to/167501/bitnami-lampstack-7.1.12-0-linux-x6
 mean="https://bitnami.com/redirect/to/170111/bitnami-meanstack-3.6.0-0-linux-x64-installer.run"
 django="https://bitnami.com/redirect/to/170692/bitnami-djangostack-2.0.1-0-linux-x64-installer.run"
 rails="https://bitnami.com/redirect/to/170396/bitnami-rubystack-2.4.3-0-linux-x64-installer.run"
+tf="https://bitnami.com/redirect/to/184103/bitnami-tensorflowserving-1.5.0-1-linux-x64-installer.run"
 
 # Lamp Stack Installer
 function lamp {
@@ -59,6 +60,17 @@ function rails {
     fi
 }
 
+# TF Stack Installer
+function tf {
+    wget -O tf.run > /dev/null 2>&1 $tf && chmod +x tf.run
+    if ./tf.run --mode unattended --disable_glibcxx_version_check 1 --prefix /opt/tf > /dev/null 2>&1; then
+        rm tf.run &&
+        echo "TRUE:Installation successfull"
+    else
+        echo "FALSE:Installation failed"
+    fi
+}
+
 # Create swap if not available
 function checkSwap {
     if free | awk '/^Swap:/ {exit !$2}'; then
@@ -84,7 +96,7 @@ function start {
         # Check for swap
         if [[ "$(checkSwap)"=="true" ]]; then
             case "$stack" in
-                "lamp" | "mean" | "django" | "rails")
+                "lamp" | "mean" | "django" | "rails" | "tf")
                     # Update & call stack installer
                     if [ "$os" == "centos" ]; then
                         sudo yum update > /dev/null 2>&1

@@ -287,10 +287,12 @@ angular.module('optimusApp')
                 $scope.title = 'MEAN';
             else if ($scope.stack == 3)
                 $scope.title = 'Django';
-            else
+            else if ($scope.stack == 4)
                 $scope.title = 'Ruby on Rails';
+            else
+                $scope.title = 'Tensorflow';
             swal({
-                title: 'Proceed to install ' + $scope.title + ' Stack ?',
+                title: 'Proceed to install ' + $scope.title + ' ?',
                 showCancelButton: true,
                 confirmButtonText: 'Confirm',
                 showLoaderOnConfirm: true,

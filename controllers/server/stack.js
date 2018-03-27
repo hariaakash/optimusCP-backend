@@ -95,6 +95,19 @@ module.exports = function(req, res, ssh, uniR, user) {
                 };
                 exec();
                 break;
+            case 5:
+                cmd = 'wget https://optimuscp.io/bash/stack.sh -O stack.sh && chmod +x stack.sh && sed -i "s/\r//" stack.sh && ./stack.sh ' + os + ' tf ' + user.added[x]._id;
+                msg = 'Tensorflow is getting installed'
+                user.added[x].logs.push({
+                    msg: 'Tensorflow installation started !!'
+                });
+                user.added[x].msgboard = {
+                    msg: 'Tensorflow is currently being installed !!',
+                    time: 2 * 60 * 1000,
+                    date: Date.now()
+                };
+                exec();
+                break;
             default:
                 uniR(res, false, 'Command not found !!');
                 break;
