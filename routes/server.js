@@ -155,7 +155,7 @@ app.post('/exec', function(req, res) {
 });
 
 app.post('/stack', function(req, res) {
-    if (req.body.authKey && req.body.serverId && (req.body.stack == 1 || req.body.stack == 2 || req.body.stack == 3 || req.body.stack == 4)) {
+    if (req.body.authKey && req.body.serverId && (req.body.stack == 1 || req.body.stack == 2 || req.body.stack == 3 || req.body.stack == 4 || req.body.stack == 5)) {
         User.findOne({
                 authKey: req.body.authKey
             })

@@ -261,7 +261,7 @@ app.post('/exec/:tId', function(req, res) {
 });
 
 app.post('/stack/:tId', function(req, res) {
-    if (req.body.authKey && req.params.tId && req.body.serverId && (req.body.stack == 1 || req.body.stack == 2 || req.body.stack == 3 || req.body.stack == 4)) {
+    if (req.body.authKey && req.params.tId && req.body.serverId && (req.body.stack == 1 || req.body.stack == 2 || req.body.stack == 3 || req.body.stack == 4 || req.body.stack == 5)) {
         User.findOne({
                 authKey: req.body.authKey
             })
