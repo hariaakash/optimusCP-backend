@@ -25,7 +25,7 @@ var uniR = require('../controllers/uniR');
 var formatBytes = require('../controllers/formatBytes');
 
 //Check uptime
-require('../controllers/tserver/checkServerUptime')();
+// require('../controllers/tserver/checkServerUptime')();
 
 //Retrieve team info
 function checkUserInTeam(uId, teamId) {
