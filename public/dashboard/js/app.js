@@ -573,4 +573,7 @@ angular.module('optimusApp')
                     $rootScope.toast('Failed', "Some error occurred, try again.", "error");
                 });
         };
+        $rootScope.comingSoon = function () {
+            $rootScope.toast('Alert', "This feature will be available soon.", "success");
+        };
     });
