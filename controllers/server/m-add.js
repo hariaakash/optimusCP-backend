@@ -54,7 +54,6 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                                                 });
                                                         })
                                                         .catch(function(err) {
-                                                            console.log(err)
                                                             uniR(res, false, 'Some error occurred when adding server, try again !!')
                                                         });
                                                 } else {
@@ -127,7 +126,6 @@ module.exports = function(req, res, fs, ssh, requestIp, uniR, user) {
                                                         .then(function() {
                                                             ssh.execCommand('sudo ' + oscmd + ' -y install wget && wget -O metrics.sh https://optimuscp.io/bash/metrics.sh && chmod +x metrics.sh && sed -i "s/\x0D$//" metrics.sh && (crontab -l ; echo "*/5 * * * * /home/optimusCP/metrics.sh ' + user._id + ' ' + user.added[user.added.length - 1]._id + '") 2>&1 | grep -v "no crontab" | sort | uniq | crontab -')
                                                                 .then(function(result) {
-                                                                    console.log(result)
                                                                     user.save();
                                                                     uniR(res, true, 'Server added successfully !!');
                                                                 });
