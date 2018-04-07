@@ -14,7 +14,6 @@ module.exports = {
     MW: function(app, express, morgan, cors, Raven) {
         app.use(Raven.requestHandler());
         app.use(Raven.errorHandler());
-        app.use(express.static('public'));
         app.use(morgan('dev'));
         app.use(cors());
         app.use(function(req, res, next) {
