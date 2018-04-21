@@ -34,7 +34,7 @@ var payload = {
     send_email: false,
     send_sms: false,
     redirect_url: 'https://optimuscp.io/dashboard/#!/billing/processPayment',
-    webhook: 'https://optimuscp.io/webapi/payment/instamojo',
+    webhook: 'https://webapi.optimuscp.io/payment/instamojo',
     allow_repeated_payments: false
 };
 
