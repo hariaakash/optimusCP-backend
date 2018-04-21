@@ -87,7 +87,7 @@ app.post('/', function(req, res) {
                             payload.amount = Math.ceil(5 * JSON.parse(data).USD_INR);
                             payload.buyer_name = user.info.name;
                             payload.email = user.email;
-                            request.post('https://instamojo.com/api/1.1/payment-requests/', {
+                            request.post('https://www.instamojo.com/api/1.1/payment-requests/', {
                                 form: payload,
                                 headers: headers
                             }, function(error, response, body) {
