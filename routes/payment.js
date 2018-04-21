@@ -22,8 +22,8 @@ var uniR = require('../controllers/uniR');
 
 //instamojo
 var headers = {
-    'X-Api-Key': '6cbe1d7f5c66201e59e6e1d0d8bd32b4',
-    'X-Auth-Token': 'fb30cd538c9483393a9eb8e26287c25e'
+    'X-Api-Key': '16b10f4ff4f4c18dda2c9c8c4a1caf63',
+    'X-Auth-Token': 'dea2ca7b2c6f6d3a26dabb483e3f8336'
 };
 var payload = {
     purpose: 'OptimusCP Credits',
@@ -87,7 +87,7 @@ app.post('/', function(req, res) {
                             payload.amount = Math.ceil(5 * JSON.parse(data).USD_INR);
                             payload.buyer_name = user.info.name;
                             payload.email = user.email;
-                            request.post('https://test.instamojo.com/api/1.1/payment-requests/', {
+                            request.post('https://instamojo.com/api/1.1/payment-requests/', {
                                 form: payload,
                                 headers: headers
                             }, function(error, response, body) {
