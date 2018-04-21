@@ -11,12 +11,12 @@ module.exports = function (app) {
 	var tserver = require('./routes/tserver');
 
 	// Use Routes
-	app.use('/webapi/user', user);
-	app.use('/webapi/payment', payment);
-	app.use('/webapi/server', server);
-	app.use('/webapi/apiKey', apiKey);
+	app.use('/user', user);
+	app.use('/payment', payment);
+	app.use('/server', server);
+	app.use('/apiKey', apiKey);
 	app.use('/api', api);
-	app.use('/webapi/admin', admin);
-	app.use('/webapi/team', team);
-	app.use('/webapi/tserver', tserver);
+	app.use('/admin', admin);
+	app.use('/team', team);
+	app.use('/tserver', tserver);
 };

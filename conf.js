@@ -2,7 +2,9 @@ module.exports = {
     PORT: 3000,
     MONGOOSE: function(mongoose) {
         mongoose.Promise = global.Promise;
-        mongoose.connect('mongodb://127.0.0.1:27017/optimus')
+        mongoose.connect('mongodb://127.0.0.1:27017/optimus', {
+                useMongoClient: true
+            })
             .then(function() {
                 console.log('Connected to MONGOD !!');
             })

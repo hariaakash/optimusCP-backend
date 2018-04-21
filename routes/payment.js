@@ -174,7 +174,7 @@ app.get('/instamojo', function(req, res) {
                 if (user && user.payment[0]) {
                     res.json({
                         status: true,
-                        data: user.payment[0]._id
+                        data: user.payment[user.payment.length - 1]._id
                     })
                 } else {
                     uniR(res, false, 'Account not found !!');
@@ -205,7 +205,7 @@ app.post('/instamojo', function(req, res) {
                                 if (user) {
                                     user.stats.credits += payment.amount;
                                     user.save();
-                                    payment.status = 'Credit';
+                                    payment.status = 'Credited';
                                     payment.save();
                                     uniR(res, true, 'Payment Verified !!')
                                 } else {
