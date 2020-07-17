@@ -27,7 +27,7 @@
     "node-cron": "^1.2.0",
     "node-ssh": "^4.2.2",
     "raven": "^2.1.0",
-    "request": "^2.87.0",
+    "request": "^2.88.0",
     "request-ip": "^2.0.2",
     "rotating-file-stream": "^1.2.2",
     "sendgrid": "^5.2.3",
